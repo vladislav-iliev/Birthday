@@ -18,7 +18,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class ConnectionTest {
+class ClientTest {
 
     private lateinit var mockWebServer: MockWebServer
 
