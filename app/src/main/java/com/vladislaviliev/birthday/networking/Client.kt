@@ -1,5 +1,7 @@
 package com.vladislaviliev.birthday.networking
 
+import com.vladislaviliev.birthday.kids.KidsApi
+import com.vladislaviliev.birthday.kids.MSG_TO_SEND_ON_CONNECT
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.logging.Logging
@@ -13,9 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 
-const val MSG_TO_SEND_ON_CONNECT = "HappyBirthday"
-
-class Client(private val serverIp: String, private val port: Int) {
+class Client(private val serverIp: String, private val port: Int) : KidsApi {
 
     private val client = HttpClient(CIO) {
         install(Logging)
@@ -25,7 +25,7 @@ class Client(private val serverIp: String, private val port: Int) {
     }
 
     private val _state = MutableStateFlow<State>(State.Disconnected())
-    val state = _state.asStateFlow()
+    override val state = _state.asStateFlow()
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
@@ -40,7 +40,7 @@ class Client(private val serverIp: String, private val port: Int) {
         loopReceiving(session)
     }
 
-    suspend fun connect() {
+    override suspend fun connect() {
         if (state.value is State.Connected) return
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
