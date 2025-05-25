@@ -41,6 +41,7 @@ class Client(private val serverIp: String, private val port: Int) {
     }
 
     suspend fun connect() {
+        if (state.value is State.Connected) return
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
