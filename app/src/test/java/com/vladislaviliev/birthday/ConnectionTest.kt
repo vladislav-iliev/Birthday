@@ -59,7 +59,7 @@ class ConnectionTest {
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
 
-        client.state.takeWhile { (it as? State.Connected)?.received != null }
+        client.state.takeWhile { (it as? State.Connected)?.received == null }
     }
 
     @Test
