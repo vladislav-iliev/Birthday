@@ -24,18 +24,18 @@ class Client(private val serverIp: String, private val port: Int) {
         }
     }
 
-    private val _response = MutableStateFlow<State>(State.Disconnected())
-    val response = _response.asStateFlow()
+    private val _state = MutableStateFlow<State>(State.Disconnected())
+    val state = _state.asStateFlow()
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
             val response = session.receiveDeserialized<ResponseRaw>().beautify()
-            _response.emit(State.Connected(response))
+            _state.emit(State.Connected(response))
         }
     }
 
     private suspend fun onConnected(session: DefaultClientWebSocketSession) {
-        _response.emit(State.Connected())
+        _state.emit(State.Connected())
         session.send(Frame.Text(MSG_TO_SEND_ON_CONNECT))
         loopReceiving(session)
     }
@@ -44,7 +44,7 @@ class Client(private val serverIp: String, private val port: Int) {
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
-            _response.emit(State.Disconnected(e))
+            _state.emit(State.Disconnected(e))
         }
     }
 }

@@ -32,7 +32,7 @@ class ConnectionTest {
 
     @Test
     fun testInitialState() {
-        Assert.assertNull((Client("", 0).response.value as State.Disconnected).cause)
+        Assert.assertNull((Client("", 0).state.value as State.Disconnected).cause)
     }
 
     @Test
@@ -41,7 +41,7 @@ class ConnectionTest {
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
 
-        client.response.takeWhile { it !is State.Connected }.collect {}
+        client.state.takeWhile { it !is State.Connected }.collect {}
     }
 
     @Test
@@ -56,7 +56,7 @@ class ConnectionTest {
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
 
-        client.response.takeWhile { (it as? State.Connected)?.received != null }
+        client.state.takeWhile { (it as? State.Connected)?.received != null }
     }
 
     @Test
@@ -65,8 +65,8 @@ class ConnectionTest {
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
 
-        client.response.takeWhile { it !is State.Connected }.collect {}
+        client.state.takeWhile { it !is State.Connected }.collect {}
         mockWebServer.shutdown()
-        client.response.takeWhile { it !is State.Disconnected }.collect {}
+        client.state.takeWhile { it !is State.Disconnected }.collect {}
     }
 }
