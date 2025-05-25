@@ -1,10 +1,9 @@
 package com.vladislaviliev.birthday
 
-import com.vladislaviliev.birthday.networking.MSG_TO_SEND_ON_CONNECT
 import com.vladislaviliev.birthday.networking.Client
+import com.vladislaviliev.birthday.networking.MSG_TO_SEND_ON_CONNECT
 import com.vladislaviliev.birthday.networking.State
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import okhttp3.WebSocket
@@ -37,6 +36,15 @@ class ConnectionTest {
     }
 
     @Test
+    fun testConnection() = runTest {
+        mockWebServer.enqueue(MockResponse().setResponseCode(101))
+        val client = Client(mockWebServer.hostName, mockWebServer.port)
+        backgroundScope.launch { client.connect() }
+
+        client.response.takeWhile { it !is State.Connected }.collect {}
+    }
+
+    @Test
     fun testSuccessfulConnectionAndMessageExchange() = runTest {
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -48,9 +56,7 @@ class ConnectionTest {
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
 
-        val state = client.response.drop(2).first()
-        Assert.assertTrue(state is State.Connected)
-        Assert.assertNotNull((state as State.Connected).received)
+        client.response.takeWhile { (it as? State.Connected)?.received != null }
     }
 
     @Test
@@ -58,9 +64,9 @@ class ConnectionTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(101))
         val client = Client(mockWebServer.hostName, mockWebServer.port)
         backgroundScope.launch { client.connect() }
-        mockWebServer.shutdown()
 
-        val state = client.response.drop(1).first()
-        Assert.assertTrue(state is State.Disconnected)
+        client.response.takeWhile { it !is State.Connected }.collect {}
+        mockWebServer.shutdown()
+        client.response.takeWhile { it !is State.Disconnected }.collect {}
     }
 }
