@@ -10,8 +10,8 @@ import io.ktor.client.plugins.websocket.receiveDeserialized
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.websocket.Frame
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 
 class Client(private val serverIp: String, private val port: Int) : KidsApi {
@@ -24,7 +24,7 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
     }
 
     private val _state = MutableStateFlow<State>(State.Disconnected())
-    override val state = _state.asStateFlow()
+    override val state: Flow<State> = _state
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
@@ -40,7 +40,7 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
     }
 
     override suspend fun connect() {
-        if (state.value is State.Connecting || state.value is State.Connected) return
+        if (_state.value is State.Connecting || _state.value is State.Connected) return
         _state.emitAndYield(State.Connecting)
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)

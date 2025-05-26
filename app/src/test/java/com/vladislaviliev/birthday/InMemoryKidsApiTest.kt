@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -17,7 +17,7 @@ class InMemoryKidsApiTest {
 
     @Test
     fun `initial state should be disconnected`() = runTest {
-        Assert.assertEquals(State.Disconnected(), InMemoryKidsApi().state.value)
+        Assert.assertEquals(State.Disconnected(), InMemoryKidsApi().state.first())
     }
 
     @Test

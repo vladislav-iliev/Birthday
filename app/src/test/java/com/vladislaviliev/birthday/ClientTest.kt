@@ -5,8 +5,6 @@ import com.vladislaviliev.birthday.networking.ResponseRaw
 import com.vladislaviliev.birthday.networking.State
 import com.vladislaviliev.birthday.networking.beautify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
