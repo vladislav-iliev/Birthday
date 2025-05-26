@@ -27,18 +27,20 @@ import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.networking.State
 
 @Composable
-fun ConnectScreen(onConnectClick: (String, String) -> Unit, state: State, modifier: Modifier = Modifier) {
+fun ConnectScreen(connect: (String, Int) -> Unit, state: State, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
 
-        var ip by rememberSaveable { mutableStateOf("") }
-        var port by rememberSaveable { mutableStateOf("") }
+        var ip by rememberSaveable { mutableStateOf("localhost") }
+        var port by rememberSaveable { mutableStateOf("8080") }
+        val isAuthorityValid = ip.isNotBlank() && null != port.toIntOrNull() && 0 < port.toInt()
+        val onConnectClick = { if (isAuthorityValid) connect(ip, port.toInt()) }
 
         Spacer(Modifier.height(20.dp))
         Text(stringResource(R.string.connect_to_server), fontSize = 30.sp)
         Spacer(Modifier.height(10.dp))
-        Inputs(ip, { ip = it }, port, { port = it }, Modifier.fillMaxWidth())
+        Inputs(ip, { ip = it }, port, { port = it }, isAuthorityValid, Modifier.fillMaxWidth())
         Spacer(Modifier.height(10.dp))
-        Button({ onConnectClick(ip, port) }) { Text(stringResource(R.string.connect)) }
+        Button(onConnectClick) { Text(stringResource(R.string.connect)) }
         Spacer(Modifier.height(10.dp))
         StateComposable(state)
     }
@@ -50,15 +52,14 @@ private fun Inputs(
     onIpChange: (String) -> Unit,
     port: String,
     onPortChange: (String) -> Unit,
+    isAuthorityValid: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val ipPlaceholder = @Composable { Text(stringResource(R.string.ip)) }
-    val portPlaceholder = @Composable { Text(stringResource(R.string.port)) }
-
     Row(modifier, Arrangement.Center, Alignment.CenterVertically) {
         Spacer(Modifier.weight(0.1f))
-        TextField(ip, onIpChange, Modifier.weight(0.5f), maxLines = 1, placeholder = ipPlaceholder)
-        TextField(port, onPortChange, Modifier.weight(0.3f), maxLines = 1, placeholder = portPlaceholder)
+        TextField(ip, onIpChange, Modifier.weight(0.4f), isError = !isAuthorityValid)
+        Spacer(Modifier.weight(0.1f))
+        TextField(port, onPortChange, Modifier.weight(0.2f), isError = !isAuthorityValid)
         Spacer(Modifier.weight(0.1f))
     }
 }

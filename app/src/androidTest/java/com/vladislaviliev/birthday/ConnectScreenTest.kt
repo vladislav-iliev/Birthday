@@ -32,8 +32,8 @@ class ConnectScreenTest {
     fun testShowsInitialElements() {
         composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.connect_to_server)).assertIsDisplayed()
-        composeTestRule.onNodeWithText(getStringResource(R.string.ip)).assertIsDisplayed()
-        composeTestRule.onNodeWithText(getStringResource(R.string.port)).assertIsDisplayed()
+        composeTestRule.onNodeWithText("localhost").assertIsDisplayed()
+        composeTestRule.onNodeWithText("8080").assertIsDisplayed()
         composeTestRule.onNodeWithText(getStringResource(R.string.connect)).assertIsDisplayed()
         composeTestRule.onRoot().onChildren().assertCountEquals(4)
     }
@@ -41,19 +41,33 @@ class ConnectScreenTest {
     @Test
     fun testOnConnectClick() {
         var ip = ""
-        var port = ""
-        val onConnectClick: (String, String) -> Unit = { ipArg, portArg -> ip = ipArg; port = portArg }
+        var port = 0
+        val connect: (String, Int) -> Unit = { ipArg, portArg -> ip = ipArg; port = portArg }
 
-        val testIp = "192.168.1.1"
-        val testPort = "8080"
+        var testIp = "localhost"
+        var testPort = 8080
 
-        composeTestRule.setContent { ConnectScreen(onConnectClick, State.Disconnected()) }
-        composeTestRule.onNodeWithText(getStringResource(R.string.ip)).performTextInput(testIp)
-        composeTestRule.onNodeWithText(getStringResource(R.string.port)).performTextInput(testPort)
+        composeTestRule.setContent { ConnectScreen(connect, State.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.connect)).performClick()
 
         Assert.assertEquals(testIp, ip)
         Assert.assertEquals(testPort, port)
+
+        var newTestIp = ""
+        var newTestPort = -1
+
+        composeTestRule.onNodeWithText(testIp).performTextInput(newTestIp)
+        composeTestRule.onNodeWithText(getStringResource(R.string.connect)).performClick()
+
+        Assert.assertNotEquals(newTestIp, ip)
+
+        testIp = ip
+        newTestPort = 80
+
+        composeTestRule.onNodeWithText(testIp).performTextInput(newTestIp)
+        composeTestRule.onNodeWithText(testPort.toString()).performTextInput(newTestPort.toString())
+
+        Assert.assertNotEquals(newTestPort, port)
     }
 
     @Test
