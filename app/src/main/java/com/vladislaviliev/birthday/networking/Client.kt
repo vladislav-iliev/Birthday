@@ -1,7 +1,6 @@
 package com.vladislaviliev.birthday.networking
 
 import com.vladislaviliev.birthday.kids.KidsApi
-import com.vladislaviliev.birthday.kids.MSG_TO_SEND_ON_CONNECT
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.logging.Logging
@@ -36,7 +35,7 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
 
     private suspend fun onConnected(session: DefaultClientWebSocketSession) {
         _state.emit(State.Connected())
-        session.send(Frame.Text(MSG_TO_SEND_ON_CONNECT))
+        session.send(Frame.Text("HappyBirthday"))
         loopReceiving(session)
     }
 

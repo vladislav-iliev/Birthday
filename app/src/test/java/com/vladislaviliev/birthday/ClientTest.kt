@@ -1,6 +1,5 @@
 package com.vladislaviliev.birthday
 
-import com.vladislaviliev.birthday.kids.MSG_TO_SEND_ON_CONNECT
 import com.vladislaviliev.birthday.networking.Client
 import com.vladislaviliev.birthday.networking.ResponseRaw
 import com.vladislaviliev.birthday.networking.State
@@ -51,7 +50,7 @@ class ClientTest {
     fun testSuccessfulConnectionAndMessageExchange() = runTest {
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
-                if (text == MSG_TO_SEND_ON_CONNECT) webSocket.send("{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}")
+                webSocket.send("{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}")
             }
         }
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
