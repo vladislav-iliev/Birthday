@@ -41,7 +41,7 @@ class ViewModelTest {
 
         val (viewModel, api) = createViewModelAndApi()
         backgroundScope.launch { viewModel.state.collect { } }
-        viewModel.connect()
+        viewModel.connect("", 0)
         runCurrent()
 
         Assert.assertEquals(State.Connected(), viewModel.state.value)
@@ -56,7 +56,7 @@ class ViewModelTest {
     fun `multiple connect calls should not affect final state`() = runTest {
         val (viewModel, _) = createViewModelAndApi()
         backgroundScope.launch { viewModel.state.collect { } }
-        repeat(3) { viewModel.connect() }
+        repeat(3) { viewModel.connect("", 0) }
         runCurrent()
         Assert.assertEquals(State.Connected(), viewModel.state.value)
     }

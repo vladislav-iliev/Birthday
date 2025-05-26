@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.json.Json
 
-class Client(private val serverIp: String, private val port: Int) : KidsApi {
+class Client : KidsApi {
 
     private val client = HttpClient(CIO) {
         install(Logging)
@@ -39,11 +39,11 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
         loopReceiving(session)
     }
 
-    override suspend fun connect() {
+    override suspend fun connect(ip: String, port: Int) {
         if (_state.value is State.Connecting || _state.value is State.Connected) return
         _state.emitAndYield(State.Connecting)
         try {
-            client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
+            client.webSocket(host = ip, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
             _state.emitAndYield(State.Disconnected(e))
         }

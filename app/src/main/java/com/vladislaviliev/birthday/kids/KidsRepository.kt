@@ -13,7 +13,7 @@ class KidsRepository(
 ) {
     val state: Flow<State> = api.state
 
-    suspend fun connect() = scope.launch(dispatcher) {
-        api.connect()
+    suspend fun connect(ip: String, port: Int) = scope.launch(dispatcher) {
+        api.connect(ip, port)
     }.join()
 }

@@ -25,7 +25,7 @@ class KidsRepositoryTest {
     @Test
     fun `connect should change state to connected`() = runTest {
         val repository = createRepo(InMemoryKidsApi())
-        repository.connect()
+        repository.connect("", 0)
         Assert.assertEquals(State.Connected(), repository.state.first())
     }
 

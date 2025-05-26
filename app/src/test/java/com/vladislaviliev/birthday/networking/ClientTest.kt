@@ -44,13 +44,13 @@ class ClientTest {
             }
         }
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
+        val client = Client()
 
         val states = mutableListOf<State>()
 
         backgroundScope.launch { client.state.toList(states) }
         runCurrent()
-        client.connect()
+        client.connect(mockWebServer.hostName, mockWebServer.port)
 
         advanceUntilIdle()
         Assert.assertEquals(State.Disconnected(), states[0])
@@ -74,13 +74,13 @@ class ClientTest {
         }
 
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
+        val client = Client()
 
         val states = mutableListOf<State>()
 
         backgroundScope.launch { client.state.toList(states) }
-        val firstConnect = launch { client.connect() }
-        val secondConnect = launch { client.connect() }
+        val firstConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
+        val secondConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         runCurrent()
         firstConnect.join()
         secondConnect.join()

@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface KidsApi {
     val state: Flow<State>
-    suspend fun connect()
+    suspend fun connect(ip: String, port: Int)
 }

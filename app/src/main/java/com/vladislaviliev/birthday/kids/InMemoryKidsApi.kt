@@ -11,10 +11,8 @@ class InMemoryKidsApi : KidsApi {
     private val _state = MutableStateFlow<State>(State.Disconnected())
     override val state: Flow<State> = _state
 
-    override suspend fun connect() {
-        if (_state.value is State.Connecting || _state.value is State.Connected) {
-            return
-        }
+    override suspend fun connect(ip: String, port: Int) {
+        if (_state.value is State.Connecting || _state.value is State.Connected) return
         _state.emitAndYield(State.Connecting)
         _state.emitAndYield(State.Connected())
     }

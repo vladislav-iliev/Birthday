@@ -29,7 +29,7 @@ class InMemoryKidsApiTest {
         runCurrent()
         val response = Response("JohnyDoe", LocalDateTime.parse("2025-05-26T00:19:16"), Theme.PELICAN)
 
-        kidsApi.connect()
+        kidsApi.connect("", 0)
         kidsApi.emitResponse(response)
         kidsApi.disconnect()
 

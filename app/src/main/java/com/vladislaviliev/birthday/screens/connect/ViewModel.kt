@@ -12,7 +12,7 @@ class ViewModel(private val repository: KidsRepository) : ViewModel() {
 
     val state = repository.state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), State.Disconnected())
 
-    fun connect() {
-        viewModelScope.launch { repository.connect() }
+    fun connect(ip: String, port: Int) {
+        viewModelScope.launch { repository.connect(ip, port) }
     }
 }
