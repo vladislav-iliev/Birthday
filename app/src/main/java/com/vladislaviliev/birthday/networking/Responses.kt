@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResponseRaw(val name: String, val dob: Long, val theme: String)
 
-data class Response(private val name: String, private val dob: LocalDateTime, val theme: Theme)
+data class Response(val name: String, val dob: LocalDateTime, val theme: Theme)
 
 fun ResponseRaw.beautify(): Response {
     val dob = Instant.fromEpochMilliseconds(dob).toLocalDateTime(TimeZone.currentSystemDefault())
