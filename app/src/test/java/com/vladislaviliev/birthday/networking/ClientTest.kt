@@ -1,9 +1,5 @@
-package com.vladislaviliev.birthday
+package com.vladislaviliev.birthday.networking
 
-import com.vladislaviliev.birthday.networking.Client
-import com.vladislaviliev.birthday.networking.ResponseRaw
-import com.vladislaviliev.birthday.networking.State
-import com.vladislaviliev.birthday.networking.beautify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -39,7 +35,7 @@ class ClientTest {
     @Test
     fun `states progress up and down`() = runTest {
         val serverMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-        val serverMessageParsed = Json.decodeFromString<ResponseRaw>(serverMessage).beautify()
+        val serverMessageParsed = Json.Default.decodeFromString<ResponseRaw>(serverMessage).beautify()
 
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -68,7 +64,7 @@ class ClientTest {
     fun testMultipleConnectsAreIdempotent() = runTest {
 
         val firstServerMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-        val firstParsed = Json.decodeFromString<ResponseRaw>(firstServerMessage).beautify()
+        val firstParsed = Json.Default.decodeFromString<ResponseRaw>(firstServerMessage).beautify()
 
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {

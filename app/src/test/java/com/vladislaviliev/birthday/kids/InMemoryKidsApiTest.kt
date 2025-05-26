@@ -1,6 +1,6 @@
-package com.vladislaviliev.birthday
+package com.vladislaviliev.birthday.kids
 
-import com.vladislaviliev.birthday.kids.InMemoryKidsApi
+import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
