@@ -29,23 +29,23 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
             val response = session.receiveDeserialized<ResponseRaw>().beautify()
-            _state.emit(State.Connected(response))
+            _state.emitAndYield(State.Connected(response))
         }
     }
 
     private suspend fun onConnected(session: DefaultClientWebSocketSession) {
-        _state.emit(State.Connected())
+        _state.emitAndYield(State.Connected())
         session.send(Frame.Text("HappyBirthday"))
         loopReceiving(session)
     }
 
     override suspend fun connect() {
         if (state.value is State.Connecting || state.value is State.Connected) return
-        _state.emit(State.Connecting)
+        _state.emitAndYield(State.Connecting)
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
-            _state.emit(State.Disconnected(e))
+            _state.emitAndYield(State.Disconnected(e))
         }
     }
 }

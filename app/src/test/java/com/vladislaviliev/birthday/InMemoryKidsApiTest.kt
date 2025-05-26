@@ -3,7 +3,6 @@ package com.vladislaviliev.birthday
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
@@ -22,40 +21,22 @@ class InMemoryKidsApiTest {
     }
 
     @Test
-    fun `connect should change state to connected`() = runTest {
+    fun `states progress up and down`() = runTest {
         val kidsApi = InMemoryKidsApi()
         val states = mutableListOf<State>()
 
         backgroundScope.launch { kidsApi.state.collect { states.add(it) } }
         runCurrent()
+        val response = Response("JohnyDoe", LocalDateTime.parse("2025-05-26T00:19:16"), Theme.PELICAN)
+
         kidsApi.connect()
-        runCurrent()
+        kidsApi.emitResponse(response)
+        kidsApi.disconnect()
+
+        Assert.assertEquals(State.Disconnected(), states[0])
         Assert.assertEquals(State.Connecting, states[1])
-        Assert.assertEquals(State.Connected(), kidsApi.state.value)
-    }
-
-    @Test
-    fun `multiple connects should not change state if already connected`() = runTest {
-        val kidsApi = InMemoryKidsApi()
-
-        kidsApi.connect()
-        val firstConnectedState = kidsApi.state.value
-
-        kidsApi.connect()
-        val secondConnectedState = kidsApi.state.value
-
-        Assert.assertEquals(firstConnectedState, secondConnectedState)
-    }
-
-
-    @Test
-    fun `emitResponse should emit connected state with response`() = runTest {
-        val kidsApi = InMemoryKidsApi()
-        val toEmit = Response("JohnyDoe", LocalDateTime.parse("2025-05-26T00:19:16"), Theme.PELICAN)
-
-        kidsApi.connect()
-        kidsApi.emitResponse(toEmit)
-
-        Assert.assertEquals(State.Connected(toEmit), kidsApi.state.value)
+        Assert.assertEquals(State.Connected(), states[2])
+        Assert.assertEquals(State.Connected(response), states[3])
+        Assert.assertTrue(states[4] is State.Disconnected)
     }
 }

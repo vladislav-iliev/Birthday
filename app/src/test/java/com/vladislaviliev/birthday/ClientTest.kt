@@ -5,8 +5,11 @@ import com.vladislaviliev.birthday.networking.ResponseRaw
 import com.vladislaviliev.birthday.networking.State
 import com.vladislaviliev.birthday.networking.beautify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -36,14 +39,42 @@ class ClientTest {
     }
 
     @Test
-    fun testInitialState() {
-        Assert.assertEquals(State.Disconnected(), Client("", 0).state.value)
+    fun `states progress up and down`() = runTest {
+        val serverMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
+        val serverMessageParsed = Json.decodeFromString<ResponseRaw>(serverMessage).beautify()
+
+        val serverListener = object : WebSocketListener() {
+            override fun onMessage(webSocket: WebSocket, text: String) {
+                webSocket.send(serverMessage)
+                webSocket.close(1000, "")
+            }
+        }
+        mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
+        val client = Client(mockWebServer.hostName, mockWebServer.port)
+
+        val states = mutableListOf<State>()
+
+        backgroundScope.launch { client.state.toList(states) }
+        runCurrent()
+        client.connect()
+
+        advanceUntilIdle()
+        Assert.assertEquals(State.Disconnected(), states[0])
+        Assert.assertEquals(State.Connecting, states[1])
+        Assert.assertEquals(State.Connected(), states[2])
+        Assert.assertEquals(State.Connected(serverMessageParsed), states[3])
+        Assert.assertTrue(states[4] is State.Disconnected)
     }
 
     @Test
-    fun testConnection() = runTest {
+    fun testMultipleConnectsAreIdempotent() = runTest {
+
+        val firstServerMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
+        val firstParsed = Json.decodeFromString<ResponseRaw>(firstServerMessage).beautify()
+
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
+                webSocket.send(firstServerMessage)
                 webSocket.close(1000, "")
             }
         }
@@ -53,64 +84,14 @@ class ClientTest {
 
         val states = mutableListOf<State>()
 
-        backgroundScope.launch { client.state.collect { states.add(it) } }
+        backgroundScope.launch { client.state.toList(states) }
+        val firstConnect = launch { client.connect() }
+        val secondConnect = launch { client.connect() }
         runCurrent()
-        client.connect()
-        runCurrent()
-        Assert.assertEquals(State.Connecting, states[1])
-        Assert.assertEquals(State.Connected(), states[2])
-    }
+        firstConnect.join()
+        secondConnect.join()
 
-    @Test
-    fun testSuccessfulConnectionAndMessageExchange() = runTest {
-        val serverListener = object : WebSocketListener() {
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                webSocket.send("{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}")
-            }
-        }
-        mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
-        backgroundScope.launch { client.connect() }
-
-        client.state.takeWhile { (it as? State.Connected)?.received == null }
-    }
-
-    @Test
-    fun testServerDisconnectionHandling() = runTest {
-        mockWebServer.enqueue(MockResponse().setResponseCode(101))
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
-        backgroundScope.launch { client.connect() }
-
-        client.state.takeWhile { it !is State.Connected }.collect {}
-        mockWebServer.shutdown()
-        client.state.takeWhile { it !is State.Disconnected }.collect {}
-    }
-
-    @Test
-    fun testMultipleConnectsAreIdempotent() = runTest {
-
-        val firstServerMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-        val firstParsed = Json.decodeFromString<ResponseRaw>(firstServerMessage).beautify()
-
-        val secondServerMessage = "{\"name\":\"Nanit2\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-
-        val serverListener = object : WebSocketListener() {
-            var counter = 0
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                if (counter++ == 0) webSocket.send(firstServerMessage)
-                else webSocket.send(secondServerMessage)
-            }
-        }
-
-        mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
-
-        backgroundScope.launch { client.connect() }
-        client.state.takeWhile { (it as? State.Connected)?.received == null }.collect {}
-        Assert.assertEquals(firstParsed, (client.state.value as State.Connected).received)
-
-        backgroundScope.launch { client.connect() }
-        Assert.assertEquals(firstParsed, (client.state.value as State.Connected).received)
+        Assert.assertEquals("Connected count", 1, states.count(State.Connected()::equals))
+        Assert.assertEquals("Parsed message", 1, states.count(State.Connected(firstParsed)::equals))
     }
 }

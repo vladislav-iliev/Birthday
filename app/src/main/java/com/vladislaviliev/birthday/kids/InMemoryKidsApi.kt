@@ -2,9 +2,9 @@ package com.vladislaviliev.birthday.kids
 
 import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.emitAndYield
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.yield
 
 class InMemoryKidsApi : KidsApi {
 
@@ -12,12 +12,18 @@ class InMemoryKidsApi : KidsApi {
     override val state = _state.asStateFlow()
 
     override suspend fun connect() {
-        _state.emit(State.Connecting)
-        yield()
-        _state.emit(State.Connected())
+        if (state.value is State.Connecting || state.value is State.Connected) {
+            return
+        }
+        _state.emitAndYield(State.Connecting)
+        _state.emitAndYield(State.Connected())
     }
 
     suspend fun emitResponse(r: Response) {
-        _state.emit(State.Connected(r))
+        _state.emitAndYield(State.Connected(r))
+    }
+
+    suspend fun disconnect() {
+        _state.emitAndYield(State.Disconnected())
     }
 }
