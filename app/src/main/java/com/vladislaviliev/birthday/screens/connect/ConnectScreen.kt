@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladislaviliev.birthday.R
+import com.vladislaviliev.birthday.networking.State
 
 @Composable
 fun ConnectScreen(onConnectClick: (String, String) -> Unit, state: State, modifier: Modifier = Modifier) {
@@ -64,8 +65,8 @@ private fun Inputs(
 
 @Composable
 private fun StateComposable(state: State) {
-    if (state is State.Message && state.msg.isNotEmpty()) {
-        Text(state.msg, color = Color.Red)
+    if (state is State.Disconnected && state.cause != null) {
+        Text(state.cause.javaClass.simpleName, color = Color.Red)
         return
     }
     if (state is State.Connecting) {
@@ -77,5 +78,5 @@ private fun StateComposable(state: State) {
 @Preview(showBackground = true)
 @Composable
 fun ConnectScreenPreview() {
-    ConnectScreen({ _, _ -> }, State.Message("Some error"), Modifier.fillMaxSize())
+    ConnectScreen({ _, _ -> }, State.Connecting, Modifier.fillMaxSize())
 }

@@ -40,7 +40,8 @@ class Client(private val serverIp: String, private val port: Int) : KidsApi {
     }
 
     override suspend fun connect() {
-        if (state.value is State.Connected) return
+        if (state.value is State.Connecting || state.value is State.Connected) return
+        _state.emit(State.Connecting)
         try {
             client.webSocket(host = serverIp, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {

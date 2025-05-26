@@ -13,8 +13,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vladislaviliev.birthday.networking.State
 import com.vladislaviliev.birthday.screens.connect.ConnectScreen
-import com.vladislaviliev.birthday.screens.connect.State
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ class ConnectScreenTest {
 
     @Test
     fun testShowsInitialElements() {
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Message("")) }
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.connect_to_server)).assertIsDisplayed()
         composeTestRule.onNodeWithText(getStringResource(R.string.ip)).assertIsDisplayed()
         composeTestRule.onNodeWithText(getStringResource(R.string.port)).assertIsDisplayed()
@@ -47,7 +47,7 @@ class ConnectScreenTest {
         val testIp = "192.168.1.1"
         val testPort = "8080"
 
-        composeTestRule.setContent { ConnectScreen(onConnectClick, State.Message("")) }
+        composeTestRule.setContent { ConnectScreen(onConnectClick, State.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.ip)).performTextInput(testIp)
         composeTestRule.onNodeWithText(getStringResource(R.string.port)).performTextInput(testPort)
         composeTestRule.onNodeWithText(getStringResource(R.string.connect)).performClick()
@@ -67,8 +67,8 @@ class ConnectScreenTest {
 
     @Test
     fun testShowsStateMessage() {
-        val message = "Test message"
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Message(message)) }
-        composeTestRule.onNodeWithText(message).assertIsDisplayed()
+        val cause = IllegalStateException()
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Disconnected(cause)) }
+        composeTestRule.onNodeWithText(cause.javaClass.simpleName).assertIsDisplayed()
     }
 }

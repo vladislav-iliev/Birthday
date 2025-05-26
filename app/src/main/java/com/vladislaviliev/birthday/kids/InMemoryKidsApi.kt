@@ -4,6 +4,7 @@ import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.yield
 
 class InMemoryKidsApi : KidsApi {
 
@@ -11,6 +12,8 @@ class InMemoryKidsApi : KidsApi {
     override val state = _state.asStateFlow()
 
     override suspend fun connect() {
+        _state.emit(State.Connecting)
+        yield()
         _state.emit(State.Connected())
     }
 

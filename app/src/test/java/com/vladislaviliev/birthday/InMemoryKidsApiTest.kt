@@ -3,11 +3,17 @@ package com.vladislaviliev.birthday
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.networking.Response
 import com.vladislaviliev.birthday.networking.State
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import org.junit.Assert
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class InMemoryKidsApiTest {
 
     @Test
@@ -18,7 +24,13 @@ class InMemoryKidsApiTest {
     @Test
     fun `connect should change state to connected`() = runTest {
         val kidsApi = InMemoryKidsApi()
+        val states = mutableListOf<State>()
+
+        backgroundScope.launch { kidsApi.state.collect { states.add(it) } }
+        runCurrent()
         kidsApi.connect()
+        runCurrent()
+        Assert.assertEquals(State.Connecting, states[1])
         Assert.assertEquals(State.Connected(), kidsApi.state.value)
     }
 

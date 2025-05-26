@@ -4,8 +4,10 @@ import com.vladislaviliev.birthday.networking.Client
 import com.vladislaviliev.birthday.networking.ResponseRaw
 import com.vladislaviliev.birthday.networking.State
 import com.vladislaviliev.birthday.networking.beautify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
@@ -17,6 +19,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ClientTest {
 
     private lateinit var mockWebServer: MockWebServer
@@ -34,16 +37,28 @@ class ClientTest {
 
     @Test
     fun testInitialState() {
-        Assert.assertNull((Client("", 0).state.value as State.Disconnected).cause)
+        Assert.assertEquals(State.Disconnected(), Client("", 0).state.value)
     }
 
     @Test
     fun testConnection() = runTest {
-        mockWebServer.enqueue(MockResponse().setResponseCode(101))
-        val client = Client(mockWebServer.hostName, mockWebServer.port)
-        backgroundScope.launch { client.connect() }
+        val serverListener = object : WebSocketListener() {
+            override fun onMessage(webSocket: WebSocket, text: String) {
+                webSocket.close(1000, "")
+            }
+        }
 
-        client.state.takeWhile { it !is State.Connected }.collect {}
+        mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
+        val client = Client(mockWebServer.hostName, mockWebServer.port)
+
+        val states = mutableListOf<State>()
+
+        backgroundScope.launch { client.state.collect { states.add(it) } }
+        runCurrent()
+        client.connect()
+        runCurrent()
+        Assert.assertEquals(State.Connecting, states[1])
+        Assert.assertEquals(State.Connected(), states[2])
     }
 
     @Test
