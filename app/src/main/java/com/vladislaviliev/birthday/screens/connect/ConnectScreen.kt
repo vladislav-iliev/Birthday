@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -28,7 +29,12 @@ import com.vladislaviliev.birthday.networking.State
 
 @Composable
 fun ConnectScreen(connect: (String, Int) -> Unit, state: State, modifier: Modifier = Modifier) {
-    Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         var ip by rememberSaveable { mutableStateOf("localhost") }
         var port by rememberSaveable { mutableStateOf("8080") }
