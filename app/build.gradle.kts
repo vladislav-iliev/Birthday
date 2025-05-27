@@ -1,8 +1,10 @@
 plugins {
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -16,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.vladislaviliev.birthday.HiltTestRunner"
     }
 
     buildTypes {
@@ -54,6 +56,10 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
 
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+
     implementation(libs.slf4j.simple)
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.client.core)
@@ -73,6 +79,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     androidTestImplementation(libs.androidx.navigation.testing)
+
+    kaptAndroidTest(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.runner)
 
     testImplementation(libs.okhttp3.mockwebserver)
 }
