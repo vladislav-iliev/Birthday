@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.LocalDateTime
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InMemoryKidsApiTest {

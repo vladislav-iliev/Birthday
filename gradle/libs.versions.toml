@@ -1,4 +1,6 @@
 [versions]
+core-library-desugaring = "2.1.5"
+
 kotlin = "2.1.0"
 kotlin-serialization = "2.1.21"
 kotlinx-serialization-json = "1.8.1"
@@ -32,8 +34,9 @@ okhttp3-mockwebserver = "4.12.0"
 runner = "1.6.2"
 
 [libraries]
+core-library-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "core-library-desugaring" }
+
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
