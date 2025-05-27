@@ -39,7 +39,6 @@ class NavControllerTest {
 
     @Test
     fun verifyStartDestinationIsConnectScreen() {
-        composeTestRule.waitForIdle()
         Assert.assertEquals(ScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 

@@ -20,10 +20,12 @@ fun NavGraphBuilder.addScreenDestination(onConnected: () -> Unit) {
 private fun Content(onConnected: () -> Unit) {
     val viewModel = hiltViewModel<ViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    if (state is State.Connected) {
+    if (canProgressToMainScreen(state)) {
         onConnected()
         return
     }
     val connect = { ip: String, port: Int -> viewModel.connect(ip, port) }
     ConnectScreen(connect, state)
 }
+
+private fun canProgressToMainScreen(state: State) = state is State.Connected && null != state.received

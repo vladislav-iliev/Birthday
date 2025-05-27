@@ -14,5 +14,5 @@ fun createAppGraph(controller: NavController) =
     controller.createGraph(ScreenRoute, AppGraphRoute::class) { addAppGraphDestinations(controller) }
 
 private fun NavGraphBuilder.addAppGraphDestinations(controller: NavController) {
-    addScreenDestination { repeat(5) { println("Connected") } }
+    addScreenDestination { repeat(5) { println("Received kid") } }
 }
