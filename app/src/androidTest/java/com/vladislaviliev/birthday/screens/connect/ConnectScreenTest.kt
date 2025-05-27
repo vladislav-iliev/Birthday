@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday
+package com.vladislaviliev.birthday.screens.connect
 
 import android.content.Context
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -13,8 +13,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.networking.State
-import com.vladislaviliev.birthday.screens.connect.ConnectScreen
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -75,7 +75,7 @@ class ConnectScreenTest {
         composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connecting) }
         composeTestRule.waitForIdle()
         composeTestRule
-            .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
+            .onNode(SemanticsMatcher.Companion.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
             .assertIsDisplayed()
     }
 
