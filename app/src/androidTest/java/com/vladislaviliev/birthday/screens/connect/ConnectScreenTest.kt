@@ -75,7 +75,7 @@ class ConnectScreenTest {
         composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connecting) }
         composeTestRule.waitForIdle()
         composeTestRule
-            .onNode(SemanticsMatcher.Companion.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
+            .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
             .assertIsDisplayed()
     }
 
