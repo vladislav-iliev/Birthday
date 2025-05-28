@@ -3,10 +3,12 @@
     <string name="connect_to_server">Connect to server</string>
     <string name="connect">Connect</string>
     <plurals name="plurals_month">
+        <item quantity="zero">months</item>
         <item quantity="one">month</item>
         <item quantity="other">months</item>
     </plurals>
     <plurals name="plurals_year">
+        <item quantity="zero">years</item>
         <item quantity="one">year</item>
         <item quantity="other">years</item>
     </plurals>
@@ -14,4 +16,5 @@
     <string name="x_old">%1$s old!</string>
     <string name="nanit">Nanit</string>
     <string name="share_the_news">Share the news</string>
+    <string name="avatar_image_of_x">Avatar image of %1$s</string>
 </resources>

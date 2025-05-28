@@ -33,9 +33,9 @@ fun Header(kidName: String, ageMonths: Int, modifier: Modifier = Modifier) {
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         HeaderText(stringResource(R.string.today_x_is, kidName))
-        Spacer(Modifier.height(13.ptToDp))
+        Spacer(Modifier.height(13.dp))
         DrawnNumber(number)
-        Spacer(Modifier.height(14.ptToDp))
+        Spacer(Modifier.height(14.dp))
         HeaderText(stringResource(R.string.x_old, durationWord))
     }
 }

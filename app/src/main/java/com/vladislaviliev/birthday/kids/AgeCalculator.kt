@@ -13,4 +13,9 @@ class AgeCalculator {
     fun calculateMonthsBetween(dob: LocalDateTime, now: LocalDateTime) = ChronoUnit.MONTHS.between(dob, now).toInt()
 
     fun monthsToYears(months: Int): Int = months / 12
+
+    fun parseForDisplay(ageMonths: Int): AgeToDisplay {
+        val years = monthsToYears(ageMonths)
+        return if (0 < years) AgeToDisplay(years, false) else AgeToDisplay(ageMonths, true)
+    }
 }

@@ -1,6 +1,9 @@
 package com.vladislaviliev.birthday.screens.kid
 
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -10,8 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ChainStyle
@@ -19,6 +26,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.vladislaviliev.birthday.R
+import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.networking.Message
 
 private const val backgroundRef = "background"
 private const val topSpacerRef = "top_spacer"
@@ -29,20 +38,21 @@ private const val bottomSpacerRef = "bottom_spacer"
 private const val footerRef = "footer"
 
 @Composable
-fun KidScreen(modifier: Modifier = Modifier) {
-
+fun KidScreen(message: Message, modifier: Modifier = Modifier) {
     ConstraintLayout(
-        constraints(), modifier
-            .fillMaxSize()
+        constraints(LocalContext.current.resources.displayMetrics),
+        modifier
+            .background(colorResource(message.theme.backgroundColorRes))
             .statusBarsPadding()
     ) {
         Image(
-            painter = painterResource(R.drawable.background_pelican),
+            painter = painterResource(message.theme.backgroundDrawableRes),
             null,
             Modifier
                 .layoutId(backgroundRef)
                 .zIndex(2f),
             contentScale = ContentScale.Crop,
+//            alignment = Alignment.Center TODO: verify alignment, bottom hides the items behind drawable
         )
         Spacer(
             Modifier
@@ -50,7 +60,9 @@ fun KidScreen(modifier: Modifier = Modifier) {
                 .zIndex(10f),
         )
         Header(
-            "Johny Doe His Name Is So Long Lol", 16, Modifier
+            message.name,
+            message.ageMonths,
+            Modifier
                 .layoutId(headerRef)
                 .zIndex(3f)
         )
@@ -60,13 +72,14 @@ fun KidScreen(modifier: Modifier = Modifier) {
                 .zIndex(10f)
         )
         Avatar(
+            message,
             Modifier
                 .layoutId(avatarRef)
                 .zIndex(1f)
         )
         Image(
             painterResource(R.drawable.logo),
-            null,
+            stringResource(R.string.nanit),
             Modifier
                 .width(66.dp)
                 .layoutId(footerRef)
@@ -78,10 +91,10 @@ fun KidScreen(modifier: Modifier = Modifier) {
                 .layoutId(bottomSpacerRef)
                 .zIndex(10f),
         )
-    }
+}
 }
 
-private fun constraints() = ConstraintSet {
+private fun constraints(displayMetrics: DisplayMetrics) = ConstraintSet {
     val background = createRefFor(backgroundRef)
     val topSpacer = createRefFor(topSpacerRef)
     val header = createRefFor(headerRef)
@@ -93,9 +106,23 @@ private fun constraints() = ConstraintSet {
     val startGuideline = createGuidelineFromStart(50.dp)
     val endGuideline = createGuidelineFromEnd(50.dp)
 
+    /*
+     * The header needs to be exactly at the center between StatusBar and Avatar
+     * whenever possible.
+     * The following percent will be applied to weights to compensate for the
+     * difference in the default margins.
+     *
+     * Don't forget to ensure the sum of all weights is reasonably close to 100!
+     */
+    val percentOffset = 2.5.dp.asHeightPercent(displayMetrics)
+    val topSpacerWeight = 12.5f - percentOffset
+    val middleSpacerWeight = 12.5f + percentOffset
+    val avatarWeight = 50f
+    val bottomSpacerWeight = 25f
+
     constrain(background) {
-        width = Dimension.wrapContent
-        height = Dimension.wrapContent
+        width = Dimension.fillToConstraints
+        height = Dimension.fillToConstraints
         top.linkTo(parent.top)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
@@ -109,7 +136,7 @@ private fun constraints() = ConstraintSet {
         start.linkTo(startGuideline)
         end.linkTo(endGuideline)
         bottom.linkTo(header.top)
-        verticalChainWeight = 1f
+        verticalChainWeight = topSpacerWeight
     }
 
     constrain(header) {
@@ -128,7 +155,7 @@ private fun constraints() = ConstraintSet {
         start.linkTo(startGuideline)
         end.linkTo(endGuideline)
         bottom.linkTo(avatar.top)
-        verticalChainWeight = 1f
+        verticalChainWeight = middleSpacerWeight
     }
 
     constrain(avatar) {
@@ -138,7 +165,7 @@ private fun constraints() = ConstraintSet {
         start.linkTo(startGuideline)
         end.linkTo(endGuideline)
         bottom.linkTo(footer.top)
-        verticalChainWeight = 6f
+        verticalChainWeight = avatarWeight
     }
 
     constrain(footer) {
@@ -157,7 +184,7 @@ private fun constraints() = ConstraintSet {
         start.linkTo(startGuideline)
         end.linkTo(endGuideline)
         bottom.linkTo(parent.bottom)
-        verticalChainWeight = 3f
+        verticalChainWeight = bottomSpacerWeight
     }
 
     createVerticalChain(
@@ -167,12 +194,17 @@ private fun constraints() = ConstraintSet {
         avatar,
         footer.withChainParams(topMargin = 15.dp),
         bottomSpacer,
-        chainStyle = ChainStyle.Spread
+        chainStyle = ChainStyle.SpreadInside
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp,orientation=portrait")
+private fun Dp.asHeightPercent(displayMetrics: DisplayMetrics): Float {
+    val dpInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.value, displayMetrics)
+    return 100 * dpInPx / displayMetrics.heightPixels.toFloat()
+}
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun KidScreenPreview() {
-    KidScreen(Modifier.fillMaxSize())
+    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), Modifier.fillMaxSize())
 }
