@@ -28,11 +28,11 @@ class KidScreenTest {
 
         composeTestRule.setContent { KidScreen(message = message) }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertExists()
-        composeTestRule.onNodeWithContentDescription("1").assertExists()
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertExists()
-        composeTestRule.onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, message.name)).assertExists()
-        composeTestRule.onNodeWithContentDescription(context.getString(R.string.nanit)).assertExists()
+        composeTestRule.onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("1").assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, message.name)).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.nanit)).assertIsDisplayed()
     }
 
     @Test
