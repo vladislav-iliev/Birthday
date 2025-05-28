@@ -6,9 +6,9 @@ import java.time.temporal.ChronoUnit
 
 class AgeCalculator {
 
-    fun timezone(): ZoneId = ZoneId.systemDefault()
+    val timezone: ZoneId = ZoneId.systemDefault()
 
-    fun getCurrentDateTime(): LocalDateTime = LocalDateTime.now()
+    val currentDateTime: LocalDateTime get() = LocalDateTime.now()
 
     fun calculateMonthsBetween(dob: LocalDateTime, now: LocalDateTime) = ChronoUnit.MONTHS.between(dob, now).toInt()
 

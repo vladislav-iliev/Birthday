@@ -9,11 +9,16 @@ import java.time.LocalDateTime
 @Serializable
 data class ResponseRaw(val name: String, val dob: Long, val theme: String)
 
-data class Response(val name: String, val dob: LocalDateTime, val theme: Theme)
+data class Response(val name: String, val ageMonths: Int, val theme: Theme)
 
 fun ResponseRaw.beautify(): Response {
-    val timezone = AgeCalculator().timezone()
+    val calculator = AgeCalculator()
+    val timezone = calculator.timezone
+
     val dob = LocalDateTime.ofInstant(Instant.ofEpochMilli(dob), timezone)
+    val now = calculator.currentDateTime
+    val ageMonths = calculator.calculateMonthsBetween(dob, now)
+
     val theme = Theme.entries.first { it.name.equals(theme, true) }
-    return Response(name, dob, theme)
+    return Response(name, ageMonths, theme)
 }
