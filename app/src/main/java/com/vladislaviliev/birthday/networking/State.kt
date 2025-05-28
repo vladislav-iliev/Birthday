@@ -5,3 +5,5 @@ sealed class State {
     data object Connecting : State()
     data class Connected(val message: Message? = null) : State()
 }
+
+fun State.getMessageOrNull() = (this as? State.Connected)?.message
