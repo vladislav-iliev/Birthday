@@ -2,4 +2,16 @@
     <string name="app_name">Birthday</string>
     <string name="connect_to_server">Connect to server</string>
     <string name="connect">Connect</string>
+    <plurals name="plurals_month">
+        <item quantity="one">month</item>
+        <item quantity="other">months</item>
+    </plurals>
+    <plurals name="plurals_year">
+        <item quantity="one">year</item>
+        <item quantity="other">years</item>
+    </plurals>
+    <string name="today_x_is">Today %1$s is</string>
+    <string name="x_old">%1$s old!</string>
+    <string name="nanit">Nanit</string>
+    <string name="share_the_news">Share the news</string>
 </resources>

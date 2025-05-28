@@ -4,7 +4,6 @@ core-library-desugaring = "2.1.5"
 kotlin = "2.1.0"
 kotlin-serialization = "2.1.21"
 kotlinx-serialization-json = "1.8.1"
-kotlinx-datetime = "0.6.2"
 
 agp = "8.10.0"
 
@@ -13,6 +12,9 @@ lifecycleRuntimeKtx = "2.9.0"
 
 activityCompose = "1.10.1"
 composeBom = "2025.05.01"
+
+constraint-layout = "2.2.1"
+constraint-layout-compose = "1.1.1"
 
 navigation-compose = "2.9.0"
 
@@ -49,6 +51,9 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+androidx-constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint-layout" }
+androidx-constraint-layout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraint-layout-compose" }
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 
