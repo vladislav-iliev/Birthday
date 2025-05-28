@@ -52,7 +52,8 @@ fun KidScreen(message: Message, modifier: Modifier = Modifier) {
                 .layoutId(backgroundRef)
                 .zIndex(2f),
             contentScale = ContentScale.Crop,
-//            alignment = Alignment.Center TODO: verify alignment, bottom hides the items behind drawable
+            /* TODO: verify alignment requirement with examiners, bottom-centered hides the items behind drawable
+                alignment = Alignment.BottomCenter */
         )
         Spacer(
             Modifier
