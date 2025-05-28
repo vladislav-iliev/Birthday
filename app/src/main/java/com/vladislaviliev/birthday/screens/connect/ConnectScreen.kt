@@ -76,7 +76,8 @@ private fun StateComposable(state: State) {
         Text(state.cause.javaClass.simpleName, color = Color.Red)
         return
     }
-    if (state is State.Connecting) {
+    val awaitingMessage = state is State.Connected && state.message == null
+    if (state is State.Connecting || awaitingMessage) {
         CircularProgressIndicator()
         return
     }

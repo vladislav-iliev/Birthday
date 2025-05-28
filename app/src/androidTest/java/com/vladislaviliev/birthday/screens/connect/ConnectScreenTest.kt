@@ -71,8 +71,17 @@ class ConnectScreenTest {
     }
 
     @Test
-    fun testShowsConnectionIndicator() {
+    fun testShowsProgressIndicatorWhenConnecting() {
         composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connecting) }
+        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun testShowsProgressIndicatorWhenAwaitingMessage() {
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connected()) }
         composeTestRule.waitForIdle()
         composeTestRule
             .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
