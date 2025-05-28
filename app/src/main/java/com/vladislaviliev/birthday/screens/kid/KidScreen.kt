@@ -42,6 +42,7 @@ fun KidScreen(message: Message, modifier: Modifier = Modifier) {
     ConstraintLayout(
         constraints(LocalContext.current.resources.displayMetrics),
         modifier
+            .fillMaxSize()
             .background(colorResource(message.theme.backgroundColorRes))
             .statusBarsPadding()
     ) {
@@ -91,7 +92,7 @@ fun KidScreen(message: Message, modifier: Modifier = Modifier) {
                 .layoutId(bottomSpacerRef)
                 .zIndex(10f),
         )
-}
+    }
 }
 
 private fun constraints(displayMetrics: DisplayMetrics) = ConstraintSet {
