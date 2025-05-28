@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -82,7 +81,6 @@ fun KidScreen(message: Message, modifier: Modifier = Modifier) {
             painterResource(R.drawable.logo),
             stringResource(R.string.nanit),
             Modifier
-                .width(66.dp)
                 .layoutId(footerRef)
                 .zIndex(3f)
         )
