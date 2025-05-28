@@ -3,7 +3,7 @@ package com.vladislaviliev.birthday.screens.kid
 import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
-import com.vladislaviliev.birthday.networking.Response
+import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -42,10 +42,10 @@ class ViewModelTest {
         api.connect("", 0)
         Assert.assertEquals(State.Connected(), viewModel.state.value)
 
-        // When API receives response
-        val response = Response("JohnyDoe", 1, Theme.PELICAN)
-        api.emitResponse(response)
-        Assert.assertEquals(State.Connected(response), viewModel.state.value)
+        // When API receives message
+        val message = Message("JohnyDoe", 1, Theme.PELICAN)
+        api.emitMessage(message)
+        Assert.assertEquals(State.Connected(message), viewModel.state.value)
 
         // When API disconnects
         api.disconnect()

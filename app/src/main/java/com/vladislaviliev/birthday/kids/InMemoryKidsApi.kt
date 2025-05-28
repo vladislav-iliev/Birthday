@@ -1,6 +1,6 @@
 package com.vladislaviliev.birthday.kids
 
-import com.vladislaviliev.birthday.networking.Response
+import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.networking.State
 import com.vladislaviliev.birthday.networking.emitAndYield
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ class InMemoryKidsApi : KidsApi {
         _state.emitAndYield(State.Connected())
     }
 
-    suspend fun emitResponse(r: Response) {
+    suspend fun emitMessage(r: Message) {
         _state.emitAndYield(State.Connected(r))
     }
 

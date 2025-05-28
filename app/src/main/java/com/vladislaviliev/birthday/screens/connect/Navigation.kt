@@ -28,4 +28,4 @@ private fun Content(onConnected: () -> Unit) {
     ConnectScreen(connect, state)
 }
 
-private fun canProgressToKidScreen(state: State) = state is State.Connected && null != state.received
+private fun canProgressToKidScreen(state: State) = state is State.Connected && null != state.message

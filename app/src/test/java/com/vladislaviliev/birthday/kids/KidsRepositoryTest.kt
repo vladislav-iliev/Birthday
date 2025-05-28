@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.kids
 
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.Response
+import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,17 +29,17 @@ class KidsRepositoryTest {
     }
 
     @Test
-    fun `repository should reflect api response state changes`() = runTest {
+    fun `repository should reflect incoming messages`() = runTest {
         val api = InMemoryKidsApi()
         val repository = createRepo(api)
 
-        val response = Response("JohnyDoe", 1, Theme.PELICAN)
-        api.emitResponse(response)
+        val message = Message("JohnyDoe", 1, Theme.PELICAN)
+        api.emitMessage(message)
 
         val state = repository.state.first()
 
         println(api.state.first())
 
-        Assert.assertEquals(State.Connected(response), state)
+        Assert.assertEquals(State.Connected(message), state)
     }
 }

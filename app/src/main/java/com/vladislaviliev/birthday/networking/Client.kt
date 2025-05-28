@@ -28,7 +28,7 @@ class Client : KidsApi {
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
-            val response = session.receiveDeserialized<ResponseRaw>().beautify()
+            val response = session.receiveDeserialized<MessageRaw>().beautify()
             _state.emitAndYield(State.Connected(response))
         }
     }
