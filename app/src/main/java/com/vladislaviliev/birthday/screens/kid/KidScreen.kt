@@ -4,8 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,54 +25,64 @@ private const val topSpacerRef = "top_spacer"
 private const val headerRef = "header"
 private const val middleSpacerRef = "middle_spacer"
 private const val avatarRef = "avatar"
-private const val footerRef = "footer"
 private const val bottomSpacerRef = "bottom_spacer"
+private const val footerRef = "footer"
 
 @Composable
 fun KidScreen(modifier: Modifier = Modifier) {
 
-    ConstraintLayout(constraints(), modifier.fillMaxSize()) {
+    ConstraintLayout(
+        constraints(), modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
         Image(
             painter = painterResource(R.drawable.background_pelican),
             null,
             Modifier
                 .layoutId(backgroundRef)
                 .zIndex(2f),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
         Spacer(
             Modifier
                 .layoutId(topSpacerRef)
-                .sizeIn(minHeight = 20.dp)
+                .zIndex(10f),
         )
         Header(
-            "Johny DoeJohny DoeJohny DoeJohny Doe", 16, Modifier
+            "Johny Doe His Name Is So Long Lol", 16, Modifier
                 .layoutId(headerRef)
-                .statusBarsPadding()
                 .zIndex(3f)
         )
         Spacer(
             Modifier
                 .layoutId(middleSpacerRef)
-                .sizeIn(minHeight = 15.dp)
+                .zIndex(10f)
         )
         Avatar(
             Modifier
                 .layoutId(avatarRef)
                 .zIndex(1f)
         )
-        Footer(
+        Image(
+            painterResource(R.drawable.logo),
+            null,
             Modifier
+                .width(66.dp)
                 .layoutId(footerRef)
-                .navigationBarsPadding()
                 .zIndex(3f)
         )
-        Spacer(Modifier.layoutId(bottomSpacerRef))
+        Spacer(
+            Modifier
+                .navigationBarsPadding()
+                .layoutId(bottomSpacerRef)
+                .zIndex(10f),
+        )
     }
 }
 
-private fun constraints() = ConstraintSet { // Use res/layout/kid_screen for easier modification
-    val backgroundRef = createRefFor(backgroundRef)
+private fun constraints() = ConstraintSet {
+    val background = createRefFor(backgroundRef)
     val topSpacer = createRefFor(topSpacerRef)
     val header = createRefFor(headerRef)
     val middleSpacer = createRefFor(middleSpacerRef)
@@ -80,12 +90,12 @@ private fun constraints() = ConstraintSet { // Use res/layout/kid_screen for eas
     val footer = createRefFor(footerRef)
     val bottomSpacer = createRefFor(bottomSpacerRef)
 
-    val avatarStartBarrier = createStartBarrier(avatar)
-    val avatarEndBarrier = createEndBarrier(avatar)
+    val startGuideline = createGuidelineFromStart(50.dp)
+    val endGuideline = createGuidelineFromEnd(50.dp)
 
-    constrain(backgroundRef) {
-        width = Dimension.fillToConstraints
-        height = Dimension.fillToConstraints
+    constrain(background) {
+        width = Dimension.wrapContent
+        height = Dimension.wrapContent
         top.linkTo(parent.top)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
@@ -96,8 +106,8 @@ private fun constraints() = ConstraintSet { // Use res/layout/kid_screen for eas
         width = Dimension.fillToConstraints
         height = Dimension.fillToConstraints
         top.linkTo(parent.top)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
         bottom.linkTo(header.top)
         verticalChainWeight = 1f
     }
@@ -106,36 +116,37 @@ private fun constraints() = ConstraintSet { // Use res/layout/kid_screen for eas
         width = Dimension.fillToConstraints
         height = Dimension.wrapContent
         top.linkTo(topSpacer.bottom)
-        start.linkTo(avatarStartBarrier)
-        end.linkTo(avatarEndBarrier)
-        bottom.linkTo(bottomSpacer.top)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
+        bottom.linkTo(middleSpacer.top)
     }
 
     constrain(middleSpacer) {
         width = Dimension.fillToConstraints
         height = Dimension.fillToConstraints
         top.linkTo(header.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
         bottom.linkTo(avatar.top)
         verticalChainWeight = 1f
     }
 
     constrain(avatar) {
-        width = Dimension.fillToConstraints
-        height = Dimension.ratio("1:1")
-        top.linkTo(bottomSpacer.bottom)
-        start.linkTo(parent.start, 50.dp)
-        end.linkTo(parent.end, 50.dp)
+        width = Dimension.ratio("1:1")
+        height = Dimension.fillToConstraints
+        top.linkTo(middleSpacer.bottom)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
         bottom.linkTo(footer.top)
+        verticalChainWeight = 6f
     }
 
     constrain(footer) {
-        width = Dimension.wrapContent
+        width = Dimension.value(70.dp)
         height = Dimension.wrapContent
         top.linkTo(avatar.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
         bottom.linkTo(bottomSpacer.top)
     }
 
@@ -143,16 +154,24 @@ private fun constraints() = ConstraintSet { // Use res/layout/kid_screen for eas
         width = Dimension.fillToConstraints
         height = Dimension.fillToConstraints
         top.linkTo(footer.bottom)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
+        start.linkTo(startGuideline)
+        end.linkTo(endGuideline)
         bottom.linkTo(parent.bottom)
-        verticalChainWeight = 1f
+        verticalChainWeight = 3f
     }
 
-    createVerticalChain(topSpacer, header, middleSpacer, avatar, footer, bottomSpacer, chainStyle = ChainStyle.Packed)
+    createVerticalChain(
+        topSpacer,
+        header.withChainParams(topMargin = 20.dp, bottomMargin = 15.dp),
+        middleSpacer,
+        avatar,
+        footer.withChainParams(topMargin = 15.dp),
+        bottomSpacer,
+        chainStyle = ChainStyle.Spread
+    )
 }
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp,orientation=landscape")
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp,orientation=portrait")
 @Composable
 fun KidScreenPreview() {
     KidScreen(Modifier.fillMaxSize())
