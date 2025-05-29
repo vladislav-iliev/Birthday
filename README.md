@@ -1,7 +1,7 @@
 # home-task-birthday
 
 ##
-Base app done, including some tests.
+Base app done. Tests included (probably cover most points of interest).
 Currently doing "bonus" task, should be done soon.
 
 ## Videos
