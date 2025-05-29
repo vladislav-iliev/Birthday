@@ -1,9 +1,10 @@
 package com.vladislaviliev.birthday.screens.kid
 
 import android.content.Context
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
@@ -28,11 +29,17 @@ class KidScreenTest {
 
         composeTestRule.setContent { KidScreen(message = message) }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription("1").assertIsDisplayed()
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, message.name)).assertIsDisplayed()
-        composeTestRule.onNodeWithContentDescription(context.getString(R.string.nanit)).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("1").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, message.name))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(R.string.nanit)).assertIsDisplayed()
     }
 
     @Test
@@ -42,7 +49,8 @@ class KidScreenTest {
         composeTestRule.setContent { KidScreen(message = message) }
 
         val monthText = context.resources.getQuantityString(R.plurals.plurals_month, 1, 1)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, monthText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, monthText), ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -52,7 +60,8 @@ class KidScreenTest {
         composeTestRule.setContent { KidScreen(message = message) }
 
         val monthsText = context.resources.getQuantityString(R.plurals.plurals_month, 11, 11)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, monthsText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, monthsText), ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -62,7 +71,8 @@ class KidScreenTest {
         composeTestRule.setContent { KidScreen(message = message) }
 
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -71,7 +81,8 @@ class KidScreenTest {
 
         composeTestRule.setContent { KidScreen(message = message) }
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -81,7 +92,8 @@ class KidScreenTest {
         composeTestRule.setContent { KidScreen(message = message) }
 
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
     }
 
     @Test
@@ -91,6 +103,7 @@ class KidScreenTest {
         composeTestRule.setContent { KidScreen(message = message) }
 
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
-        composeTestRule.onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
     }
 }
