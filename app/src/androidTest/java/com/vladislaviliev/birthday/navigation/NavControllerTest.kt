@@ -15,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.HiltTestActivity
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.avatarPicker.cameraPermission.CameraPermissionRoute
+import com.vladislaviliev.birthday.avatarPicker.cameraPermission.navigateToCameraPermission
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
@@ -145,5 +147,41 @@ class NavControllerTest {
         }
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.cancel)).performClick()
         Assert.assertNotEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun testCameraOnChooseSourceOpensDialog() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.camera)).performClick()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
+        Assert.assertEquals(CameraPermissionRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun testCameraOnChooseSourceClosesChooseSource() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.camera)).performClick()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
+        Assert.assertTrue(navController.backStack.none { it.destination.route == ChooseSourceRoute::class.qualifiedName })
+    }
+
+    @Test
+    fun testCameraPermissionDialogClosesOnCancel() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToCameraPermission() }
+        composeTestRule.waitUntil {
+            CameraPermissionRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.cancel)).performClick()
+        Assert.assertNotEquals(CameraPermissionRoute::class.qualifiedName, navController.currentDestination?.route)
+        println(navController.backStack)
     }
 }

@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.ktor.client.websockets)
     implementation(libs.ktor.serialization)
 
+    implementation(libs.accompanist.permissions)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.junit.ktx)
