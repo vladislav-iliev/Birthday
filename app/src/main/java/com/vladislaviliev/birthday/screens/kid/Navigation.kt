@@ -14,12 +14,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object KidScreenRoute
 
-fun NavGraphBuilder.addKidScreenDestination(onDisconnected: () -> Unit) {
-    composable<KidScreenRoute> { Content(onDisconnected) }
+fun NavGraphBuilder.addKidScreenDestination(onDisconnect: () -> Unit, onAvatarPickerClick: () -> Unit) {
+    composable<KidScreenRoute> { Content(onDisconnect, onAvatarPickerClick) }
 }
 
 @Composable
-private fun Content(onDisconnect: () -> Unit) {
+private fun Content(onDisconnect: () -> Unit, onAvatarPickerClick: () -> Unit) {
     val vm = hiltViewModel<ViewModel>()
     val state by vm.state.collectAsStateWithLifecycle()
     val message = (state as? State.Connected)?.message
@@ -27,7 +27,7 @@ private fun Content(onDisconnect: () -> Unit) {
         onDisconnect()
         return
     }
-    KidScreen(message)
+    KidScreen(message, onAvatarPickerClick)
 }
 
 fun NavController.onDisconnected() {

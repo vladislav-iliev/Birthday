@@ -37,7 +37,7 @@ private const val bottomSpacerRef = "bottom_spacer"
 private const val footerRef = "footer"
 
 @Composable
-fun KidScreen(message: Message, modifier: Modifier = Modifier) {
+fun KidScreen(message: Message, onAvatarPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     ConstraintLayout(
         constraints(LocalContext.current.resources.displayMetrics),
         modifier
@@ -74,6 +74,7 @@ fun KidScreen(message: Message, modifier: Modifier = Modifier) {
         )
         Avatar(
             message,
+            onAvatarPickerClick,
             Modifier
                 .layoutId(avatarRef)
                 .zIndex(1f)
@@ -206,5 +207,5 @@ private fun Dp.asHeightPercent(displayMetrics: DisplayMetrics): Float {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun KidScreenPreview() {
-    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), Modifier.fillMaxSize())
+    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), {}, Modifier.fillMaxSize())
 }

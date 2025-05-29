@@ -18,5 +18,5 @@ fun createAppGraph(controller: NavController) =
 
 private fun NavGraphBuilder.addAppGraphDestinations(controller: NavController) {
     addConnectScreenDestination(controller::onConnected)
-    addKidScreenDestination(controller::onDisconnected)
+    addKidScreenDestination(controller::onDisconnected, {})
 }
