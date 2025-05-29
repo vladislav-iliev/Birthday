@@ -31,7 +31,6 @@ private fun Content(onConnected: () -> Unit) {
 }
 
 fun NavController.onConnected() {
-    navigate(KidScreenRoute) {
-        popUpTo(ConnectScreenRoute) { inclusive = true }
-    }
+    popBackStack()
+    navigate(KidScreenRoute)
 }

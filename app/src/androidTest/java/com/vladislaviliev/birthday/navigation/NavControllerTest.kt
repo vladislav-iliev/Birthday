@@ -79,10 +79,22 @@ class NavControllerTest {
         coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
 
         composeTestRule.waitUntil {
-            ConnectScreenRoute::class.qualifiedName != navController.currentDestination?.route
+            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
         }
-        Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
+
+    @Test
+    fun testConnectClosesItselfWhenConnected() {
+        setContentToAppDefault(navController)
+
+        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+
+        composeTestRule.waitUntil {
+            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        Assert.assertTrue(navController.backStack.none { it.destination.route == ConnectScreenRoute::class.qualifiedName })
+    }
+
 
     @Test
     fun testDisconnectGoesToConnectScreen() {
