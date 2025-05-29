@@ -1,7 +1,10 @@
 package com.vladislaviliev.birthday.navigation
 
 import android.content.Context
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.DialogNavigator
@@ -9,7 +12,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.HiltTestActivity
+import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
+import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.kids.KidsApi
 import com.vladislaviliev.birthday.networking.Message
@@ -91,5 +97,29 @@ class NavControllerTest {
             KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
         }
         Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun testAvatarPickerGraphStartsWithChooseSource() {
+        setContentToAppDefault(navController)
+
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+    }
+
+    @Test
+    fun testSelectingChooseAvatarGoesToAvatarPicker() {
+        setContentToAppDefault(navController)
+
+        val btn =
+            composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
+
+        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        composeTestRule.waitUntil { btn.isDisplayed() }
+
+        btn.performClick()
+        Assert.assertEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 }

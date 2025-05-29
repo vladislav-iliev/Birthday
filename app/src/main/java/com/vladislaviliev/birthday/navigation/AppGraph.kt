@@ -3,6 +3,8 @@ package com.vladislaviliev.birthday.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.createGraph
+import com.vladislaviliev.birthday.avatarPicker.addAvatarPickerGraph
+import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.connect.addConnectScreenDestination
 import com.vladislaviliev.birthday.screens.connect.onConnected
@@ -17,6 +19,7 @@ fun createAppGraph(controller: NavController) =
     controller.createGraph(ConnectScreenRoute, AppGraphRoute::class) { addAppGraphDestinations(controller) }
 
 private fun NavGraphBuilder.addAppGraphDestinations(controller: NavController) {
+    addAvatarPickerGraph(controller)
     addConnectScreenDestination(controller::onConnected)
-    addKidScreenDestination(controller::onDisconnected, {})
+    addKidScreenDestination(controller::onDisconnected, controller::navigateToAvatarPicker)
 }

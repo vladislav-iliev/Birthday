@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker
+package com.vladislaviliev.birthday.avatarPicker.chooseSource
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
@@ -49,6 +49,7 @@ fun ChooseSourceDialog(
         title = { Text(stringResource(R.string.choose_avatar_source)) },
         text = { Items(selectedSource, onItemSelected) },
         confirmButton = { Button(onConfirmClick) { Text(stringResource(android.R.string.ok)) } },
+        dismissButton = { Button(onDismissRequest) { Text(stringResource(android.R.string.cancel)) } },
     )
 }
 

@@ -57,7 +57,7 @@ fun Avatar(message: Message, onPickerClick: () -> Unit, modifier: Modifier = Mod
                 .offset(createOffset)
                 .size(size)
                 .clip(CircleShape)
-                .clickable(onClick = onPickerClick)
+                .clickable(onClick = onPickerClick, onClickLabel = stringResource(R.string.select_new_avatar))
         )
     }
 }
