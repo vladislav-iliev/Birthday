@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -33,44 +34,44 @@ import kotlin.math.sin
 @Composable
 fun Avatar(message: Message, onPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) { // seems like a reasonable choice instead of custom Layout
-
         val borderRadius = 9.dp
-        val diameter = minOf(this.maxWidth, this.maxHeight) - borderRadius
-        val pickerSize = borderRadius * 5
-
         Image(
             painterResource(message.theme.avatarPlaceholderRes),
             stringResource(R.string.avatar_image_of_x, message.name),
             Modifier
-                .fillMaxSize()
                 .aspectRatio(1f)
+                .fillMaxSize()
+                .align(Alignment.Center)
                 .clip(CircleShape)
                 .border(borderRadius, colorResource(message.theme.avatarBorderColorRes), CircleShape)
         )
 
-        val displayMetrics = LocalContext.current.resources.displayMetrics
-        val createOffset = { d: Density -> radiusToOffset(diameter / 2, displayMetrics) }
-
+        val size = borderRadius * 5
+        val radiusPx = getRadiusPixels(borderRadius, LocalContext.current.resources.displayMetrics)
+        val createOffset = { d: Density -> radiusToOffset(radiusPx) }
         Image(
             painterResource(message.theme.avatarPickerRes),
             stringResource(R.string.select_new_avatar),
             Modifier
                 .align(Alignment.Center)
                 .offset(createOffset)
-                .size(pickerSize)
+                .size(size)
                 .clip(CircleShape)
                 .clickable(onClick = onPickerClick)
         )
     }
 }
 
-private fun radiusToOffset(r: Dp, displayMetrics: DisplayMetrics): IntOffset {
-    val rPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, r.value, displayMetrics)
+fun BoxWithConstraintsScope.getRadiusPixels(borderRadius: Dp, displayMetrics: DisplayMetrics): Float {
+    val borderRadiusPx =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, borderRadius.value.toFloat(), displayMetrics)
+    val diameter = minOf(constraints.maxWidth, constraints.maxHeight) - borderRadiusPx
+    return diameter / 2
+}
+
+private fun radiusToOffset(r: Float): IntOffset {
     val angleInRadians = Math.toRadians(45.0).toFloat()
-    return IntOffset(
-        x = (rPx * cos(angleInRadians)).toInt(),
-        y = -(rPx * sin(angleInRadians)).toInt()
-    )
+    return IntOffset((r * cos(angleInRadians)).toInt(), -(r * sin(angleInRadians)).toInt())
 }
 
 @Preview
