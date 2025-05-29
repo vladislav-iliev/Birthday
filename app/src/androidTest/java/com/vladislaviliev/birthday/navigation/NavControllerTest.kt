@@ -2,6 +2,7 @@ package com.vladislaviliev.birthday.navigation
 
 import android.content.Context
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.DialogNavigator
 import androidx.navigation.compose.NavHost
@@ -55,15 +56,19 @@ class NavControllerTest {
         navigatorProvider.addNavigator(ComposeNavigator()); navigatorProvider.addNavigator(DialogNavigator())
     }
 
+    private fun setContentToAppDefault(navController: NavHostController) {
+        composeTestRule.setContent { NavHost(navController, createAppGraph(navController)) }
+    }
+
     @Test
     fun verifyStartDestinationIsConnectScreen() {
-        composeTestRule.setContent { NavHost(navController, createAppGraph(navController)) }
+        setContentToAppDefault(navController)
         Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 
     @Test
     fun testConnectNavigatesToKids() {
-        composeTestRule.setContent { NavHost(navController, createAppGraph(navController)) }
+        setContentToAppDefault(navController)
 
         coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
 
@@ -75,7 +80,7 @@ class NavControllerTest {
 
     @Test
     fun testDisconnectGoesToConnectScreen() {
-        composeTestRule.setContent { NavHost(navController, createAppGraph(navController)) }
+        setContentToAppDefault(navController)
 
         coroutineScope.launch(Dispatchers.Main) { navController.onConnected() }
         coroutineScope.launch { (testKidsApi as InMemoryKidsApi).disconnect() }
