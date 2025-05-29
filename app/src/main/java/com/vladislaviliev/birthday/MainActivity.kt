@@ -4,8 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.vladislaviliev.birthday.navigation.Container
+import com.vladislaviliev.birthday.navigation.createAppGraph
 import com.vladislaviliev.birthday.ui.theme.BirthdayTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BirthdayTheme {
                 val navController = rememberNavController()
-                Container(navController)
+                NavHost(navController, createAppGraph(navController))
             }
         }
     }
