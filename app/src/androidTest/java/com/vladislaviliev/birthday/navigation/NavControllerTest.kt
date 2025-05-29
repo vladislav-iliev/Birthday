@@ -83,8 +83,11 @@ class NavControllerTest {
         setContentToAppDefault(navController)
 
         coroutineScope.launch(Dispatchers.Main) { navController.onConnected() }
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).disconnect() }
+        composeTestRule.waitUntil {
+            KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
+        }
 
+        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).disconnect() }
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
         }
