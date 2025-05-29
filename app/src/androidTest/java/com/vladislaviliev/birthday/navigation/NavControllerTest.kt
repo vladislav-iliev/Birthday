@@ -14,7 +14,6 @@ import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.kids.KidsApi
 import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
-import com.vladislaviliev.birthday.screens.connect.onConnected
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -82,9 +81,9 @@ class NavControllerTest {
     fun testDisconnectGoesToConnectScreen() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch(Dispatchers.Main) { navController.onConnected() }
+        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
         composeTestRule.waitUntil {
-            KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
+            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
         }
 
         coroutineScope.launch { (testKidsApi as InMemoryKidsApi).disconnect() }
