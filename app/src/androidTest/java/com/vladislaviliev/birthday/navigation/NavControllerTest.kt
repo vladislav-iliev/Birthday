@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
@@ -110,7 +111,7 @@ class NavControllerTest {
     }
 
     @Test
-    fun testSelectingChooseAvatarGoesToAvatarPicker() {
+    fun testClickingSelectNewAvatarGoesToChooseSource() {
         setContentToAppDefault(navController)
 
         val btn =
@@ -121,5 +122,16 @@ class NavControllerTest {
 
         btn.performClick()
         Assert.assertEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun testClickingCancelOnChooseSource() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.cancel)).performClick()
+        Assert.assertNotEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 }
