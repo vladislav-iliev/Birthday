@@ -9,26 +9,26 @@ import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCame
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.onPermissionGranted
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.addChooseSourceDestination
-import com.vladislaviliev.birthday.avatarPicker.gallery.addGalleryPickerDestination
-import com.vladislaviliev.birthday.avatarPicker.gallery.navigateToGalleryPicker
+import com.vladislaviliev.birthday.avatarPicker.gallery.addGalleryDestination
+import com.vladislaviliev.birthday.avatarPicker.gallery.navigateToGallery
 import kotlinx.serialization.Serializable
 
 @Serializable
-object AvatarPickerNavGraphRoute
+private object Route
 
 fun NavGraphBuilder.addAvatarPickerGraph(controller: NavController) {
-    navigation<AvatarPickerNavGraphRoute>(ChooseSourceRoute) { addDestinations(controller) }
+    navigation<Route>(ChooseSourceRoute) { addDestinations(controller) }
 }
 
 private fun NavGraphBuilder.addDestinations(controller: NavController) {
     addChooseSourceDestination(
         controller::popBackStack,
-        controller::navigateToGalleryPicker,
+        controller::navigateToGallery,
         controller::navigateToCameraPermission,
     )
-    addGalleryPickerDestination(controller::popBackStack)
+    addGalleryDestination(controller::popBackStack)
     addCameraPermissionDestination(controller::popBackStack, controller::onPermissionGranted)
     addCameraDestination(controller::popBackStack)
 }
 
-fun NavController.navigateToAvatarPicker() = navigate(AvatarPickerNavGraphRoute)
+fun NavController.navigateToAvatarPicker() = navigate(Route)

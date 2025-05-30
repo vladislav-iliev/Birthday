@@ -17,7 +17,7 @@ import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-object CameraDestinationRoute
+private object CameraDestinationRoute
 
 fun NavGraphBuilder.addCameraDestination(onFinished: () -> Unit) {
     composable<CameraDestinationRoute> { Content(onFinished) }
@@ -26,15 +26,15 @@ fun NavGraphBuilder.addCameraDestination(onFinished: () -> Unit) {
 @Composable
 private fun Content(onFinished: () -> Unit) {
     val context = LocalContext.current
-    val activityVm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
+    val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (Activity.RESULT_OK == it.resultCode) activityVm.onPhotoCopied()
+        if (Activity.RESULT_OK == it.resultCode) vm.onPhotoCopied()
         onFinished()
     }
 
     LaunchedEffect(true) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, activityVm.fileUri)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, vm.fileUri)
         launcher.launch(intent)
     }
 }

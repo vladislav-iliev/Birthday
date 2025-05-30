@@ -25,7 +25,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import com.vladislaviliev.birthday.R
 
-enum class AvatarSource { GALLERY, CAMERA }
+private enum class AvatarSource { GALLERY, CAMERA }
 
 @Composable
 fun ChooseSourceDialog(

@@ -28,7 +28,7 @@ class KidScreenTest {
         val message = Message(name = "Test Kid", ageMonths = 12, theme = Theme.FOX)
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         composeTestRule
             .onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertIsDisplayed()
@@ -51,7 +51,7 @@ class KidScreenTest {
     fun testPlurals_oneMonth() {
         val message = Message(name = "Baby", ageMonths = 1, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         val monthText = context.resources.getQuantityString(R.plurals.plurals_month, 1, 1)
         composeTestRule
@@ -62,7 +62,7 @@ class KidScreenTest {
     fun testPlurals_elevenMonths() {
         val message = Message(name = "Baby", ageMonths = 11, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         val monthsText = context.resources.getQuantityString(R.plurals.plurals_month, 11, 11)
         composeTestRule
@@ -73,7 +73,7 @@ class KidScreenTest {
     fun testPlurals_oneYear() {
         val message = Message(name = "Toddler", ageMonths = 12, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
         composeTestRule
@@ -84,7 +84,7 @@ class KidScreenTest {
     fun testPlurals_oneYearAndOneMonth() {
         val message = Message(name = "Toddler", ageMonths = 13, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
         composeTestRule
             .onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
@@ -94,7 +94,7 @@ class KidScreenTest {
     fun testPlurals_twoYears() {
         val message = Message(name = "Kid", ageMonths = 24, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
         composeTestRule
@@ -105,7 +105,7 @@ class KidScreenTest {
     fun testPlurals_twoYearsAndThreeMonths() {
         val message = Message(name = "Kid", ageMonths = 27, theme = Theme.FOX)
 
-        composeTestRule.setContent { KidScreen(message, {}) }
+        composeTestRule.setContent { KidScreen(message, null, {}) }
 
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
         composeTestRule

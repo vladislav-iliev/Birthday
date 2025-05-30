@@ -15,30 +15,26 @@ import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-object GalleryPickerRoute
+object GalleryRoute
 
-fun NavGraphBuilder.addGalleryPickerDestination(onSelected: () -> Unit) {
-    composable<GalleryPickerRoute> { Content(onSelected) }
+fun NavGraphBuilder.addGalleryDestination(onSelected: () -> Unit) {
+    composable<GalleryRoute> { Content(onSelected) }
 }
 
 @Composable
-fun Content(onSelected: () -> Unit) {
+fun Content(onDone: () -> Unit) {
     val context = LocalContext.current
     val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
         if (null != it) vm.copyFromUri(it)
-        onSelected()
+        onDone()
     }
 
     LaunchedEffect(true) { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
 }
 
-fun NavController.navigateToGalleryPicker() {
+fun NavController.navigateToGallery() {
     popBackStack()
-    navigate(GalleryPickerRoute)
-}
-
-fun NavController.onImageSelected() {
-
+    navigate(GalleryRoute)
 }

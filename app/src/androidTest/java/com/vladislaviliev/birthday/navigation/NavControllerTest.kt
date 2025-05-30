@@ -18,7 +18,7 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.CameraPermissionRoute
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCameraPermission
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
-import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryPickerRoute
+import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.kids.KidsApi
@@ -207,6 +207,6 @@ class NavControllerTest {
         }
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
-        Assert.assertEquals(GalleryPickerRoute::class.qualifiedName, navController.currentDestination?.route)
+        Assert.assertEquals(GalleryRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 }
