@@ -184,4 +184,16 @@ class NavControllerTest {
         Assert.assertNotEquals(CameraPermissionRoute::class.qualifiedName, navController.currentDestination?.route)
         println(navController.backStack)
     }
+
+    @Test
+    fun testSourceChooserClosesItselfAfterSelectingGallery() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
+        Assert.assertTrue(navController.backStack.none { it.destination.route == ChooseSourceRoute::class.qualifiedName })
+    }
 }

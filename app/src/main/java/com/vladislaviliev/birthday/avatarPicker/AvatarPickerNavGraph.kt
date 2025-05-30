@@ -8,8 +8,7 @@ import com.vladislaviliev.birthday.avatarPicker.cameraPermission.navigateToCamer
 import com.vladislaviliev.birthday.avatarPicker.cameraPermission.onPermissionGranted
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.addChooseSourceDestination
-import com.vladislaviliev.birthday.avatarPicker.cameraPermission.addCameraPermissionRequestDestination
-import com.vladislaviliev.birthday.avatarPicker.cameraPermission.navigateToCameraPermission
+import com.vladislaviliev.birthday.avatarPicker.gallery.onGallerySelected
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,7 +21,7 @@ fun NavGraphBuilder.addAvatarPickerGraph(controller: NavController) {
 private fun NavGraphBuilder.addDestinations(controller: NavController) {
     addChooseSourceDestination(
         controller::popBackStack,
-        {},
+        controller::onGallerySelected,
         controller::navigateToCameraPermission,
     )
     addCameraPermissionRequestDestination(controller::popBackStack, controller::onPermissionGranted)
