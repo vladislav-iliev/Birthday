@@ -6,22 +6,25 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.dialog
+import androidx.navigation.compose.composable
+import com.vladislaviliev.birthday.avatarPicker.AvatarSaver
 import kotlinx.serialization.Serializable
 
 @Serializable
 object GalleryPickerRoute
 
 fun NavGraphBuilder.addGalleryPickerDestination(onImageSelected: (Uri) -> Unit) {
-    dialog<GalleryPickerRoute> { Content(onImageSelected) }
+    composable<GalleryPickerRoute> { Content(onImageSelected) }
 }
 
 @Composable
 fun Content(onImageSelected: (Uri) -> Unit) {
+    val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        onImageSelected(it ?: Uri.EMPTY)
+        onImageSelected(if (null == it) Uri.EMPTY else AvatarSaver(context).saveUriToFile(it))
     }
     LaunchedEffect(true) { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
 }
