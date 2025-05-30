@@ -24,4 +24,5 @@
     <string name="permission_needed">Permission needed</string>
     <string name="using_camera_as_source_requires_permission">Using Camera as source requires granting permission.</string>
     <string name="request_permission">Request permission</string>
+    <string name="file_provider_authority">com.vladislaviliev.birthday.fileprovider</string>
 </resources>
