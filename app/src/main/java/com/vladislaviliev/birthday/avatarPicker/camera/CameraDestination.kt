@@ -29,7 +29,7 @@ private fun Content(onFinished: () -> Unit) {
     val activityVm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (Activity.RESULT_OK == it.resultCode) activityVm.onPhoto()
+        if (Activity.RESULT_OK == it.resultCode) activityVm.onPhotoCopied()
         onFinished()
     }
 

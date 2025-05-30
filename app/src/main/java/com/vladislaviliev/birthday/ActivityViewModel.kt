@@ -17,11 +17,11 @@ class ActivityViewModel @Inject constructor(private val avatarRepository: Avatar
 
     val fileUri = avatarRepository.fileUri
 
-    fun onPhoto() {
-        viewModelScope.launch { avatarRepository.onPhoto() }
+    fun onPhotoCopied() {
+        viewModelScope.launch { avatarRepository.onPhotoCopied() }
     }
 
-    fun saveFromUri(uri: Uri) {
-        viewModelScope.launch { avatarRepository.saveFromUri(uri) }
+    fun copyFromUri(uri: Uri) {
+        viewModelScope.launch { avatarRepository.copyFromUri(uri) }
     }
 }

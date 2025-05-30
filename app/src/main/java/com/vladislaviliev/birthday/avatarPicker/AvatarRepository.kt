@@ -27,46 +27,41 @@ class AvatarRepository @Inject constructor(
     private val _state = MutableStateFlow<ImageBitmap?>(initialState())
     val state = _state.asStateFlow()
 
-    private fun initialState(): ImageBitmap? {
-        if (!file.exists() || file.length() == 0L) return null
-        return convertFileToBitmap()
-    }
+    private fun initialState() = if (file.length() == 0L) null else convertFileToBitmap()
 
-    private fun convertFileToBitmap(): ImageBitmap? {
-        var bitmap: Bitmap? = BitmapFactory.decodeFile(file.absolutePath)
-        if (bitmap != null) bitmap = rotateBitmap(bitmap)
-        return bitmap?.asImageBitmap()
-    }
+    private fun convertFileToBitmap() =
+        BitmapFactory.decodeFile(file.absolutePath)?.run { rotateBitmap(this).asImageBitmap() }
 
-    private suspend fun emitNext() {
+    private suspend fun emitFileAsBitmap() {
         _state.emit(convertFileToBitmap())
     }
 
     private fun rotateBitmap(bitmap: Bitmap): Bitmap {
         val exif = ExifInterface(file.absolutePath)
-        var rotate = 0
-
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90
+
+        val rotate = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_270 -> 270
+            ExifInterface.ORIENTATION_ROTATE_180 -> 180
+            ExifInterface.ORIENTATION_ROTATE_90 -> 90
+            else -> 0
         }
         val matrix = Matrix()
         matrix.postRotate(rotate.toFloat())
+
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true)
     }
 
-    suspend fun onPhoto() {
-        emitNext()
+    suspend fun onPhotoCopied() {
+        emitFileAsBitmap()
     }
 
-    suspend fun saveFromUri(uri: Uri) = withContext(dispatcher) {
+    suspend fun copyFromUri(uri: Uri) = withContext(dispatcher) {
         context.contentResolver.openInputStream(uri)?.use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
         }
-        emitNext()
+        emitFileAsBitmap()
     }
 }
