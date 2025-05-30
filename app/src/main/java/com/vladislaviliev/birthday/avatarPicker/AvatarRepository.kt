@@ -47,10 +47,6 @@ class AvatarRepository @Inject constructor(
         var rotate = 0
 
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        println("orientation: $orientation")
-        println("orientation: $orientation")
-        println("orientation: $orientation")
-        println("orientation: $orientation")
         when (orientation) {
             ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
             ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
