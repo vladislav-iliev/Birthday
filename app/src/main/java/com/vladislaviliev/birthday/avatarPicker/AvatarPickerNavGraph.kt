@@ -30,7 +30,7 @@ private fun NavGraphBuilder.addDestinations(controller: NavController) {
     )
     addGalleryPickerDestination(controller::onImageSelected)
     addCameraPermissionDestination(controller::popBackStack, controller::onPermissionGranted)
-    addCameraDestination(controller::onPhotoCaptured)
+    addCameraDestination(controller::popBackStack)
 }
 
 fun NavController.navigateToAvatarPicker() = navigate(AvatarPickerNavGraphRoute)

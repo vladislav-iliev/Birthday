@@ -2,45 +2,49 @@ package com.vladislaviliev.birthday.avatarPicker.camera
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladislaviliev.birthday.avatarPicker.AvatarSaver
+import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
+import java.io.File
 
 @Serializable
 object CameraDestinationRoute
 
-fun NavGraphBuilder.addCameraDestination(onPhotoCaptured: (Uri) -> Unit) {
-    composable<CameraDestinationRoute> { Content(onPhotoCaptured) }
+fun NavGraphBuilder.addCameraDestination(onFinished: () -> Unit) {
+    composable<CameraDestinationRoute> { Content(onFinished) }
 }
 
 @Composable
-private fun Content(onPhotoCaptured: (Uri) -> Unit) {
+private fun Content(onFinished: () -> Unit) {
     val context = LocalContext.current
+    val activityVm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
+
+    val tempFile = File.createTempFile("avatar", ".temp", context.cacheDir)
+    val tempFileUri = activityVm.getUriOfFile(tempFile)
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        val resultOk = Activity.RESULT_OK == it.resultCode
-        onPhotoCaptured(if (resultOk) AvatarSaver(context).fileUri else Uri.EMPTY)
+        if (Activity.RESULT_OK == it.resultCode) activityVm.saveAvatarFromUri(tempFileUri)
+        tempFile.delete()
+        onFinished()
     }
 
     LaunchedEffect(true) {
-        launcher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, tempFileUri)
+        launcher.launch(intent)
     }
 }
 
 fun NavController.navigateToCamera() {
     popBackStack()
     navigate(CameraDestinationRoute)
-}
-
-fun NavController.onPhotoCaptured(uri: Uri) {
-    popBackStack()
 }
