@@ -21,16 +21,25 @@ class AvatarRepository @Inject constructor(
     private val context: Context,
     private val dispatcher: CoroutineDispatcher,
 ) {
-    private val file = File(context.filesDir, "avatar.jpg")
+    private val file = File(context.filesDir, "avatar")
     val fileUri: Uri = FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
 
-    private val _state = MutableStateFlow<ImageBitmap?>(null)
+    private val _state = MutableStateFlow<ImageBitmap?>(initialState())
     val state = _state.asStateFlow()
 
-    private suspend fun emitNext() {
+    private fun initialState(): ImageBitmap? {
+        if (!file.exists() || file.length() == 0L) return null
+        return convertFileToBitmap()
+    }
+
+    private fun convertFileToBitmap(): ImageBitmap? {
         var bitmap: Bitmap? = BitmapFactory.decodeFile(file.absolutePath)
         if (bitmap != null) bitmap = rotateBitmap(bitmap)
-        _state.emit(bitmap?.asImageBitmap())
+        return bitmap?.asImageBitmap()
+    }
+
+    private suspend fun emitNext() {
+        _state.emit(convertFileToBitmap())
     }
 
     private fun rotateBitmap(bitmap: Bitmap): Bitmap {
