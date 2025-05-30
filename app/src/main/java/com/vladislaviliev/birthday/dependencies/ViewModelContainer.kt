@@ -21,9 +21,8 @@ class ViewModelContainer {
     @ViewModelScoped
     fun provideAvatarSaver(
         @ApplicationContext context: Context,
-        scope: CoroutineScope,
         dispatcher: CoroutineDispatcher,
-    ) = AvatarRepository(context, scope, dispatcher)
+    ) = AvatarRepository(context, dispatcher)
 
     @Provides
     @ViewModelScoped

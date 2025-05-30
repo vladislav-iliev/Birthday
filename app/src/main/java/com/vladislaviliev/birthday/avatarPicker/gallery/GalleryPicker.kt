@@ -27,7 +27,7 @@ fun Content(onSelected: () -> Unit) {
     val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        if (null != it) vm.saveAvatarFromUri(it)
+        if (null != it) vm.saveFromUri(it)
         onSelected()
     }
 

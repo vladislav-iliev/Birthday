@@ -1,35 +1,67 @@
 package com.vladislaviliev.birthday.avatarPicker
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
+import androidx.exifinterface.media.ExifInterface
 import com.vladislaviliev.birthday.R
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import javax.inject.Inject
 
-class AvatarRepository(
+class AvatarRepository @Inject constructor(
     private val context: Context,
-    private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
 ) {
-    private val fileProviderAuthority = context.getString(R.string.file_provider_authority)
-    private val avatarFile = File(context.filesDir, "avatar").apply { createNewFile() }
+    private val file = File(context.filesDir, "avatar.jpg")
+    val fileUri: Uri = FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
 
-    private val _bitmap = MutableStateFlow<ImageBitmap?>(null)
-    val bitmap = _bitmap.asStateFlow()
+    private val _state = MutableStateFlow<ImageBitmap?>(null)
+    val state = _state.asStateFlow()
 
-    suspend fun saveFromUri(uri: Uri) = scope.launch(dispatcher) {
+    private suspend fun emitNext() {
+        var bitmap: Bitmap? = BitmapFactory.decodeFile(file.absolutePath)
+        if (bitmap != null) bitmap = rotateBitmap(bitmap)
+        _state.emit(bitmap?.asImageBitmap())
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap): Bitmap {
+        val exif = ExifInterface(file.absolutePath)
+        var rotate = 0
+
+        val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        println("orientation: $orientation")
+        println("orientation: $orientation")
+        println("orientation: $orientation")
+        println("orientation: $orientation")
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90
+        }
+        val matrix = Matrix()
+        matrix.postRotate(rotate.toFloat())
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true)
+    }
+
+    suspend fun onPhoto() {
+        emitNext()
+    }
+
+    suspend fun saveFromUri(uri: Uri) = withContext(dispatcher) {
         context.contentResolver.openInputStream(uri)?.use { input ->
-            avatarFile.outputStream().use { output ->
+            file.outputStream().use { output ->
                 input.copyTo(output)
             }
         }
-    }.join()
-
-    fun getShareableUri(file: File): Uri = FileProvider.getUriForFile(context, fileProviderAuthority, file)
+        emitNext()
+    }
 }

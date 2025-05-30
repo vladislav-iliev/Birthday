@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.ktor.serialization)
 
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.exifinterface)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

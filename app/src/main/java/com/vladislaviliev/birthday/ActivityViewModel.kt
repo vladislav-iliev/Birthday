@@ -8,18 +8,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class ActivityViewModel @Inject constructor(private val avatarRepository: AvatarRepository) : ViewModel() {
 
-    val bitmap = avatarRepository.bitmap.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val state = avatarRepository.state.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    fun saveAvatarFromUri(uri: Uri) {
-        viewModelScope.launch { avatarRepository.saveFromUri(uri) }
+    val fileUri = avatarRepository.fileUri
+
+    fun onPhoto() {
+        viewModelScope.launch { avatarRepository.onPhoto() }
     }
 
-    fun getUriOfFile(file: File) = avatarRepository.getShareableUri(file)
-
+    fun saveFromUri(uri: Uri) {
+        viewModelScope.launch { avatarRepository.saveFromUri(uri) }
+    }
 }
