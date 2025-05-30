@@ -15,8 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.HiltTestActivity
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.avatarPicker.cameraPermission.CameraPermissionRoute
-import com.vladislaviliev.birthday.avatarPicker.cameraPermission.navigateToCameraPermission
+import com.vladislaviliev.birthday.avatarPicker.camera.CameraPermissionRoute
+import com.vladislaviliev.birthday.avatarPicker.camera.navigateToCameraPermission
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryPickerRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker

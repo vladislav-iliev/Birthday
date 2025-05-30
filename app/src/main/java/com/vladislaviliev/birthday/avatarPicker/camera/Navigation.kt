@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.cameraPermission
+package com.vladislaviliev.birthday.avatarPicker.camera
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
