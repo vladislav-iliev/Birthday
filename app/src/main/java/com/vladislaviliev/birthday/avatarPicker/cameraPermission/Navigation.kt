@@ -25,3 +25,7 @@ fun NavController.navigateToCameraPermission() {
     popBackStack()
     navigate(CameraPermissionRoute)
 }
+
+fun NavController.onPermissionGranted() {
+    popBackStack()
+}

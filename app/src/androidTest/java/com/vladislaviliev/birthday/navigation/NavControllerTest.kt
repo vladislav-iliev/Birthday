@@ -139,7 +139,7 @@ class NavControllerTest {
     }
 
     @Test
-    fun testClickingCancelOnChooseSource() {
+    fun testSourceChooserClosesItselfOnCancel() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
         composeTestRule.waitUntil {
@@ -150,7 +150,7 @@ class NavControllerTest {
     }
 
     @Test
-    fun testCameraOnChooseSourceOpensDialog() {
+    fun testSourceChooserOpensCameraPermissions() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
         composeTestRule.waitUntil {
@@ -162,7 +162,7 @@ class NavControllerTest {
     }
 
     @Test
-    fun testCameraOnChooseSourceClosesChooseSource() {
+    fun testSourceChooserClosesItselfAfterSelectingCamera() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
         composeTestRule.waitUntil {
