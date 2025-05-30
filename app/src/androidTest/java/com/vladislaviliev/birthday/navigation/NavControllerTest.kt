@@ -18,6 +18,7 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.avatarPicker.cameraPermission.CameraPermissionRoute
 import com.vladislaviliev.birthday.avatarPicker.cameraPermission.navigateToCameraPermission
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
+import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryPickerRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.kids.KidsApi
@@ -195,5 +196,17 @@ class NavControllerTest {
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertTrue(navController.backStack.none { it.destination.route == ChooseSourceRoute::class.qualifiedName })
+    }
+
+    @Test
+    fun testSourceChooserNavigatesToGalleryAfterSelectingGallery() {
+        setContentToAppDefault(navController)
+        coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
+        composeTestRule.waitUntil {
+            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
+        }
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
+        Assert.assertEquals(GalleryPickerRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 }
