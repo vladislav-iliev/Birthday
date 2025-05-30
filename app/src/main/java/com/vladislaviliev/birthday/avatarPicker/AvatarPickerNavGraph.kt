@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import com.vladislaviliev.birthday.avatarPicker.camera.addCameraDestination
-import com.vladislaviliev.birthday.avatarPicker.camera.onPhotoCaptured
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.addCameraPermissionDestination
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCameraPermission
 import com.vladislaviliev.birthday.avatarPicker.camera.permission.onPermissionGranted
@@ -12,7 +11,6 @@ import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.addChooseSourceDestination
 import com.vladislaviliev.birthday.avatarPicker.gallery.addGalleryPickerDestination
 import com.vladislaviliev.birthday.avatarPicker.gallery.navigateToGalleryPicker
-import com.vladislaviliev.birthday.avatarPicker.gallery.onImageSelected
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,7 +26,7 @@ private fun NavGraphBuilder.addDestinations(controller: NavController) {
         controller::navigateToGalleryPicker,
         controller::navigateToCameraPermission,
     )
-    addGalleryPickerDestination(controller::onImageSelected)
+    addGalleryPickerDestination(controller::popBackStack)
     addCameraPermissionDestination(controller::popBackStack, controller::onPermissionGranted)
     addCameraDestination(controller::popBackStack)
 }

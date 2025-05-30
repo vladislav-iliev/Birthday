@@ -1,31 +1,36 @@
 package com.vladislaviliev.birthday.avatarPicker.gallery
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladislaviliev.birthday.avatarPicker.AvatarSaver
+import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
 object GalleryPickerRoute
 
-fun NavGraphBuilder.addGalleryPickerDestination(onImageSelected: (Uri) -> Unit) {
-    composable<GalleryPickerRoute> { Content(onImageSelected) }
+fun NavGraphBuilder.addGalleryPickerDestination(onSelected: () -> Unit) {
+    composable<GalleryPickerRoute> { Content(onSelected) }
 }
 
 @Composable
-fun Content(onImageSelected: (Uri) -> Unit) {
+fun Content(onSelected: () -> Unit) {
     val context = LocalContext.current
+    val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
+
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        onImageSelected(if (null == it) Uri.EMPTY else AvatarSaver(context).saveUriToFile(it))
+        if (null != it) vm.saveAvatarFromUri(it)
+        onSelected()
     }
+
     LaunchedEffect(true) { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
 }
 
@@ -34,6 +39,6 @@ fun NavController.navigateToGalleryPicker() {
     navigate(GalleryPickerRoute)
 }
 
-fun NavController.onImageSelected(uri: Uri) {
-    popBackStack()
+fun NavController.onImageSelected() {
+
 }
