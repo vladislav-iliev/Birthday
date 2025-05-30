@@ -1,5 +1,6 @@
-package com.vladislaviliev.birthday.avatarPicker.camera
+package com.vladislaviliev.birthday.avatarPicker.camera.permission
 
+import android.Manifest
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
@@ -22,7 +23,7 @@ fun CameraPermissionDialog(
     onPermissionGranted: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val permissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     if (permissionState.status.isGranted) {
         onPermissionGranted()
         return

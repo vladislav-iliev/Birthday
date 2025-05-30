@@ -1,15 +1,16 @@
-package com.vladislaviliev.birthday.avatarPicker.camera
+package com.vladislaviliev.birthday.avatarPicker.camera.permission
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
+import com.vladislaviliev.birthday.avatarPicker.camera.navigateToCamera
 import kotlinx.serialization.Serializable
 
 @Serializable
 object CameraPermissionRoute
 
-fun NavGraphBuilder.addCameraPermissionRequestDestination(
+fun NavGraphBuilder.addCameraPermissionDestination(
     onDismissRequest: () -> Unit,
     onPermissionGranted: () -> Unit,
 ) {
@@ -27,5 +28,5 @@ fun NavController.navigateToCameraPermission() {
 }
 
 fun NavController.onPermissionGranted() {
-    popBackStack()
+    navigateToCamera()
 }

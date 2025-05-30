@@ -3,9 +3,11 @@ package com.vladislaviliev.birthday.avatarPicker
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.vladislaviliev.birthday.avatarPicker.camera.addCameraPermissionRequestDestination
-import com.vladislaviliev.birthday.avatarPicker.camera.navigateToCameraPermission
-import com.vladislaviliev.birthday.avatarPicker.camera.onPermissionGranted
+import com.vladislaviliev.birthday.avatarPicker.camera.addCameraDestination
+import com.vladislaviliev.birthday.avatarPicker.camera.onPhotoCaptured
+import com.vladislaviliev.birthday.avatarPicker.camera.permission.addCameraPermissionDestination
+import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCameraPermission
+import com.vladislaviliev.birthday.avatarPicker.camera.permission.onPermissionGranted
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.addChooseSourceDestination
 import com.vladislaviliev.birthday.avatarPicker.gallery.addGalleryPickerDestination
@@ -27,7 +29,8 @@ private fun NavGraphBuilder.addDestinations(controller: NavController) {
         controller::navigateToCameraPermission,
     )
     addGalleryPickerDestination(controller::onImageSelected)
-    addCameraPermissionRequestDestination(controller::popBackStack, controller::onPermissionGranted)
+    addCameraPermissionDestination(controller::popBackStack, controller::onPermissionGranted)
+    addCameraDestination(controller::onPhotoCaptured)
 }
 
 fun NavController.navigateToAvatarPicker() = navigate(AvatarPickerNavGraphRoute)
