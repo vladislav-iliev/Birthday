@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
@@ -37,7 +38,12 @@ private const val bottomSpacerRef = "bottom_spacer"
 private const val footerRef = "footer"
 
 @Composable
-fun KidScreen(message: Message, onAvatarPickerClick: () -> Unit, modifier: Modifier = Modifier) {
+fun KidScreen(
+    message: Message,
+    avatarBitmap: ImageBitmap?,
+    onAvatarPickerClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     ConstraintLayout(
         constraints(LocalContext.current.resources.displayMetrics),
         modifier
@@ -74,6 +80,7 @@ fun KidScreen(message: Message, onAvatarPickerClick: () -> Unit, modifier: Modif
         )
         Avatar(
             message,
+            avatarBitmap,
             onAvatarPickerClick,
             Modifier
                 .layoutId(avatarRef)
@@ -207,5 +214,5 @@ private fun Dp.asHeightPercent(displayMetrics: DisplayMetrics): Float {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun KidScreenPreview() {
-    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), {}, Modifier.fillMaxSize())
+    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), null, {}, Modifier.fillMaxSize())
 }

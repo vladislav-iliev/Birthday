@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -32,12 +34,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun Avatar(message: Message, onPickerClick: () -> Unit, modifier: Modifier = Modifier) {
+fun Avatar(message: Message, avatarBitmap: ImageBitmap?, onPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) { // seems like a reasonable choice instead of custom Layout
         val borderRadius = 9.dp
-        Image(
-            painterResource(message.theme.avatarPlaceholderRes),
-            stringResource(R.string.avatar_image_of_x, message.name),
+        Avatar(
+            message,
+            avatarBitmap,
             Modifier
                 .aspectRatio(1f)
                 .fillMaxSize()
@@ -62,6 +64,22 @@ fun Avatar(message: Message, onPickerClick: () -> Unit, modifier: Modifier = Mod
     }
 }
 
+@Composable
+private fun Avatar(message: Message, bitmap: ImageBitmap?, modifier: Modifier = Modifier) {
+
+    val contentDescription = stringResource(R.string.avatar_image_of_x, message.name)
+    val scale = ContentScale.Crop
+    val alignment = Alignment.Center
+
+    if (null == bitmap) {
+        val painter = painterResource(message.theme.avatarPlaceholderRes)
+        Image(painter, contentDescription, modifier, contentScale = scale, alignment = alignment)
+        return
+    }
+
+    Image(bitmap, contentDescription, modifier, contentScale = scale, alignment = alignment)
+}
+
 fun BoxWithConstraintsScope.getRadiusPixels(borderRadius: Dp, displayMetrics: DisplayMetrics): Float {
     val borderRadiusPx =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, borderRadius.value.toFloat(), displayMetrics)
@@ -77,5 +95,5 @@ private fun radiusToOffset(r: Float): IntOffset {
 @Preview
 @Composable
 private fun PreviewAvatar(modifier: Modifier = Modifier) {
-    Avatar(Message("Johny", 1, Theme.ELEPHANT), {}, modifier.fillMaxSize())
+    Avatar(Message("Johny", 1, Theme.ELEPHANT), null, {}, modifier.fillMaxSize())
 }
