@@ -11,8 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class GalleryViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    val avatarUri = repository.fileUri
-
     fun copyAvatarFromUri(uri: Uri) {
         viewModelScope.launch { repository.copyFromUri(uri) }
     }
