@@ -14,8 +14,8 @@ class AgeCalculator {
 
     fun monthsToYears(months: Int): Int = months / 12
 
-    fun parseForDisplay(ageMonths: Int): AgeToDisplay {
+    fun parseForDisplay(ageMonths: Int): Age {
         val years = monthsToYears(ageMonths)
-        return if (0 < years) AgeToDisplay(years, false) else AgeToDisplay(ageMonths, true)
+        return if (0 < years) Age(years, false) else Age(ageMonths, true)
     }
 }

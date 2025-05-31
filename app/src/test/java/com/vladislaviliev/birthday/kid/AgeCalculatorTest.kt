@@ -149,42 +149,42 @@ class AgeCalculatorTest {
 
     @Test
     fun `parseForDisplay converts 24 months to 2 years`() {
-        Assert.assertEquals(AgeToDisplay(2, false), calculator.parseForDisplay(24))
+        Assert.assertEquals(Age(2, false), calculator.parseForDisplay(24))
     }
 
     @Test
     fun `parseForDisplay converts 36 months to 3 years`() {
-        Assert.assertEquals(AgeToDisplay(3, false), calculator.parseForDisplay(36))
+        Assert.assertEquals(Age(3, false), calculator.parseForDisplay(36))
     }
 
     @Test
     fun `parseForDisplay converts 48 months to 4 years`() {
-        Assert.assertEquals(AgeToDisplay(4, false), calculator.parseForDisplay(48))
+        Assert.assertEquals(Age(4, false), calculator.parseForDisplay(48))
     }
 
     @Test
     fun `parseForDisplay represents newborn as 0 months`() {
-        Assert.assertEquals(AgeToDisplay(0, true), calculator.parseForDisplay(0))
+        Assert.assertEquals(Age(0, true), calculator.parseForDisplay(0))
     }
 
     @Test
     fun `parseForDisplay keeps 1 month as months`() {
-        Assert.assertEquals(AgeToDisplay(1, true), calculator.parseForDisplay(1))
+        Assert.assertEquals(Age(1, true), calculator.parseForDisplay(1))
     }
 
     @Test
     fun `parseForDisplay keeps 6 months as months`() {
-        Assert.assertEquals(AgeToDisplay(6, true), calculator.parseForDisplay(6))
+        Assert.assertEquals(Age(6, true), calculator.parseForDisplay(6))
     }
 
     @Test
     fun `parseForDisplay keeps 11 months as months`() {
-        Assert.assertEquals(AgeToDisplay(11, true), calculator.parseForDisplay(11))
+        Assert.assertEquals(Age(11, true), calculator.parseForDisplay(11))
     }
 
     @Test
     fun `parseForDisplay converts exactly 12 months to 1 year`() {
-        Assert.assertEquals(AgeToDisplay(1, false), calculator.parseForDisplay(12))
+        Assert.assertEquals(Age(1, false), calculator.parseForDisplay(12))
     }
 
 }
