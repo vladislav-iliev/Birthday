@@ -20,6 +20,7 @@ import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCame
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
+import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidApi
 import com.vladislaviliev.birthday.networking.Message

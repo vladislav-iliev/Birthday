@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.navigation
+package com.vladislaviliev.birthday
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
