@@ -3,7 +3,4 @@
     <files-path
         name="images"
         path="/" />
-    <cache-path
-        name="temp"
-        path="/" />
 </paths>
