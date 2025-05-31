@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.gallery
+package com.vladislaviliev.birthday.screens.avatarPicker.gallery
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest

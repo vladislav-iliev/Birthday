@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.camera.permission
+package com.vladislaviliev.birthday.screens.avatarPicker.camera.permission
 
 import android.Manifest
 import androidx.compose.material.icons.Icons

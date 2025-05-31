@@ -1,16 +1,16 @@
-package com.vladislaviliev.birthday.avatarPicker
+package com.vladislaviliev.birthday.screens.avatarPicker
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.vladislaviliev.birthday.avatarPicker.camera.addCameraDestination
-import com.vladislaviliev.birthday.avatarPicker.camera.permission.addCameraPermissionDestination
-import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCameraPermission
-import com.vladislaviliev.birthday.avatarPicker.camera.permission.onPermissionGranted
-import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
-import com.vladislaviliev.birthday.avatarPicker.chooseSource.addChooseSourceDestination
-import com.vladislaviliev.birthday.avatarPicker.gallery.addGalleryDestination
-import com.vladislaviliev.birthday.avatarPicker.gallery.navigateToGallery
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.addCameraDestination
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.addCameraPermissionDestination
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.onPermissionGranted
+import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.ChooseSourceRoute
+import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.addChooseSourceDestination
+import com.vladislaviliev.birthday.screens.avatarPicker.gallery.addGalleryDestination
+import com.vladislaviliev.birthday.screens.avatarPicker.gallery.navigateToGallery
 import kotlinx.serialization.Serializable
 
 @Serializable

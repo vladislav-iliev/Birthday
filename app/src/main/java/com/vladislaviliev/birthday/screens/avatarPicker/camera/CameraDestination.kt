@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.camera
+package com.vladislaviliev.birthday.screens.avatarPicker.camera
 
 import android.app.Activity
 import android.content.Intent

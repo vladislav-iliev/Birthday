@@ -3,8 +3,8 @@ package com.vladislaviliev.birthday
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.createGraph
-import com.vladislaviliev.birthday.avatarPicker.addAvatarPickerGraph
-import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
+import com.vladislaviliev.birthday.screens.avatarPicker.addAvatarPickerGraph
+import com.vladislaviliev.birthday.screens.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.connect.addConnectScreenDestination
 import com.vladislaviliev.birthday.screens.connect.onConnected

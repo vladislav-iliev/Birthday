@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.camera
+package com.vladislaviliev.birthday.screens.avatarPicker.camera
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

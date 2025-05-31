@@ -1,10 +1,10 @@
-package com.vladislaviliev.birthday.avatarPicker.camera.permission
+package com.vladislaviliev.birthday.screens.avatarPicker.camera.permission
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
-import com.vladislaviliev.birthday.avatarPicker.camera.navigateToCamera
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.navigateToCamera
 import kotlinx.serialization.Serializable
 
 @Serializable

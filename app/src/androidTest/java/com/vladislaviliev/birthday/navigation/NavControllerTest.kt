@@ -15,11 +15,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.HiltTestActivity
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.avatarPicker.camera.permission.CameraPermissionRoute
-import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCameraPermission
-import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
-import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryRoute
-import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.CameraPermissionRoute
+import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
+import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.ChooseSourceRoute
+import com.vladislaviliev.birthday.screens.avatarPicker.gallery.GalleryRoute
+import com.vladislaviliev.birthday.screens.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidApi

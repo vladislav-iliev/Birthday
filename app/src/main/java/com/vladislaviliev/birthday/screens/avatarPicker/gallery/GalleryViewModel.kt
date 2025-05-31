@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.gallery
+package com.vladislaviliev.birthday.screens.avatarPicker.gallery
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

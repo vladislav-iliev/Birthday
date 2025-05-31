@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker.chooseSource
+package com.vladislaviliev.birthday.screens.avatarPicker.chooseSource
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
