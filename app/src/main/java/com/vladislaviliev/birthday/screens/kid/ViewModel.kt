@@ -2,7 +2,7 @@ package com.vladislaviliev.birthday.screens.kid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.KidApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModel @Inject constructor(kidApi: KidApi, avatarRepository: AvatarRepository) : ViewModel() {
+class ViewModel @Inject constructor(kidApi: KidApi, avatarRepository: Repository) : ViewModel() {
 
     private val transformer = StateTransformer()
 

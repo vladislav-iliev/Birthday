@@ -2,17 +2,17 @@ package com.vladislaviliev.birthday.avatarPicker.camera
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CameraViewModel @Inject constructor(private val avatarRepository: AvatarRepository) : ViewModel() {
+class CameraViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    val avatarUri = avatarRepository.fileUri
+    val avatarUri = repository.fileUri
 
     fun onPhotoCopied() {
-        viewModelScope.launch { avatarRepository.onPhotoCopied() }
+        viewModelScope.launch { repository.onPhotoCopied() }
     }
 }

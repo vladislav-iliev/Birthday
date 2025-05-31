@@ -3,17 +3,17 @@ package com.vladislaviliev.birthday.avatarPicker.gallery
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(private val avatarRepository: AvatarRepository) : ViewModel() {
+class GalleryViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    val avatarUri = avatarRepository.fileUri
+    val avatarUri = repository.fileUri
 
     fun copyAvatarFromUri(uri: Uri) {
-        viewModelScope.launch { avatarRepository.copyFromUri(uri) }
+        viewModelScope.launch { repository.copyFromUri(uri) }
     }
 }

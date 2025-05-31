@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.avatarPicker
+package com.vladislaviliev.birthday.kid.avatar
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
-class AvatarRepository @Inject constructor(
+class Repository @Inject constructor(
     private val context: Context,
     private val dispatcher: CoroutineDispatcher,
 ) {

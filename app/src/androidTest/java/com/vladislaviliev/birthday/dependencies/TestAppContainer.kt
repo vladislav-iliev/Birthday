@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.dependencies
 
 import android.content.Context
-import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidApi
 import dagger.Module
@@ -33,5 +33,5 @@ class TestAppContainer {
     // TODO swap with dummy
     @Provides
     @Singleton
-    fun provideAvatarRepository(@ApplicationContext context: Context) = AvatarRepository(context, Dispatchers.IO)
+    fun provideAvatarRepository(@ApplicationContext context: Context) = Repository(context, Dispatchers.IO)
 }
