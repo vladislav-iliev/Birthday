@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidRepository
-import com.vladislaviliev.birthday.networking.Message
+import com.vladislaviliev.birthday.networking.NetworkMessage
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,9 +44,9 @@ class ViewModelTest {
         runCurrent()
 
         Assert.assertEquals(NetworkState.Connected(), viewModel.networkState.value)
-        val message = Message("JohnyDoe", 1, Theme.PELICAN)
-        api.emitMessage(message)
-        Assert.assertEquals(NetworkState.Connected(message), viewModel.networkState.value)
+        val networkMessage = NetworkMessage("JohnyDoe", 1, Theme.PELICAN)
+        api.emitMessage(networkMessage)
+        Assert.assertEquals(NetworkState.Connected(networkMessage), viewModel.networkState.value)
         api.disconnect()
         Assert.assertEquals(NetworkState.Disconnected(), viewModel.networkState.value)
     }

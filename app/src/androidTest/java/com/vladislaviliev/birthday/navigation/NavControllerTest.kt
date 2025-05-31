@@ -23,7 +23,7 @@ import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidApi
-import com.vladislaviliev.birthday.networking.Message
+import com.vladislaviliev.birthday.networking.NetworkMessage
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -80,7 +80,7 @@ class NavControllerTest {
     fun testConnectNavigatesToKids() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(NetworkMessage("Johny", 1, Theme.PELICAN)) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -91,7 +91,7 @@ class NavControllerTest {
     fun testConnectClosesItselfWhenConnected() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(NetworkMessage("Johny", 1, Theme.PELICAN)) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -104,7 +104,7 @@ class NavControllerTest {
     fun testDisconnectGoesToConnectScreen() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(NetworkMessage("Johny", 1, Theme.PELICAN)) }
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
         }
@@ -133,7 +133,7 @@ class NavControllerTest {
         val btn =
             composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
 
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(NetworkMessage("Johny", 1, Theme.PELICAN)) }
         composeTestRule.waitUntil { btn.isDisplayed() }
 
         btn.performClick()

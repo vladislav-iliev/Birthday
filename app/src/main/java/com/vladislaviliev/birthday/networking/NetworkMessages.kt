@@ -7,11 +7,11 @@ import java.time.Instant
 import java.time.LocalDateTime
 
 @Serializable
-data class MessageRaw(val name: String, val dob: Long, val theme: String)
+data class NetworkMessageRaw(val name: String, val dob: Long, val theme: String)
 
-data class Message(val name: String, val ageMonths: Int, val theme: Theme)
+data class NetworkMessage(val name: String, val ageMonths: Int, val theme: Theme)
 
-fun MessageRaw.beautify(): Message {
+fun NetworkMessageRaw.beautify(): NetworkMessage {
     val calculator = AgeCalculator()
     val timezone = calculator.timezone
 
@@ -20,5 +20,5 @@ fun MessageRaw.beautify(): Message {
     val ageMonths = calculator.calculateMonthsBetween(dob, now)
 
     val theme = Theme.entries.first { it.name.equals(theme, true) }
-    return Message(name, ageMonths, theme)
+    return NetworkMessage(name, ageMonths, theme)
 }

@@ -10,7 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.Message
+import com.vladislaviliev.birthday.networking.NetworkMessage
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,19 +27,19 @@ class KidScreenTest {
 
     @Test
     fun testScreenStructure_coreElements() {
-        val message = Message(name = "Test Kid", ageMonths = 12, theme = Theme.FOX)
+        val networkMessage = NetworkMessage(name = "Test Kid", ageMonths = 12, theme = Theme.FOX)
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
 
         composeTestRule.setContent { KidScreen(defaultState, {}) }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.today_x_is, message.name), ignoreCase = true).assertIsDisplayed()
+            .onNodeWithText(context.getString(R.string.today_x_is, networkMessage.name), ignoreCase = true).assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("1").assertIsDisplayed()
         composeTestRule
             .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, message.name))
+            .onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, networkMessage.name))
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription(context.getString(R.string.select_new_avatar))
