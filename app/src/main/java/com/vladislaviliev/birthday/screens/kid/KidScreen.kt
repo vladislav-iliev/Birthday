@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
@@ -27,7 +26,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.Message
 
 private const val backgroundRef = "background"
 private const val topSpacerRef = "top_spacer"
@@ -38,21 +36,16 @@ private const val bottomSpacerRef = "bottom_spacer"
 private const val footerRef = "footer"
 
 @Composable
-fun KidScreen(
-    message: Message,
-    avatarBitmap: ImageBitmap?,
-    onAvatarPickerClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun KidScreen(state: KidScreenState, onAvatarPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     ConstraintLayout(
         constraints(LocalContext.current.resources.displayMetrics),
         modifier
             .fillMaxSize()
-            .background(colorResource(message.theme.backgroundColorRes))
+            .background(colorResource(state.theme.backgroundColorRes))
             .statusBarsPadding()
     ) {
         Image(
-            painter = painterResource(message.theme.backgroundDrawableRes),
+            painter = painterResource(state.theme.backgroundDrawableRes),
             null,
             Modifier
                 .layoutId(backgroundRef)
@@ -67,8 +60,8 @@ fun KidScreen(
                 .zIndex(10f),
         )
         Header(
-            message.name,
-            message.ageMonths,
+            state.name,
+            state.ageMonths,
             Modifier
                 .layoutId(headerRef)
                 .zIndex(3f)
@@ -79,8 +72,9 @@ fun KidScreen(
                 .zIndex(10f)
         )
         Avatar(
-            message,
-            avatarBitmap,
+            state.name,
+            state.avatar,
+            state.theme,
             onAvatarPickerClick,
             Modifier
                 .layoutId(avatarRef)
@@ -214,5 +208,5 @@ private fun Dp.asHeightPercent(displayMetrics: DisplayMetrics): Float {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun KidScreenPreview() {
-    KidScreen(Message("Johny Doe", 11, Theme.PELICAN), null, {}, Modifier.fillMaxSize())
+    KidScreen(KidScreenState(true, "Johny Doe", 11, Theme.PELICAN, null), {}, Modifier.fillMaxSize())
 }

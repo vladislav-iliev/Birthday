@@ -5,13 +5,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,14 +20,11 @@ fun NavGraphBuilder.addGalleryDestination(onSelected: () -> Unit) {
 
 @Composable
 fun Content(onDone: () -> Unit) {
-    val context = LocalContext.current
-    val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
-
+    val vm = hiltViewModel<GalleryViewModel>()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        if (null != it) vm.copyFromUri(it)
+        if (null != it) vm.copyAvatarFromUri(it)
         onDone()
     }
-
     LaunchedEffect(true) { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
 }
 

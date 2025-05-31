@@ -29,30 +29,30 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.Message
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun Avatar(message: Message, avatarBitmap: ImageBitmap?, onPickerClick: () -> Unit, modifier: Modifier = Modifier) {
+fun Avatar(name: String, bitmap: ImageBitmap?, theme: Theme, onPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier) { // seems like a reasonable choice instead of custom Layout
         val borderRadius = 9.dp
         Avatar(
-            message,
-            avatarBitmap,
+            name,
+            bitmap,
+            theme,
             Modifier
                 .aspectRatio(1f)
                 .fillMaxSize()
                 .align(Alignment.Center)
                 .clip(CircleShape)
-                .border(borderRadius, colorResource(message.theme.avatarBorderColorRes), CircleShape)
+                .border(borderRadius, colorResource(theme.avatarBorderColorRes), CircleShape)
         )
 
         val size = borderRadius * 5
         val radiusPx = getRadiusPixels(borderRadius, LocalContext.current.resources.displayMetrics)
         val createOffset = { d: Density -> radiusToOffset(radiusPx) }
         Image(
-            painterResource(message.theme.avatarPickerRes),
+            painterResource(theme.avatarPickerRes),
             stringResource(R.string.select_new_avatar),
             Modifier
                 .align(Alignment.Center)
@@ -65,14 +65,14 @@ fun Avatar(message: Message, avatarBitmap: ImageBitmap?, onPickerClick: () -> Un
 }
 
 @Composable
-private fun Avatar(message: Message, bitmap: ImageBitmap?, modifier: Modifier = Modifier) {
+private fun Avatar(name: String, bitmap: ImageBitmap?, theme: Theme, modifier: Modifier = Modifier) {
 
-    val contentDescription = stringResource(R.string.avatar_image_of_x, message.name)
+    val contentDescription = stringResource(R.string.avatar_image_of_x, name)
     val scale = ContentScale.Crop
     val alignment = Alignment.Center
 
     if (null == bitmap) {
-        val painter = painterResource(message.theme.avatarPlaceholderRes)
+        val painter = painterResource(theme.avatarPlaceholderRes)
         Image(painter, contentDescription, modifier, contentScale = scale, alignment = alignment)
         return
     }
@@ -95,5 +95,5 @@ private fun radiusToOffset(r: Float): IntOffset {
 @Preview
 @Composable
 private fun PreviewAvatar(modifier: Modifier = Modifier) {
-    Avatar(Message("Johny", 1, Theme.ELEPHANT), null, {}, modifier.fillMaxSize())
+    Avatar("Johny", null, Theme.ELEPHANT, {}, modifier.fillMaxSize())
 }

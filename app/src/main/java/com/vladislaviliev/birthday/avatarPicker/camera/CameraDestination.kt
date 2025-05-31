@@ -7,13 +7,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladislaviliev.birthday.ActivityViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,16 +22,13 @@ fun NavGraphBuilder.addCameraDestination(onFinished: () -> Unit) {
 
 @Composable
 private fun Content(onFinished: () -> Unit) {
-    val context = LocalContext.current
-    val vm = hiltViewModel<ActivityViewModel>(context as ViewModelStoreOwner)
-
+    val vm = hiltViewModel<CameraViewModel>()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (Activity.RESULT_OK == it.resultCode) vm.onPhotoCopied()
         onFinished()
     }
-
     LaunchedEffect(true) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, vm.fileUri)
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, vm.avatarUri)
         launcher.launch(intent)
     }
 }

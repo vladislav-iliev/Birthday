@@ -1,9 +1,12 @@
 package com.vladislaviliev.birthday.dependencies
 
+import android.content.Context
+import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
 import com.vladislaviliev.birthday.kids.InMemoryKidsApi
 import com.vladislaviliev.birthday.kids.KidsApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,4 +30,8 @@ class TestAppContainer {
     @Singleton
     fun provideKidsApi(): KidsApi = InMemoryKidsApi()
 
+    // TODO swap with dummy
+    @Provides
+    @Singleton
+    fun provideAvatarRepository(@ApplicationContext context: Context) = AvatarRepository(context, Dispatchers.IO)
 }
