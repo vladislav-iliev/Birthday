@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.networking
 
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.kids.AgeCalculator
+import com.vladislaviliev.birthday.kid.AgeCalculator
 import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.time.LocalDateTime

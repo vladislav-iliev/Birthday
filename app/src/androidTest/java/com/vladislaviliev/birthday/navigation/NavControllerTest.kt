@@ -20,8 +20,8 @@ import com.vladislaviliev.birthday.avatarPicker.camera.permission.navigateToCame
 import com.vladislaviliev.birthday.avatarPicker.chooseSource.ChooseSourceRoute
 import com.vladislaviliev.birthday.avatarPicker.gallery.GalleryRoute
 import com.vladislaviliev.birthday.avatarPicker.navigateToAvatarPicker
-import com.vladislaviliev.birthday.kids.InMemoryKidsApi
-import com.vladislaviliev.birthday.kids.KidsApi
+import com.vladislaviliev.birthday.kid.InMemoryKidApi
+import com.vladislaviliev.birthday.kid.KidApi
 import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
@@ -53,7 +53,7 @@ class NavControllerTest {
     lateinit var coroutineScope: CoroutineScope
 
     @Inject
-    lateinit var testKidsApi: KidsApi
+    lateinit var testKidApi: KidApi
 
     @Before
     fun setup() {
@@ -79,7 +79,7 @@ class NavControllerTest {
     fun testConnectNavigatesToKids() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -90,7 +90,7 @@ class NavControllerTest {
     fun testConnectClosesItselfWhenConnected() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -103,12 +103,12 @@ class NavControllerTest {
     fun testDisconnectGoesToConnectScreen() {
         setContentToAppDefault(navController)
 
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
         }
 
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).disconnect() }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).disconnect() }
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
         }
@@ -132,7 +132,7 @@ class NavControllerTest {
         val btn =
             composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
 
-        coroutineScope.launch { (testKidsApi as InMemoryKidsApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(Message("Johny", 1, Theme.PELICAN)) }
         composeTestRule.waitUntil { btn.isDisplayed() }
 
         btn.performClick()

@@ -2,7 +2,7 @@ package com.vladislaviliev.birthday.screens.connect
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladislaviliev.birthday.kids.KidsRepository
+import com.vladislaviliev.birthday.kid.KidRepository
 import com.vladislaviliev.birthday.networking.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModel @Inject constructor(private val repository: KidsRepository) : ViewModel() {
+class ViewModel @Inject constructor(private val repository: KidRepository) : ViewModel() {
 
     val state = repository.state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), State.Disconnected())
 

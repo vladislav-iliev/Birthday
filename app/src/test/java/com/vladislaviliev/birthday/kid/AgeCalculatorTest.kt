@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.kids
+package com.vladislaviliev.birthday.kid
 
 import org.junit.Assert
 import org.junit.Test

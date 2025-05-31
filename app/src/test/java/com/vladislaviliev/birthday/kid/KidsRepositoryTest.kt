@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.kids
+package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.networking.Message
@@ -14,23 +14,23 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class KidsRepositoryTest {
 
-    fun TestScope.createRepo(api: KidsApi) = KidsRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
+    fun TestScope.createRepo(api: KidApi) = KidRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
 
     @Test
     fun `repository should have disconnected initial state`() = runTest {
-        Assert.assertEquals(State.Disconnected(), createRepo(InMemoryKidsApi()).state.first())
+        Assert.assertEquals(State.Disconnected(), createRepo(InMemoryKidApi()).state.first())
     }
 
     @Test
     fun `connect should change state to connected`() = runTest {
-        val repository = createRepo(InMemoryKidsApi())
+        val repository = createRepo(InMemoryKidApi())
         repository.connect("", 0)
         Assert.assertEquals(State.Connected(), repository.state.first())
     }
 
     @Test
     fun `repository should reflect incoming messages`() = runTest {
-        val api = InMemoryKidsApi()
+        val api = InMemoryKidApi()
         val repository = createRepo(api)
 
         val message = Message("JohnyDoe", 1, Theme.PELICAN)

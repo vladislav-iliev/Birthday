@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.kids
+package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.networking.Message
 import com.vladislaviliev.birthday.networking.State
@@ -6,7 +6,7 @@ import com.vladislaviliev.birthday.networking.emitAndYield
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class InMemoryKidsApi : KidsApi {
+class InMemoryKidApi : KidApi {
 
     private val _state = MutableStateFlow<State>(State.Disconnected())
     override val state = _state.asStateFlow()

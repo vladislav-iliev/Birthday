@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.kids
+package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.networking.Message
@@ -16,12 +16,12 @@ class InMemoryKidsApiTest {
 
     @Test
     fun `initial state should be disconnected`() = runTest {
-        Assert.assertEquals(State.Disconnected(), InMemoryKidsApi().state.first())
+        Assert.assertEquals(State.Disconnected(), InMemoryKidApi().state.first())
     }
 
     @Test
     fun `states progress up and down`() = runTest {
-        val kidsApi = InMemoryKidsApi()
+        val kidsApi = InMemoryKidApi()
         val states = mutableListOf<State>()
 
         backgroundScope.launch { kidsApi.state.collect { states.add(it) } }

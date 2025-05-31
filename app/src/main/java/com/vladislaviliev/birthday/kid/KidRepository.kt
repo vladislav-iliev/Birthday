@@ -1,4 +1,4 @@
-package com.vladislaviliev.birthday.kids
+package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.networking.State
 import kotlinx.coroutines.CoroutineDispatcher
@@ -6,10 +6,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class KidsRepository(
+class KidRepository(
     private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-    private val api: KidsApi,
+    private val api: KidApi,
 ) {
     val state: Flow<State> = api.state
 

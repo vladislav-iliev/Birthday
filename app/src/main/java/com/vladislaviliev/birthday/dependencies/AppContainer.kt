@@ -2,7 +2,7 @@ package com.vladislaviliev.birthday.dependencies
 
 import android.content.Context
 import com.vladislaviliev.birthday.avatarPicker.AvatarRepository
-import com.vladislaviliev.birthday.kids.KidsApi
+import com.vladislaviliev.birthday.kid.KidApi
 import com.vladislaviliev.birthday.networking.Client
 import dagger.Module
 import dagger.Provides
@@ -28,7 +28,7 @@ class AppContainer {
 
     @Provides
     @Singleton
-    fun provideKidsApi(): KidsApi = Client()
+    fun provideKidsApi(): KidApi = Client()
 
     @Provides
     @Singleton

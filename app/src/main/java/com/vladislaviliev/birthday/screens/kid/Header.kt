@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladislaviliev.birthday.R
-import com.vladislaviliev.birthday.kids.AgeCalculator
+import com.vladislaviliev.birthday.kid.AgeCalculator
 
 @Composable
 fun Header(kidName: String, ageMonths: Int, modifier: Modifier = Modifier) {
