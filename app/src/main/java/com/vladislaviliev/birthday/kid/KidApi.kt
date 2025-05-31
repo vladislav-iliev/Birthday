@@ -1,9 +1,9 @@
 package com.vladislaviliev.birthday.kid
 
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.flow.StateFlow
 
 interface KidApi {
-    val state: StateFlow<State>
+    val networkState: StateFlow<NetworkState>
     suspend fun connect(ip: String, port: Int)
 }

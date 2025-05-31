@@ -25,10 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladislaviliev.birthday.R
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 
 @Composable
-fun ConnectScreen(connect: (String, Int) -> Unit, state: State, modifier: Modifier = Modifier) {
+fun ConnectScreen(connect: (String, Int) -> Unit, networkState: NetworkState, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
@@ -48,7 +48,7 @@ fun ConnectScreen(connect: (String, Int) -> Unit, state: State, modifier: Modifi
         Spacer(Modifier.height(10.dp))
         Button(onConnectClick) { Text(stringResource(R.string.connect)) }
         Spacer(Modifier.height(10.dp))
-        StateComposable(state)
+        StateComposable(networkState)
     }
 }
 
@@ -71,13 +71,13 @@ private fun Inputs(
 }
 
 @Composable
-private fun StateComposable(state: State) {
-    if (state is State.Disconnected && state.cause != null) {
-        Text(state.cause.javaClass.simpleName, color = Color.Red)
+private fun StateComposable(networkState: NetworkState) {
+    if (networkState is NetworkState.Disconnected && networkState.cause != null) {
+        Text(networkState.cause.javaClass.simpleName, color = Color.Red)
         return
     }
-    val awaitingMessage = state is State.Connected && state.message == null
-    if (state is State.Connecting || awaitingMessage) {
+    val awaitingMessage = networkState is NetworkState.Connected && networkState.message == null
+    if (networkState is NetworkState.Connecting || awaitingMessage) {
         CircularProgressIndicator()
         return
     }
@@ -86,5 +86,5 @@ private fun StateComposable(state: State) {
 @Preview(showBackground = true)
 @Composable
 fun ConnectScreenPreview() {
-    ConnectScreen({ _, _ -> }, State.Connecting, Modifier.fillMaxSize())
+    ConnectScreen({ _, _ -> }, NetworkState.Connecting, Modifier.fillMaxSize())
 }

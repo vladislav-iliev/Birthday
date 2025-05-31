@@ -21,7 +21,7 @@ fun NavGraphBuilder.addConnectScreenDestination(onConnected: () -> Unit) {
 @Composable
 private fun Content(onConnected: () -> Unit) {
     val viewModel = hiltViewModel<ViewModel>()
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.networkState.collectAsStateWithLifecycle()
     if (null != state.getMessageOrNull()) {
         onConnected()
         return

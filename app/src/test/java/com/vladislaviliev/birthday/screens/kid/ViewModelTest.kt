@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.networking.Message
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -29,7 +29,7 @@ class ViewModelTest {
     @Test
     fun `initial state should match api initial state`() = runTest {
         val (viewModel, _) = createViewModelAndApi()
-        Assert.assertEquals(State.Disconnected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Disconnected(), viewModel.state.value)
     }
 
     @Test
@@ -40,15 +40,15 @@ class ViewModelTest {
 
         // When API connects
         api.connect("", 0)
-        Assert.assertEquals(State.Connected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Connected(), viewModel.state.value)
 
         // When API receives message
         val message = Message("JohnyDoe", 1, Theme.PELICAN)
         api.emitMessage(message)
-        Assert.assertEquals(State.Connected(message), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Connected(message), viewModel.state.value)
 
         // When API disconnects
         api.disconnect()
-        Assert.assertEquals(State.Disconnected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Disconnected(), viewModel.state.value)
     }
 }

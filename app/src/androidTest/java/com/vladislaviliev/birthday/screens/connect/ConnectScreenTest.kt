@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ class ConnectScreenTest {
 
     @Test
     fun testShowsInitialElements() {
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Disconnected()) }
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, NetworkState.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.connect_to_server)).assertIsDisplayed()
         composeTestRule.onNodeWithText("localhost").assertIsDisplayed()
         composeTestRule.onNodeWithText("8080").assertIsDisplayed()
@@ -47,7 +47,7 @@ class ConnectScreenTest {
         var testIp = "localhost"
         var testPort = 8080
 
-        composeTestRule.setContent { ConnectScreen(connect, State.Disconnected()) }
+        composeTestRule.setContent { ConnectScreen(connect, NetworkState.Disconnected()) }
         composeTestRule.onNodeWithText(getStringResource(R.string.connect)).performClick()
 
         Assert.assertEquals(testIp, ip)
@@ -72,7 +72,7 @@ class ConnectScreenTest {
 
     @Test
     fun testShowsProgressIndicatorWhenConnecting() {
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connecting) }
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, NetworkState.Connecting) }
         composeTestRule.waitForIdle()
         composeTestRule
             .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
@@ -81,7 +81,7 @@ class ConnectScreenTest {
 
     @Test
     fun testShowsProgressIndicatorWhenAwaitingMessage() {
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Connected()) }
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, NetworkState.Connected()) }
         composeTestRule.waitForIdle()
         composeTestRule
             .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
@@ -91,7 +91,7 @@ class ConnectScreenTest {
     @Test
     fun testShowsStateMessage() {
         val cause = IllegalStateException()
-        composeTestRule.setContent { ConnectScreen({ _, _ -> }, State.Disconnected(cause)) }
+        composeTestRule.setContent { ConnectScreen({ _, _ -> }, NetworkState.Disconnected(cause)) }
         composeTestRule.onNodeWithText(cause.javaClass.simpleName).assertIsDisplayed()
     }
 }

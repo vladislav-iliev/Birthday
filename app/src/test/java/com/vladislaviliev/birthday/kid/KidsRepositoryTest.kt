@@ -2,7 +2,7 @@ package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.networking.Message
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -18,14 +18,14 @@ class KidsRepositoryTest {
 
     @Test
     fun `repository should have disconnected initial state`() = runTest {
-        Assert.assertEquals(State.Disconnected(), createRepo(InMemoryKidApi()).state.first())
+        Assert.assertEquals(NetworkState.Disconnected(), createRepo(InMemoryKidApi()).networkState.first())
     }
 
     @Test
     fun `connect should change state to connected`() = runTest {
         val repository = createRepo(InMemoryKidApi())
         repository.connect("", 0)
-        Assert.assertEquals(State.Connected(), repository.state.first())
+        Assert.assertEquals(NetworkState.Connected(), repository.networkState.first())
     }
 
     @Test
@@ -36,10 +36,10 @@ class KidsRepositoryTest {
         val message = Message("JohnyDoe", 1, Theme.PELICAN)
         api.emitMessage(message)
 
-        val state = repository.state.first()
+        val state = repository.networkState.first()
 
-        println(api.state.first())
+        println(api.networkState.first())
 
-        Assert.assertEquals(State.Connected(message), state)
+        Assert.assertEquals(NetworkState.Connected(message), state)
     }
 }

@@ -23,29 +23,29 @@ class Client : KidApi {
         }
     }
 
-    private val _state = MutableStateFlow<State>(State.Disconnected())
-    override val state = _state.asStateFlow()
+    private val _Network_state = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
+    override val networkState = _Network_state.asStateFlow()
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
             val response = session.receiveDeserialized<MessageRaw>().beautify()
-            _state.emitAndYield(State.Connected(response))
+            _Network_state.emitAndYield(NetworkState.Connected(response))
         }
     }
 
     private suspend fun onConnected(session: DefaultClientWebSocketSession) {
-        _state.emitAndYield(State.Connected())
+        _Network_state.emitAndYield(NetworkState.Connected())
         session.send(Frame.Text("HappyBirthday"))
         loopReceiving(session)
     }
 
     override suspend fun connect(ip: String, port: Int) {
-        if (_state.value is State.Connecting || _state.value is State.Connected) return
-        _state.emitAndYield(State.Connecting)
+        if (_Network_state.value is NetworkState.Connecting || _Network_state.value is NetworkState.Connected) return
+        _Network_state.emitAndYield(NetworkState.Connecting)
         try {
             client.webSocket(host = ip, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
-            _state.emitAndYield(State.Disconnected(e))
+            _Network_state.emitAndYield(NetworkState.Disconnected(e))
         }
     }
 }

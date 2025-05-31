@@ -5,7 +5,7 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidRepository
 import com.vladislaviliev.birthday.networking.Message
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -32,31 +32,31 @@ class ViewModelTest {
     @Test
     fun `initial state should be disconnected`() = runTest {
         val (viewModel, _) = createViewModelAndApi()
-        Assert.assertEquals(State.Disconnected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Disconnected(), viewModel.networkState.value)
     }
 
     @Test
     fun `connection state reflects api state`() = runTest {
 
         val (viewModel, api) = createViewModelAndApi()
-        backgroundScope.launch { viewModel.state.collect { } }
+        backgroundScope.launch { viewModel.networkState.collect { } }
         viewModel.connect("", 0)
         runCurrent()
 
-        Assert.assertEquals(State.Connected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Connected(), viewModel.networkState.value)
         val message = Message("JohnyDoe", 1, Theme.PELICAN)
         api.emitMessage(message)
-        Assert.assertEquals(State.Connected(message), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Connected(message), viewModel.networkState.value)
         api.disconnect()
-        Assert.assertEquals(State.Disconnected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Disconnected(), viewModel.networkState.value)
     }
 
     @Test
     fun `multiple connect calls should not affect final state`() = runTest {
         val (viewModel, _) = createViewModelAndApi()
-        backgroundScope.launch { viewModel.state.collect { } }
+        backgroundScope.launch { viewModel.networkState.collect { } }
         repeat(3) { viewModel.connect("", 0) }
         runCurrent()
-        Assert.assertEquals(State.Connected(), viewModel.state.value)
+        Assert.assertEquals(NetworkState.Connected(), viewModel.networkState.value)
     }
 }

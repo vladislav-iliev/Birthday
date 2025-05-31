@@ -46,18 +46,18 @@ class ClientTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
         val client = Client()
 
-        val states = mutableListOf<State>()
+        val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { client.state.toList(states) }
+        backgroundScope.launch { client.networkState.toList(networkStates) }
         runCurrent()
         client.connect(mockWebServer.hostName, mockWebServer.port)
 
         advanceUntilIdle()
-        Assert.assertEquals(State.Disconnected(), states[0])
-        Assert.assertEquals(State.Connecting, states[1])
-        Assert.assertEquals(State.Connected(), states[2])
-        Assert.assertEquals(State.Connected(serverMessageParsed), states[3])
-        Assert.assertTrue(states[4] is State.Disconnected)
+        Assert.assertEquals(NetworkState.Disconnected(), networkStates[0])
+        Assert.assertEquals(NetworkState.Connecting, networkStates[1])
+        Assert.assertEquals(NetworkState.Connected(), networkStates[2])
+        Assert.assertEquals(NetworkState.Connected(serverMessageParsed), networkStates[3])
+        Assert.assertTrue(networkStates[4] is NetworkState.Disconnected)
     }
 
     @Test
@@ -76,16 +76,16 @@ class ClientTest {
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
         val client = Client()
 
-        val states = mutableListOf<State>()
+        val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { client.state.toList(states) }
+        backgroundScope.launch { client.networkState.toList(networkStates) }
         val firstConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         val secondConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         runCurrent()
         firstConnect.join()
         secondConnect.join()
 
-        Assert.assertEquals("Connected count", 1, states.count(State.Connected()::equals))
-        Assert.assertEquals("Parsed message", 1, states.count(State.Connected(firstParsed)::equals))
+        Assert.assertEquals("Connected count", 1, networkStates.count(NetworkState.Connected()::equals))
+        Assert.assertEquals("Parsed message", 1, networkStates.count(NetworkState.Connected(firstParsed)::equals))
     }
 }

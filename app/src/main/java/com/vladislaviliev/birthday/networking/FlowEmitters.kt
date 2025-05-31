@@ -15,7 +15,7 @@ import kotlinx.coroutines.yield
  * 5. The Observer has now lost the emission by the time it becomes
  *    the running coroutine.
  **/
-suspend fun FlowCollector<State>.emitAndYield(state: State) {
-    emit(state)
+suspend fun FlowCollector<NetworkState>.emitAndYield(networkState: NetworkState) {
+    emit(networkState)
     yield()
 }

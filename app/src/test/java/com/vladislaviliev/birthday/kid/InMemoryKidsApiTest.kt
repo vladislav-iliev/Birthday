@@ -2,7 +2,7 @@ package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.networking.Message
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -16,15 +16,15 @@ class InMemoryKidsApiTest {
 
     @Test
     fun `initial state should be disconnected`() = runTest {
-        Assert.assertEquals(State.Disconnected(), InMemoryKidApi().state.first())
+        Assert.assertEquals(NetworkState.Disconnected(), InMemoryKidApi().networkState.first())
     }
 
     @Test
     fun `states progress up and down`() = runTest {
         val kidsApi = InMemoryKidApi()
-        val states = mutableListOf<State>()
+        val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { kidsApi.state.collect { states.add(it) } }
+        backgroundScope.launch { kidsApi.networkState.collect { networkStates.add(it) } }
         runCurrent()
         val message = Message("JohnyDoe", 1, Theme.PELICAN)
 
@@ -32,10 +32,10 @@ class InMemoryKidsApiTest {
         kidsApi.emitMessage(message)
         kidsApi.disconnect()
 
-        Assert.assertEquals(State.Disconnected(), states[0])
-        Assert.assertEquals(State.Connecting, states[1])
-        Assert.assertEquals(State.Connected(), states[2])
-        Assert.assertEquals(State.Connected(message), states[3])
-        Assert.assertTrue(states[4] is State.Disconnected)
+        Assert.assertEquals(NetworkState.Disconnected(), networkStates[0])
+        Assert.assertEquals(NetworkState.Connecting, networkStates[1])
+        Assert.assertEquals(NetworkState.Connected(), networkStates[2])
+        Assert.assertEquals(NetworkState.Connected(message), networkStates[3])
+        Assert.assertTrue(networkStates[4] is NetworkState.Disconnected)
     }
 }

@@ -1,6 +1,6 @@
 package com.vladislaviliev.birthday.kid
 
-import com.vladislaviliev.birthday.networking.State
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +11,7 @@ class KidRepository(
     private val dispatcher: CoroutineDispatcher,
     private val api: KidApi,
 ) {
-    val state: Flow<State> = api.state
+    val networkState: Flow<NetworkState> = api.networkState
 
     suspend fun connect(ip: String, port: Int) = scope.launch(dispatcher) {
         api.connect(ip, port)
