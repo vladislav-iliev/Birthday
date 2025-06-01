@@ -3,7 +3,7 @@ package com.vladislaviliev.birthday.screens.connect
 import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
-import com.vladislaviliev.birthday.kid.InMemoryKidApi
+import com.vladislaviliev.birthday.networking.InMemoryApi
 import com.vladislaviliev.birthday.kid.KidRepository
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
@@ -23,8 +23,8 @@ class ViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, InMemoryKidApi> {
-        val api = InMemoryKidApi()
+    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, InMemoryApi> {
+        val api = InMemoryApi()
         val repository = KidRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
         val viewModel = ViewModel(repository)
         return Pair(viewModel, api)

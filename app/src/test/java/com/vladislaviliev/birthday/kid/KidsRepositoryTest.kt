@@ -2,6 +2,8 @@ package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.text.Text
+import com.vladislaviliev.birthday.networking.Api
+import com.vladislaviliev.birthday.networking.InMemoryApi
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,23 +16,23 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class KidsRepositoryTest {
 
-    fun TestScope.createRepo(api: KidApi) = KidRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
+    fun TestScope.createRepo(api: Api) = KidRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
 
     @Test
     fun `repository should have disconnected initial state`() = runTest {
-        Assert.assertEquals(NetworkState.Disconnected(), createRepo(InMemoryKidApi()).networkState.first())
+        Assert.assertEquals(NetworkState.Disconnected(), createRepo(InMemoryApi()).networkState.first())
     }
 
     @Test
     fun `connect should change state to connected`() = runTest {
-        val repository = createRepo(InMemoryKidApi())
+        val repository = createRepo(InMemoryApi())
         repository.connect("", 0)
         Assert.assertEquals(NetworkState.Connected(), repository.networkState.first())
     }
 
     @Test
     fun `repository should reflect incoming messages`() = runTest {
-        val api = InMemoryKidApi()
+        val api = InMemoryApi()
         val repository = createRepo(api)
 
         val text = Text("Johny", Age(0, false), Theme.PELICAN)

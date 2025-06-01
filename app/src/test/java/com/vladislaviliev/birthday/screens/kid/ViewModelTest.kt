@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.dependencies.DummyAvatarRepository
 import com.vladislaviliev.birthday.kid.Age
-import com.vladislaviliev.birthday.kid.InMemoryKidApi
+import com.vladislaviliev.birthday.networking.InMemoryApi
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.text.Text
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,8 +22,8 @@ class ViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private fun TestScope.createViewModelAndApi(): Triple<ViewModel, InMemoryKidApi, Repository> {
-        val api = InMemoryKidApi()
+    private fun TestScope.createViewModelAndApi(): Triple<ViewModel, InMemoryApi, Repository> {
+        val api = InMemoryApi()
         val avatarRepo = DummyAvatarRepository()
         val viewModel = ViewModel(api, DummyAvatarRepository())
         return Triple(viewModel, api, avatarRepo)

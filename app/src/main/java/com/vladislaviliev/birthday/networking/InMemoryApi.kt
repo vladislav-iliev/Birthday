@@ -1,12 +1,10 @@
-package com.vladislaviliev.birthday.kid
+package com.vladislaviliev.birthday.networking
 
 import com.vladislaviliev.birthday.kid.text.Text
-import com.vladislaviliev.birthday.networking.NetworkState
-import com.vladislaviliev.birthday.networking.emitAndYield
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class InMemoryKidApi : KidApi {
+class InMemoryApi : Api {
 
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
     override val networkState = _networkState.asStateFlow()

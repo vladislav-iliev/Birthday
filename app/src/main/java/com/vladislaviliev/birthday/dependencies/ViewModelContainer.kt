@@ -1,6 +1,6 @@
 package com.vladislaviliev.birthday.dependencies
 
-import com.vladislaviliev.birthday.kid.KidApi
+import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.kid.KidRepository
 import dagger.Module
 import dagger.Provides
@@ -16,6 +16,6 @@ class ViewModelContainer {
 
     @Provides
     @ViewModelScoped
-    fun provideKidsRepository(scope: CoroutineScope, dispatcher: CoroutineDispatcher, kidApi: KidApi) =
-        KidRepository(scope, dispatcher, kidApi)
+    fun provideKidsRepository(scope: CoroutineScope, dispatcher: CoroutineDispatcher, api: Api) =
+        KidRepository(scope, dispatcher, api)
 }

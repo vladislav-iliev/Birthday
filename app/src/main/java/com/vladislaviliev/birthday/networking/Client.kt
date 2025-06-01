@@ -1,6 +1,5 @@
 package com.vladislaviliev.birthday.networking
 
-import com.vladislaviliev.birthday.kid.KidApi
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.logging.Logging
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 
-class Client : KidApi {
+class Client : Api {
 
     private val client = HttpClient(CIO) {
         install(Logging)

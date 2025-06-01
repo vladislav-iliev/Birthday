@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.dependencies
 
 import android.content.Context
-import com.vladislaviliev.birthday.kid.KidApi
+import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.avatar.RepositoryImpl
 import com.vladislaviliev.birthday.networking.Client
@@ -29,7 +29,7 @@ class AppContainer {
 
     @Provides
     @Singleton
-    fun provideKidsApi(): KidApi = Client()
+    fun provideKidsApi(): Api = Client()
 
     @Provides
     @Singleton

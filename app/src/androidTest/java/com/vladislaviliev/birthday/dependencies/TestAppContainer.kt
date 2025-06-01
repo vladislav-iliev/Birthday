@@ -1,8 +1,8 @@
 package com.vladislaviliev.birthday.dependencies
 
 import android.content.Context
-import com.vladislaviliev.birthday.kid.InMemoryKidApi
-import com.vladislaviliev.birthday.kid.KidApi
+import com.vladislaviliev.birthday.networking.InMemoryApi
+import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.avatar.RepositoryImpl
 import dagger.Module
@@ -29,7 +29,7 @@ class TestAppContainer {
 
     @Provides
     @Singleton
-    fun provideKidsApi(): KidApi = InMemoryKidApi()
+    fun provideKidsApi(): Api = InMemoryApi()
 
     // TODO swap with dummy
     @Provides

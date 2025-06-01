@@ -2,6 +2,7 @@ package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.text.Text
+import com.vladislaviliev.birthday.networking.InMemoryApi
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -16,12 +17,12 @@ class InMemoryKidsApiTest {
 
     @Test
     fun `initial state should be disconnected`() = runTest {
-        Assert.assertEquals(NetworkState.Disconnected(), InMemoryKidApi().networkState.first())
+        Assert.assertEquals(NetworkState.Disconnected(), InMemoryApi().networkState.first())
     }
 
     @Test
     fun `states progress up and down`() = runTest {
-        val kidsApi = InMemoryKidApi()
+        val kidsApi = InMemoryApi()
         val networkStates = mutableListOf<NetworkState>()
 
         backgroundScope.launch { kidsApi.networkState.collect { networkStates.add(it) } }
