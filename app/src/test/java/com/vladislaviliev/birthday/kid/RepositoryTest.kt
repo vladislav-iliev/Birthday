@@ -14,9 +14,9 @@ import org.junit.Assert
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class KidsRepositoryTest {
+class RepositoryTest {
 
-    fun TestScope.createRepo(api: Api) = KidRepository(this, coroutineContext[CoroutineDispatcher]!!, api)
+    fun TestScope.createRepo(api: Api) = Repository(this, coroutineContext[CoroutineDispatcher]!!, api)
 
     @Test
     fun `repository should have disconnected initial state`() = runTest {

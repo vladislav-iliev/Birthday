@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class KidRepository(
+class Repository(
     private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val api: Api,
