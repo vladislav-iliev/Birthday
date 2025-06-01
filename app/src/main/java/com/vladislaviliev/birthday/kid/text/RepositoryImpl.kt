@@ -1,7 +1,6 @@
 package com.vladislaviliev.birthday.kid.text
 
 import com.vladislaviliev.birthday.networking.Api
-import com.vladislaviliev.birthday.networking.getTextOrNull
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

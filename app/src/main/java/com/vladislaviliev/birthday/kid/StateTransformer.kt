@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
-import com.vladislaviliev.birthday.networking.getTextOrNull
 
 class StateTransformer {
     fun from(apiNetworkState: NetworkState, avatar: ImageBitmap?): State {

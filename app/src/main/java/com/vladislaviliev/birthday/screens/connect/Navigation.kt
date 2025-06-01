@@ -7,7 +7,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vladislaviliev.birthday.networking.getTextOrNull
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
 import kotlinx.serialization.Serializable
 
