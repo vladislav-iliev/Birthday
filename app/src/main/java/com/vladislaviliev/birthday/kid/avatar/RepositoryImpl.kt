@@ -11,16 +11,19 @@ import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import com.vladislaviliev.birthday.R
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val context: Context,
+    private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
 ) : Repository {
+
     private val file = File(context.filesDir, "avatar")
     override val fileUri: Uri =
         FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
@@ -57,12 +60,12 @@ class RepositoryImpl @Inject constructor(
         emitFileAsBitmap()
     }
 
-    override suspend fun copyFromUri(uri: Uri) = withContext(dispatcher) {
+    override suspend fun copyFromUri(uri: Uri) = scope.launch(dispatcher) {
         context.contentResolver.openInputStream(uri)?.use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
         }
         emitFileAsBitmap()
-    }
+    }.join()
 }
