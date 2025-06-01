@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -16,60 +15,35 @@ class DummyTextRepositoryTest {
 
     @Test
     fun `initial text value should be null`() = runTest {
-        val repository = DummyTextRepository()
-        val initialValue = repository.text.first()
-        assertNull(initialValue)
+        assertNull(DummyTextRepository().text.first())
     }
 
     @Test
     fun `emit should update text value`() = runTest {
         val repository = DummyTextRepository()
-        val testText = Text(
-            name = "Test Name",
-            age = Age(number = 5, isMonths = false),
-            theme = Theme.FOX
-        )
+        val testText = Text("Test Name", Age(5, false), Theme.FOX)
 
         repository.emit(testText)
-
-        val result = repository.text.first()
-        assertEquals(testText, result)
+        assertEquals(testText, repository.text.first())
     }
 
     @Test
     fun `emit null should clear text value`() = runTest {
         val repository = DummyTextRepository()
-        val testText = Text(
-            name = "Test Name",
-            age = Age(number = 5, isMonths = false),
-            theme = Theme.ELEPHANT
-        )
+        val testText = Text("Test Name", Age(5, false), Theme.ELEPHANT)
         repository.emit(testText)
-
         repository.emit(null)
-
-        val result = repository.text.first()
-        assertNull(result)
+        assertNull(repository.text.first())
     }
 
     @Test
     fun `multiple emits should update to latest value`() = runTest {
         val repository = DummyTextRepository()
-        val firstText = Text(
-            name = "First",
-            age = Age(number = 3, isMonths = true),
-            theme = Theme.PELICAN
-        )
-        val secondText = Text(
-            name = "Second",
-            age = Age(number = 7, isMonths = false),
-            theme = Theme.FOX
-        )
+        val firstText = Text("First", Age(3, true), Theme.PELICAN)
+        val secondText = Text("Second", Age(7, false), Theme.FOX)
 
         repository.emit(firstText)
         repository.emit(secondText)
-
-        val result = repository.text.first()
-        assertEquals(secondText, result)
+        assertEquals(secondText, repository.text.first())
     }
 }
