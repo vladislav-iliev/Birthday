@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
+import com.vladislaviliev.birthday.kid.State
 import com.vladislaviliev.birthday.kid.text.Text
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +30,7 @@ class KidScreenTest {
         val networkText = Text("Test Kid", Age(1, false), Theme.PELICAN)
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
 
-        val state = KidScreenState(true, networkText, null)
+        val state = State(true, networkText, null)
         composeTestRule.setContent { KidScreen(state, {}) }
 
         composeTestRule
@@ -52,7 +53,7 @@ class KidScreenTest {
 
     @Test
     fun testPlurals_months() {
-        val state = KidScreenState(true, Text("Test Kid", Age(1, true), Theme.PELICAN), null)
+        val state = State(true, Text("Test Kid", Age(1, true), Theme.PELICAN), null)
         composeTestRule.setContent { KidScreen(state, {}) }
 
         val monthText = context.resources.getQuantityString(R.plurals.plurals_month, 1, 1)
@@ -62,7 +63,7 @@ class KidScreenTest {
 
     @Test
     fun testPlurals_years() {
-        val state = KidScreenState(true, Text("Test Kid", Age(1, false), Theme.PELICAN), null)
+        val state = State(true, Text("Test Kid", Age(1, false), Theme.PELICAN), null)
         composeTestRule.setContent { KidScreen(state, {}) }
 
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)

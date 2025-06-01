@@ -2,6 +2,7 @@ package com.vladislaviliev.birthday.screens.kid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vladislaviliev.birthday.kid.StateTransformer
 import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel

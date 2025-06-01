@@ -27,6 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
+import com.vladislaviliev.birthday.kid.State
 import com.vladislaviliev.birthday.kid.text.Text
 
 private const val backgroundRef = "background"
@@ -38,7 +39,7 @@ private const val bottomSpacerRef = "bottom_spacer"
 private const val footerRef = "footer"
 
 @Composable
-fun KidScreen(state: KidScreenState, onAvatarPickerClick: () -> Unit, modifier: Modifier = Modifier) {
+fun KidScreen(state: State, onAvatarPickerClick: () -> Unit, modifier: Modifier = Modifier) {
     ConstraintLayout(
         constraints(LocalContext.current.resources.displayMetrics),
         modifier
@@ -210,5 +211,5 @@ private fun Dp.asHeightPercent(displayMetrics: DisplayMetrics): Float {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun KidScreenPreview() {
-    KidScreen(KidScreenState(true, Text("Johny Doe", Age(1, false), Theme.PELICAN), null), {}, Modifier.fillMaxSize())
+    KidScreen(State(true, Text("Johny Doe", Age(1, false), Theme.PELICAN), null), {}, Modifier.fillMaxSize())
 }

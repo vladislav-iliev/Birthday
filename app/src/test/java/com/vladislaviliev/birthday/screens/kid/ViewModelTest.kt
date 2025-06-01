@@ -4,6 +4,8 @@ import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.dependencies.DummyAvatarRepository
 import com.vladislaviliev.birthday.kid.Age
+import com.vladislaviliev.birthday.kid.State
+import com.vladislaviliev.birthday.kid.StateTransformer
 import com.vladislaviliev.birthday.networking.InMemoryApi
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.text.Text
@@ -52,7 +54,7 @@ class ViewModelTest {
         val networkMessage = Text("JohnyDoe", Age(-1, false), Theme.PELICAN)
         api.emit(networkMessage)
         Assert.assertEquals(
-            KidScreenState(true, Text("JohnyDoe", Age(-1, false), Theme.PELICAN), null), viewModel.state.value
+            State(true, Text("JohnyDoe", Age(-1, false), Theme.PELICAN), null), viewModel.state.value
         )
 
         // When API disconnects
