@@ -29,7 +29,7 @@ class AppContainer {
 
     @Provides
     @Singleton
-    fun provideKidsApi(): Api = Client()
+    fun provideApi(): Api = Client()
 
     @Provides
     @Singleton
