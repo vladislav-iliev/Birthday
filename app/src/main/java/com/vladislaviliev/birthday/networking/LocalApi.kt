@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.kid.text.Text
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class InMemoryApi : Api {
+class LocalApi : Api {
 
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
     override val networkState = _networkState.asStateFlow()
