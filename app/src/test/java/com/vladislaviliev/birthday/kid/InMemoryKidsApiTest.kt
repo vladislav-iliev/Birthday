@@ -26,7 +26,7 @@ class InMemoryKidsApiTest {
 
         backgroundScope.launch { kidsApi.networkState.collect { networkStates.add(it) } }
         runCurrent()
-        val networkMessage = NetworkMessage("JohnyDoe", 1, Theme.PELICAN)
+        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
 
         kidsApi.connect("", 0)
         kidsApi.emitMessage(networkMessage)

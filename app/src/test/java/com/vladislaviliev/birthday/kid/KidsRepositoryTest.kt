@@ -33,7 +33,7 @@ class KidsRepositoryTest {
         val api = InMemoryKidApi()
         val repository = createRepo(api)
 
-        val networkMessage = NetworkMessage("JohnyDoe", 1, Theme.PELICAN)
+        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
         api.emitMessage(networkMessage)
 
         val state = repository.networkState.first()

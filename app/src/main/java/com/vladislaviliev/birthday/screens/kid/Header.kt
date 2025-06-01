@@ -20,21 +20,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vladislaviliev.birthday.R
-import com.vladislaviliev.birthday.kid.AgeCalculator
+import com.vladislaviliev.birthday.kid.Age
 
 @Composable
-fun Header(kidName: String, ageMonths: Int, modifier: Modifier = Modifier) {
-    val years = AgeCalculator().monthsToYears(ageMonths)
-    val showYears = 1 <= years
-    val number = if (showYears) years else ageMonths
+fun Header(kidName: String, age: Age, modifier: Modifier = Modifier) {
     val durationWord =
-        if (showYears) pluralStringResource(R.plurals.plurals_year, years)
-        else pluralStringResource(R.plurals.plurals_month, ageMonths)
+        pluralStringResource(if (age.isMonths) R.plurals.plurals_month else R.plurals.plurals_year, age.number)
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         HeaderText(stringResource(R.string.today_x_is, kidName))
         Spacer(Modifier.height(13.dp))
-        DrawnNumber(number)
+        DrawnNumber(age.number)
         Spacer(Modifier.height(14.dp))
         HeaderText(stringResource(R.string.x_old, durationWord))
     }

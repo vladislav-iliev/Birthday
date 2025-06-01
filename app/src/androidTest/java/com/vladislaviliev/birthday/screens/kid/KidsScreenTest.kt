@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.networking.NetworkMessage
 import org.junit.Rule
 import org.junit.Test
@@ -23,17 +24,18 @@ class KidScreenTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
-    private val defaultState = KidScreenState(true, "Test Kid", 1, Theme.PELICAN, null)
+    private val defaultState = KidScreenState(true, "Test Kid", Age(1, false), Theme.PELICAN, null)
 
     @Test
     fun testScreenStructure_coreElements() {
-        val networkMessage = NetworkMessage(name = "Test Kid", ageMonths = 12, theme = Theme.FOX)
+        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
 
         composeTestRule.setContent { KidScreen(defaultState, {}) }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.today_x_is, networkMessage.name), ignoreCase = true).assertIsDisplayed()
+            .onNodeWithText(context.getString(R.string.today_x_is, networkMessage.name), ignoreCase = true)
+            .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("1").assertIsDisplayed()
         composeTestRule

@@ -3,6 +3,7 @@ package com.vladislaviliev.birthday.screens.kid
 import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.dependencies.DummyAvatarRepository
+import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.networking.NetworkMessage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,9 +44,9 @@ class ViewModelTest {
         Assert.assertFalse(viewModel.state.value.isActive)
 
         // When API receives message
-        val networkMessage = NetworkMessage("JohnyDoe", 1, Theme.PELICAN)
+        val networkMessage = NetworkMessage("JohnyDoe", Age(-1, false), Theme.PELICAN)
         api.emitMessage(networkMessage)
-        Assert.assertEquals(KidScreenState(true, "JohnyDoe", 1, Theme.PELICAN, null), viewModel.state.value)
+        Assert.assertEquals(KidScreenState(true, "JohnyDoe", Age(-1, false), Theme.PELICAN, null), viewModel.state.value)
 
         // When API disconnects
         api.disconnect()

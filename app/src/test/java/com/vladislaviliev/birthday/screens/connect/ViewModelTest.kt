@@ -2,6 +2,7 @@ package com.vladislaviliev.birthday.screens.connect
 
 import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidRepository
 import com.vladislaviliev.birthday.networking.NetworkMessage
@@ -44,7 +45,7 @@ class ViewModelTest {
         runCurrent()
 
         Assert.assertEquals(NetworkState.Connected(), viewModel.networkState.value)
-        val networkMessage = NetworkMessage("JohnyDoe", 1, Theme.PELICAN)
+        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
         api.emitMessage(networkMessage)
         Assert.assertEquals(NetworkState.Connected(networkMessage), viewModel.networkState.value)
         api.disconnect()
