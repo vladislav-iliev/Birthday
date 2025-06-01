@@ -15,10 +15,10 @@ class ViewModel @Inject constructor(kidApi: KidApi, avatarRepository: Repository
 
     private val transformer = StateTransformer()
 
-    val state = combine(kidApi.networkState, avatarRepository.state, transformer::from)
+    val state = combine(kidApi.networkState, avatarRepository.bitmap, transformer::from)
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000L),
-            transformer.from(kidApi.networkState.value, avatarRepository.state.value)
+            transformer.from(kidApi.networkState.value, avatarRepository.bitmap.value)
         )
 }
