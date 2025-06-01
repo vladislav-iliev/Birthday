@@ -1,8 +1,9 @@
-package com.vladislaviliev.birthday.networking
+package com.vladislaviliev.birthday.test
 
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
+import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

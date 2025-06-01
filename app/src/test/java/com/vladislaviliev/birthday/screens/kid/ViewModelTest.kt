@@ -6,7 +6,7 @@ import com.vladislaviliev.birthday.dependencies.DummyAvatarRepository
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.State
 import com.vladislaviliev.birthday.kid.StateTransformer
-import com.vladislaviliev.birthday.networking.LocalApi
+import com.vladislaviliev.birthday.test.LocalApi
 import com.vladislaviliev.birthday.kid.avatar.Repository
 import com.vladislaviliev.birthday.kid.text.Text
 import kotlinx.coroutines.ExperimentalCoroutinesApi

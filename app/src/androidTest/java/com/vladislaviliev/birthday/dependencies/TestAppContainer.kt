@@ -3,8 +3,7 @@ package com.vladislaviliev.birthday.dependencies
 import android.content.Context
 import com.vladislaviliev.birthday.networking.LocalApi
 import com.vladislaviliev.birthday.networking.Api
-import com.vladislaviliev.birthday.kid.avatar.Repository
-import com.vladislaviliev.birthday.kid.avatar.RepositoryImpl
+import com.vladislaviliev.birthday.test.LocalApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
