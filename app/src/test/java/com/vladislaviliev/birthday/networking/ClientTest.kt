@@ -35,7 +35,7 @@ class ClientTest {
     @Test
     fun `states progress up and down`() = runTest {
         val serverMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-        val serverMessageParsed = Json.Default.decodeFromString<NetworkMessageRaw>(serverMessage).beautify()
+        val serverMessageParsed = Json.Default.decodeFromString<TextRaw>(serverMessage).beautify()
 
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -64,7 +64,7 @@ class ClientTest {
     fun testMultipleConnectsAreIdempotent() = runTest {
 
         val firstServerMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
-        val firstParsed = Json.Default.decodeFromString<NetworkMessageRaw>(firstServerMessage).beautify()
+        val firstParsed = Json.Default.decodeFromString<TextRaw>(firstServerMessage).beautify()
 
         val serverListener = object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {

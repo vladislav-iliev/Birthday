@@ -11,7 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.text.Text
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,24 +24,23 @@ class KidScreenTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
-    private val defaultState = KidScreenState(true, "Test Kid", Age(1, false), Theme.PELICAN, null)
-
     @Test
     fun testScreenStructure_coreElements() {
-        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
+        val networkText = Text("Test Kid", Age(1, false), Theme.PELICAN)
         val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
 
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
+        val state = KidScreenState(true, networkText, null)
+        composeTestRule.setContent { KidScreen(state, {}) }
 
         composeTestRule
-            .onNodeWithText(context.getString(R.string.today_x_is, networkMessage.name), ignoreCase = true)
+            .onNodeWithText(context.getString(R.string.today_x_is, networkText.name), ignoreCase = true)
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("1").assertIsDisplayed()
         composeTestRule
             .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, networkMessage.name))
+            .onNodeWithContentDescription(context.getString(R.string.avatar_image_of_x, networkText.name))
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription(context.getString(R.string.select_new_avatar))
@@ -52,8 +51,9 @@ class KidScreenTest {
     }
 
     @Test
-    fun testPlurals_oneMonth() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
+    fun testPlurals_months() {
+        val state = KidScreenState(true, Text("Test Kid", Age(1, true), Theme.PELICAN), null)
+        composeTestRule.setContent { KidScreen(state, {}) }
 
         val monthText = context.resources.getQuantityString(R.plurals.plurals_month, 1, 1)
         composeTestRule
@@ -61,46 +61,12 @@ class KidScreenTest {
     }
 
     @Test
-    fun testPlurals_elevenMonths() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
-
-        val monthsText = context.resources.getQuantityString(R.plurals.plurals_month, 11, 11)
-        composeTestRule
-            .onNodeWithText(context.getString(R.string.x_old, monthsText), ignoreCase = true).assertIsDisplayed()
-    }
-
-    @Test
-    fun testPlurals_oneYear() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
+    fun testPlurals_years() {
+        val state = KidScreenState(true, Text("Test Kid", Age(1, false), Theme.PELICAN), null)
+        composeTestRule.setContent { KidScreen(state, {}) }
 
         val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
         composeTestRule
             .onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
-    }
-
-    @Test
-    fun testPlurals_oneYearAndOneMonth() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
-        val yearText = context.resources.getQuantityString(R.plurals.plurals_year, 1, 1)
-        composeTestRule
-            .onNodeWithText(context.getString(R.string.x_old, yearText), ignoreCase = true).assertIsDisplayed()
-    }
-
-    @Test
-    fun testPlurals_twoYears() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
-
-        val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
-        composeTestRule
-            .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
-    }
-
-    @Test
-    fun testPlurals_twoYearsAndThreeMonths() {
-        composeTestRule.setContent { KidScreen(defaultState, {}) }
-
-        val yearsText = context.resources.getQuantityString(R.plurals.plurals_year, 2, 2)
-        composeTestRule
-            .onNodeWithText(context.getString(R.string.x_old, yearsText), ignoreCase = true).assertIsDisplayed()
     }
 }

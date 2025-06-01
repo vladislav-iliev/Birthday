@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -26,16 +26,16 @@ class InMemoryKidsApiTest {
 
         backgroundScope.launch { kidsApi.networkState.collect { networkStates.add(it) } }
         runCurrent()
-        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
+        val text = Text("Johny", Age(0, false), Theme.PELICAN)
 
         kidsApi.connect("", 0)
-        kidsApi.emitMessage(networkMessage)
+        kidsApi.emit(text)
         kidsApi.disconnect()
 
         Assert.assertEquals(NetworkState.Disconnected(), networkStates[0])
         Assert.assertEquals(NetworkState.Connecting, networkStates[1])
         Assert.assertEquals(NetworkState.Connected(), networkStates[2])
-        Assert.assertEquals(NetworkState.Connected(networkMessage), networkStates[3])
+        Assert.assertEquals(NetworkState.Connected(text), networkStates[3])
         Assert.assertTrue(networkStates[4] is NetworkState.Disconnected)
     }
 }

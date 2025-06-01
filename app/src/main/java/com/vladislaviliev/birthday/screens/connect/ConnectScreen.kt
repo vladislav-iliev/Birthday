@@ -76,7 +76,7 @@ private fun StateComposable(networkState: NetworkState) {
         Text(networkState.cause.javaClass.simpleName, color = Color.Red)
         return
     }
-    val awaitingMessage = networkState is NetworkState.Connected && networkState.networkMessage == null
+    val awaitingMessage = networkState is NetworkState.Connected && networkState.text == null
     if (networkState is NetworkState.Connecting || awaitingMessage) {
         CircularProgressIndicator()
         return

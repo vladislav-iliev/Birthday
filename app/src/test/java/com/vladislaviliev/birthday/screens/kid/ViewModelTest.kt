@@ -5,7 +5,8 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.dependencies.DummyAvatarRepository
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.avatar.Repository
+import com.vladislaviliev.birthday.kid.text.Text
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
@@ -21,16 +22,20 @@ class ViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, InMemoryKidApi> {
+    private fun TestScope.createViewModelAndApi(): Triple<ViewModel, InMemoryKidApi, Repository> {
         val api = InMemoryKidApi()
+        val avatarRepo = DummyAvatarRepository()
         val viewModel = ViewModel(api, DummyAvatarRepository())
-        return Pair(viewModel, api)
+        return Triple(viewModel, api, avatarRepo)
     }
 
     @Test
     fun `initial state should match api initial state`() = runTest {
-        val (viewModel, _) = createViewModelAndApi()
-        Assert.assertEquals(StateTransformer().defaultState, viewModel.state.value)
+        val (viewModel, api, avatarRepo) = createViewModelAndApi()
+        Assert.assertEquals(
+            StateTransformer().from(api.networkState.value, avatarRepo.bitmap.value),
+            viewModel.state.value
+        )
     }
 
     @Test
@@ -44,9 +49,11 @@ class ViewModelTest {
         Assert.assertFalse(viewModel.state.value.isActive)
 
         // When API receives message
-        val networkMessage = NetworkMessage("JohnyDoe", Age(-1, false), Theme.PELICAN)
-        api.emitMessage(networkMessage)
-        Assert.assertEquals(KidScreenState(true, "JohnyDoe", Age(-1, false), Theme.PELICAN, null), viewModel.state.value)
+        val networkMessage = Text("JohnyDoe", Age(-1, false), Theme.PELICAN)
+        api.emit(networkMessage)
+        Assert.assertEquals(
+            KidScreenState(true, Text("JohnyDoe", Age(-1, false), Theme.PELICAN), null), viewModel.state.value
+        )
 
         // When API disconnects
         api.disconnect()

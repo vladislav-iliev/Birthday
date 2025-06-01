@@ -1,6 +1,6 @@
 package com.vladislaviliev.birthday.kid
 
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import com.vladislaviliev.birthday.networking.emitAndYield
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,20 +8,20 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class InMemoryKidApi : KidApi {
 
-    private val _Network_state = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
-    override val networkState = _Network_state.asStateFlow()
+    private val _networkState = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
+    override val networkState = _networkState.asStateFlow()
 
     override suspend fun connect(ip: String, port: Int) {
-        if (_Network_state.value is NetworkState.Connecting || _Network_state.value is NetworkState.Connected) return
-        _Network_state.emitAndYield(NetworkState.Connecting)
-        _Network_state.emitAndYield(NetworkState.Connected())
+        if (_networkState.value is NetworkState.Connecting || _networkState.value is NetworkState.Connected) return
+        _networkState.emitAndYield(NetworkState.Connecting)
+        _networkState.emitAndYield(NetworkState.Connected())
     }
 
-    suspend fun emitMessage(r: NetworkMessage) {
-        _Network_state.emitAndYield(NetworkState.Connected(r))
+    suspend fun emit(t: Text) {
+        _networkState.emitAndYield(NetworkState.Connected(t))
     }
 
     suspend fun disconnect() {
-        _Network_state.emitAndYield(NetworkState.Disconnected())
+        _networkState.emitAndYield(NetworkState.Disconnected())
     }
 }

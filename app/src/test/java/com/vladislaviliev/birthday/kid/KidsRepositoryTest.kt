@@ -1,7 +1,7 @@
 package com.vladislaviliev.birthday.kid
 
 import com.vladislaviliev.birthday.Theme
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,13 +33,13 @@ class KidsRepositoryTest {
         val api = InMemoryKidApi()
         val repository = createRepo(api)
 
-        val networkMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
-        api.emitMessage(networkMessage)
+        val text = Text("Johny", Age(0, false), Theme.PELICAN)
+        api.emit(text)
 
         val state = repository.networkState.first()
 
         println(api.networkState.first())
 
-        Assert.assertEquals(NetworkState.Connected(networkMessage), state)
+        Assert.assertEquals(NetworkState.Connected(text), state)
     }
 }

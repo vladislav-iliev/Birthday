@@ -19,7 +19,7 @@ import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.InMemoryKidApi
 import com.vladislaviliev.birthday.kid.KidApi
-import com.vladislaviliev.birthday.networking.NetworkMessage
+import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.CameraPermissionRoute
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
 import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.ChooseSourceRoute
@@ -81,8 +81,8 @@ class NavControllerTest {
     fun testConnectNavigatesToKids() {
         setContentToAppDefault(navController)
 
-        val genericMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(genericMessage) }
+        val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emit(genericText) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -93,8 +93,8 @@ class NavControllerTest {
     fun testConnectClosesItselfWhenConnected() {
         setContentToAppDefault(navController)
 
-        val genericMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(genericMessage) }
+        val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emit(genericText) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -107,8 +107,8 @@ class NavControllerTest {
     fun testDisconnectGoesToConnectScreen() {
         setContentToAppDefault(navController)
 
-        val genericMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(genericMessage) }
+        val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emit(genericText) }
 
         composeTestRule.waitUntil {
             KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
@@ -138,8 +138,8 @@ class NavControllerTest {
         val btn =
             composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
 
-        val genericMessage = NetworkMessage("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (testKidApi as InMemoryKidApi).emitMessage(genericMessage) }
+        val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
+        coroutineScope.launch { (testKidApi as InMemoryKidApi).emit(genericText) }
 
         composeTestRule.waitUntil { btn.isDisplayed() }
 
