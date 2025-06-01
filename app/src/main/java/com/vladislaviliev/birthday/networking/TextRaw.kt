@@ -6,7 +6,6 @@ import com.vladislaviliev.birthday.kid.text.Text
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TextRaw(val name: String, val dob: Long, val theme: String)
-
-fun TextRaw.beautify() =
-    Text(name, AgeCalculator().parseDob(dob), Theme.entries.first { it.name.equals(theme, true) })
+data class TextRaw(val name: String, val dob: Long, val theme: String) {
+    fun parse() = Text(name, AgeCalculator().parseDob(dob), Theme.entries.first { it.name.equals(theme, true) })
+}
