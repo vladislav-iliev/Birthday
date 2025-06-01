@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import com.vladislaviliev.birthday.R
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.net.URI
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -25,8 +26,9 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     private val file = File(context.filesDir, "avatar")
-    override val fileUri: Uri =
-        FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
+    override val fileUri: URI = URI.create(
+        FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file).toString()
+    )
 
     private val _bitmap = MutableStateFlow<ImageBitmap?>(initialState())
     override val bitmap = _bitmap.asStateFlow()
@@ -60,8 +62,9 @@ class RepositoryImpl @Inject constructor(
         emitFileAsBitmap()
     }
 
-    override suspend fun copyFromUri(uri: Uri) = scope.launch(dispatcher) {
-        context.contentResolver.openInputStream(uri)?.use { input ->
+    override suspend fun copyFromUri(uri: URI) = scope.launch(dispatcher) {
+        val androidUri = uri.toString().toUri()
+        context.contentResolver.openInputStream(androidUri)?.use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
