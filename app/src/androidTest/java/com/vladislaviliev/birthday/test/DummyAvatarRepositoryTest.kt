@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
-class DummyAvatarRepositoryTest {
+class DummyAvatarRepositoryTest { // Instrumented test - Bitmap requires Android runtime, the Android Uri too
 
     @Test
     fun initial_state_should_be_empty() = runTest {
