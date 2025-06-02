@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import com.vladislaviliev.birthday.R
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,6 +25,7 @@ class RepositoryImpl @Inject constructor(
 ) : Repository {
 
     private val file = File(context.filesDir, "avatar")
+
     override val fileUri: Uri =
         FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
 
@@ -34,14 +34,13 @@ class RepositoryImpl @Inject constructor(
 
     private fun initialState() = if (file.length() == 0L) null else convertFileToBitmap()
 
-    private fun convertFileToBitmap() =
-        BitmapFactory.decodeFile(file.absolutePath)?.run { rotateBitmap(this).asImageBitmap() }
+    private fun convertFileToBitmap() = BitmapFactory.decodeFile(file.absolutePath)?.rotate()?.asImageBitmap()
 
     private suspend fun emitFileAsBitmap() {
         _bitmap.emit(convertFileToBitmap())
     }
 
-    private fun rotateBitmap(bitmap: Bitmap): Bitmap {
+    private fun Bitmap.rotate(): Bitmap {
         val exif = ExifInterface(file.absolutePath)
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
 
@@ -54,7 +53,7 @@ class RepositoryImpl @Inject constructor(
         val matrix = Matrix()
         matrix.postRotate(rotate.toFloat())
 
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true)
+        return Bitmap.createBitmap(this, 0, 0, getWidth(), getHeight(), matrix, true)
     }
 
     override suspend fun onPhotoCopied() {
@@ -62,8 +61,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun copyFromUri(uri: Uri) = scope.launch(dispatcher) {
-        val androidUri = uri.toString().toUri()
-        context.contentResolver.openInputStream(androidUri)?.use { input ->
+        context.contentResolver.openInputStream(uri)?.use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
