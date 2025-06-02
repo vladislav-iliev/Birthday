@@ -1,12 +1,12 @@
 package com.vladislaviliev.birthday.kid.avatar
 
+import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.coroutines.flow.StateFlow
-import java.net.URI
 
 interface Repository {
-    val fileUri: URI
+    val fileUri: Uri
     val bitmap: StateFlow<ImageBitmap?>
     suspend fun onPhotoCopied()
-    suspend fun copyFromUri(uri: URI)
+    suspend fun copyFromUri(uri: Uri)
 }
