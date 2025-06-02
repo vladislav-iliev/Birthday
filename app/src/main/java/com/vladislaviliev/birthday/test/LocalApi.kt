@@ -9,7 +9,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class LocalApi : Api {
 
-    private val isTransmitting = AtomicBoolean()
+    private val isTransmitting = AtomicBoolean(false)
+
     private val _networkState = MutableSharedFlow<NetworkState>()
     override val networkState = _networkState.asSharedFlow()
 
