@@ -9,9 +9,10 @@ import io.ktor.client.plugins.websocket.receiveDeserialized
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.websocket.Frame
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.serialization.json.Json
+import java.util.concurrent.atomic.AtomicBoolean
 
 class Client : Api {
 
@@ -22,29 +23,32 @@ class Client : Api {
         }
     }
 
-    private val _networkState = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
-    override val networkState = _networkState.asStateFlow()
+    private val isTransmitting = AtomicBoolean(false)
+
+    private val _networkState = MutableSharedFlow<NetworkState>()
+    override val networkState = _networkState.asSharedFlow()
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
             val response = session.receiveDeserialized<TextRaw>().parse()
-            _networkState.emitAndYield(NetworkState.Connected(response))
+            _networkState.emit(NetworkState.Connected(response))
         }
     }
 
     private suspend fun onConnected(session: DefaultClientWebSocketSession) {
-        _networkState.emitAndYield(NetworkState.Connected())
+        _networkState.emit(NetworkState.Connected())
         session.send(Frame.Text("HappyBirthday"))
         loopReceiving(session)
     }
 
     override suspend fun connect(ip: String, port: Int) {
-        if (_networkState.value is NetworkState.Connecting || _networkState.value is NetworkState.Connected) return
-        _networkState.emitAndYield(NetworkState.Connecting)
+        if (!isTransmitting.compareAndSet(false, true)) return
+        _networkState.emit(NetworkState.Connecting)
         try {
             client.webSocket(host = ip, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
-            _networkState.emitAndYield(NetworkState.Disconnected(e))
+            _networkState.emit(NetworkState.Disconnected(e))
+            isTransmitting.set(false)
         }
     }
 }

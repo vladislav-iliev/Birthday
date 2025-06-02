@@ -16,11 +16,6 @@ import org.junit.Test
 class LocalApiTest {
 
     @Test
-    fun `initial state should be disconnected`() = runTest {
-        Assert.assertEquals(NetworkState.Disconnected(), LocalApi().networkState.first())
-    }
-
-    @Test
     fun `states progress up and down`() = runTest {
         val kidsApi = LocalApi()
         val networkStates = mutableListOf<NetworkState>()
@@ -33,10 +28,9 @@ class LocalApiTest {
         kidsApi.emit(text)
         kidsApi.disconnect()
 
-        Assert.assertEquals(NetworkState.Disconnected(), networkStates[0])
-        Assert.assertEquals(NetworkState.Connecting, networkStates[1])
-        Assert.assertEquals(NetworkState.Connected(), networkStates[2])
-        Assert.assertEquals(NetworkState.Connected(text), networkStates[3])
-        Assert.assertTrue(networkStates[4] is NetworkState.Disconnected)
+        Assert.assertEquals(NetworkState.Connecting, networkStates[0])
+        Assert.assertEquals(NetworkState.Connected(), networkStates[1])
+        Assert.assertEquals(NetworkState.Connected(text), networkStates[2])
+        Assert.assertTrue(networkStates[3] is NetworkState.Disconnected)
     }
 }

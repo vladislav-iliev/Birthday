@@ -53,11 +53,10 @@ class ClientTest {
         client.connect(mockWebServer.hostName, mockWebServer.port)
 
         advanceUntilIdle()
-        Assert.assertEquals(NetworkState.Disconnected(), networkStates[0])
-        Assert.assertEquals(NetworkState.Connecting, networkStates[1])
-        Assert.assertEquals(NetworkState.Connected(), networkStates[2])
-        Assert.assertEquals(NetworkState.Connected(serverMessageParsed), networkStates[3])
-        Assert.assertTrue(networkStates[4] is NetworkState.Disconnected)
+        Assert.assertEquals(NetworkState.Connecting, networkStates[0])
+        Assert.assertEquals(NetworkState.Connected(), networkStates[1])
+        Assert.assertEquals(NetworkState.Connected(serverMessageParsed), networkStates[2])
+        Assert.assertTrue(networkStates[3] is NetworkState.Disconnected)
     }
 
     @Test
@@ -82,6 +81,7 @@ class ClientTest {
         val firstConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         val secondConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         runCurrent()
+        firstConnect.join()
         firstConnect.join()
         secondConnect.join()
 

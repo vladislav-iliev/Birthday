@@ -3,26 +3,27 @@ package com.vladislaviliev.birthday.test
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.networking.NetworkState
-import com.vladislaviliev.birthday.networking.emitAndYield
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import java.util.concurrent.atomic.AtomicBoolean
 
 class LocalApi : Api {
 
-    private val _networkState = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
-    override val networkState = _networkState.asStateFlow()
+    private val isTransmitting = AtomicBoolean()
+    private val _networkState = MutableSharedFlow<NetworkState>()
+    override val networkState = _networkState.asSharedFlow()
 
     override suspend fun connect(ip: String, port: Int) {
-        if (_networkState.value is NetworkState.Connecting || _networkState.value is NetworkState.Connected) return
-        _networkState.emitAndYield(NetworkState.Connecting)
-        _networkState.emitAndYield(NetworkState.Connected())
+        if (!isTransmitting.compareAndSet(false, true)) return
+        _networkState.emit(NetworkState.Connecting)
+        _networkState.emit(NetworkState.Connected())
     }
 
     suspend fun emit(t: Text) {
-        _networkState.emitAndYield(NetworkState.Connected(t))
+        _networkState.emit(NetworkState.Connected(t))
     }
 
     suspend fun disconnect() {
-        _networkState.emitAndYield(NetworkState.Disconnected())
+        _networkState.emit(NetworkState.Disconnected())
     }
 }
