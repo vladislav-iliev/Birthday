@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.stateIn
 
 class RepositoryImpl(scope: CoroutineScope, dispatcher: CoroutineDispatcher, api: Api) : Repository {
 
-    override val text = api.networkState
-        .map { it.getTextOrNull() }
-        .flowOn(dispatcher)
-        .stateIn(scope, SharingStarted.WhileSubscribed(5_000L), api.networkState.value.getTextOrNull())
+    override val text =
+        api.networkState.map { it.getTextOrNull() }.flowOn(dispatcher).stateIn(scope, SharingStarted.Eagerly, null)
 }

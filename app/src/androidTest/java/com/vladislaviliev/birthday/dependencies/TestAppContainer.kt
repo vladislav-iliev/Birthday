@@ -1,18 +1,19 @@
 package com.vladislaviliev.birthday.dependencies
 
-import android.content.Context
-import com.vladislaviliev.birthday.networking.LocalApi
 import com.vladislaviliev.birthday.networking.Api
+import com.vladislaviliev.birthday.test.DummyAvatarRepository
+import com.vladislaviliev.birthday.test.DummyTextRepository
 import com.vladislaviliev.birthday.test.LocalApi
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
+import com.vladislaviliev.birthday.kid.avatar.Repository as AvatarRepository
+import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
 
 @Module
 @TestInstallIn(components = [SingletonComponent::class], replaces = [AppContainer::class])
@@ -28,11 +29,13 @@ class TestAppContainer {
 
     @Provides
     @Singleton
-    fun provideKidsApi(): Api = LocalApi()
+    fun provideApi(): Api = LocalApi()
 
-    // TODO swap with dummy
     @Provides
     @Singleton
-    fun provideAvatarRepository(@ApplicationContext context: Context): Repository =
-        RepositoryImpl(context, Dispatchers.IO)
+    fun provideAvatarRepository(): AvatarRepository = DummyAvatarRepository()
+
+    @Provides
+    @Singleton
+    fun provideTextRepository(): TextRepository = DummyTextRepository()
 }

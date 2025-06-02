@@ -2,6 +2,7 @@ package com.vladislaviliev.birthday.screens.connect
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vladislaviliev.birthday.kid.text.Repository
 import com.vladislaviliev.birthday.networking.Api
 import com.vladislaviliev.birthday.networking.NetworkState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModel @Inject constructor(private val api: Api) : ViewModel() {
+class ViewModel @Inject constructor(
+    textRepository: Repository, // To trigger early instantiation. Don't remove!
+    private val api: Api
+) : ViewModel() {
 
     val networkState =
         api.networkState.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NetworkState.Disconnected())
