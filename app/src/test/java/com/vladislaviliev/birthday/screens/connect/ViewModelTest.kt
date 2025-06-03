@@ -4,7 +4,7 @@ import com.vladislaviliev.birthday.MainDispatcherRule
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
-import com.vladislaviliev.birthday.test.LocalApi
+import com.vladislaviliev.birthday.test.DummyNetworkingRepository
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -21,10 +21,10 @@ class ViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, LocalApi> {
-        val api = LocalApi()
-        val viewModel = ViewModel(api)
-        return Pair(viewModel, api)
+    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, DummyNetworkingRepository> {
+        val repo = DummyNetworkingRepository()
+        val viewModel = ViewModel(repo)
+        return Pair(viewModel, repo)
     }
 
     @Test

@@ -1,8 +1,6 @@
 package com.vladislaviliev.birthday.dependencies
 
 import android.content.Context
-import com.vladislaviliev.birthday.networking.Api
-import com.vladislaviliev.birthday.networking.Client
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,15 +31,8 @@ class AppContainer {
 
     @Provides
     @Singleton
-    fun provideApi(): Api = Client()
-
-    @Provides
-    @Singleton
-    fun provideNetworkingRepository(
-        scope: CoroutineScope,
-        dispatcher: CoroutineDispatcher,
-        api: Api
-    ): NetworkingRepository = NetworkingRepositoryImpl(scope, dispatcher, api)
+    fun provideNetworkingRepository(scope: CoroutineScope, dispatcher: CoroutineDispatcher): NetworkingRepository =
+        NetworkingRepositoryImpl(scope, dispatcher)
 
     @Provides
     @Singleton

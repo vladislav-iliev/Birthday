@@ -14,6 +14,6 @@ class RepositoryImpl(
     networkingRepository: NetworkingRepository
 ) : Repository {
 
-    override val text = networkingRepository.networkState
+    override val text = networkingRepository.state
         .map { it.getTextOrNull() }.flowOn(dispatcher).stateIn(scope, SharingStarted.Eagerly, null)
 }

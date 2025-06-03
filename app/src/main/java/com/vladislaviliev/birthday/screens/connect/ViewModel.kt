@@ -19,7 +19,7 @@ class ViewModel @Inject constructor(
     avatarRepository: AvatarRepository // To trigger early instantiation for App Dependency Container. Don't remove!
 ) : ViewModel() {
 
-    val networkState = networkingRepository.networkState
+    val networkState = networkingRepository.state
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NetworkState.Disconnected())
 
     fun connect(ip: String, port: Int) {

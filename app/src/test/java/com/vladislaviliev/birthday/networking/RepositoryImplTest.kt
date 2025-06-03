@@ -1,5 +1,6 @@
 package com.vladislaviliev.birthday.networking
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ClientTest {
+class RepositoryImplTest {
 
     private lateinit var mockWebServer: MockWebServer
 
@@ -44,13 +45,13 @@ class ClientTest {
             }
         }
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = Client()
+        val repo = RepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
 
         val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { client.networkState.toList(networkStates) }
+        backgroundScope.launch { repo.state.toList(networkStates) }
         runCurrent()
-        client.connect(mockWebServer.hostName, mockWebServer.port)
+        repo.connect(mockWebServer.hostName, mockWebServer.port)
 
         advanceUntilIdle()
         Assert.assertEquals(NetworkState.Connecting, networkStates[0])
@@ -73,11 +74,11 @@ class ClientTest {
         }
 
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = Client()
+        val client = RepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
 
         val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { client.networkState.toList(networkStates) }
+        backgroundScope.launch { client.state.toList(networkStates) }
         val firstConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         val secondConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         runCurrent()
