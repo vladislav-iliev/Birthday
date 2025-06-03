@@ -16,6 +16,8 @@ import com.vladislaviliev.birthday.kid.avatar.Repository as AvatarRepository
 import com.vladislaviliev.birthday.kid.avatar.RepositoryImpl as AvatarRepositoryImpl
 import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
 import com.vladislaviliev.birthday.kid.text.RepositoryImpl as TextRepositoryImpl
+import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
+import com.vladislaviliev.birthday.networking.RepositoryImpl as NetworkingRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,12 +37,23 @@ class AppContainer {
 
     @Provides
     @Singleton
+    fun provideNetworkingRepository(
+        scope: CoroutineScope,
+        dispatcher: CoroutineDispatcher,
+        api: Api
+    ): NetworkingRepository = NetworkingRepositoryImpl(scope, dispatcher, api)
+
+    @Provides
+    @Singleton
     fun provideAvatarRepository(
         @ApplicationContext context: Context, scope: CoroutineScope, dispatcher: CoroutineDispatcher
     ): AvatarRepository = AvatarRepositoryImpl(context, scope, dispatcher)
 
     @Provides
     @Singleton
-    fun provideTextRepository(scope: CoroutineScope, dispatcher: CoroutineDispatcher, api: Api): TextRepository =
-        TextRepositoryImpl(scope, dispatcher, api)
+    fun provideTextRepository(
+        scope: CoroutineScope,
+        dispatcher: CoroutineDispatcher,
+        networkingRepository: NetworkingRepository
+    ): TextRepository = TextRepositoryImpl(scope, dispatcher, networkingRepository)
 }
