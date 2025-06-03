@@ -20,13 +20,16 @@ fun NavGraphBuilder.addConnectScreenDestination(onConnected: () -> Unit) {
 @Composable
 private fun Content(onConnected: () -> Unit) {
     val viewModel = hiltViewModel<ViewModel>()
-    val state by viewModel.networkState.collectAsStateWithLifecycle()
-    if (null != state.getTextOrNull()) {
+
+    val networkState by viewModel.networkState.collectAsStateWithLifecycle()
+    val textState by viewModel.textState.collectAsStateWithLifecycle()
+
+    if (null != textState) {
         onConnected()
         return
     }
     val connect = { ip: String, port: Int -> viewModel.connect(ip, port) }
-    ConnectScreen(connect, state)
+    ConnectScreen(connect, networkState)
 }
 
 fun NavController.onConnected() {
