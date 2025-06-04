@@ -85,25 +85,18 @@ class NavControllerTest {
     @Test
     fun testConnectNavigatesToKids() {
         setContentToAppDefault(navController)
-
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
-
-        composeTestRule.waitUntil {
-            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
+        composeTestRule.waitForIdle()
+        Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 
     @Test
     fun testConnectClosesItselfWhenConnected() {
         setContentToAppDefault(navController)
-
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
-
-        composeTestRule.waitUntil {
-            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
+        composeTestRule.waitForIdle()
         Assert.assertTrue(navController.backStack.none { it.destination.route == ConnectScreenRoute::class.qualifiedName })
     }
 
@@ -114,15 +107,9 @@ class NavControllerTest {
 
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
         coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
-
-        composeTestRule.waitUntil {
-            KidScreenRoute::class.qualifiedName == navController.currentDestination?.route
-        }
-
+        composeTestRule.waitForIdle()
         coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).disconnect() }
-        composeTestRule.waitUntil {
-            KidScreenRoute::class.qualifiedName != navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 
@@ -131,9 +118,8 @@ class NavControllerTest {
         setContentToAppDefault(navController)
 
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
+        Assert.assertEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 
     @Test
@@ -144,7 +130,7 @@ class NavControllerTest {
             composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
 
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
+        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
 
         composeTestRule.waitUntil { btn.isDisplayed() }
 
@@ -156,9 +142,7 @@ class NavControllerTest {
     fun testSourceChooserClosesItselfOnCancel() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.cancel)).performClick()
         Assert.assertNotEquals(ChooseSourceRoute::class.qualifiedName, navController.currentDestination?.route)
     }
@@ -167,9 +151,7 @@ class NavControllerTest {
     fun testSourceChooserOpensCameraPermissions() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.camera)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertEquals(CameraPermissionRoute::class.qualifiedName, navController.currentDestination?.route)
@@ -179,9 +161,7 @@ class NavControllerTest {
     fun testSourceChooserClosesItselfAfterSelectingCamera() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.camera)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertTrue(navController.backStack.none { it.destination.route == ChooseSourceRoute::class.qualifiedName })
@@ -191,9 +171,7 @@ class NavControllerTest {
     fun testCameraPermissionDialogClosesOnCancel() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToCameraPermission() }
-        composeTestRule.waitUntil {
-            CameraPermissionRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.cancel)).performClick()
         Assert.assertNotEquals(CameraPermissionRoute::class.qualifiedName, navController.currentDestination?.route)
         println(navController.backStack)
@@ -203,9 +181,7 @@ class NavControllerTest {
     fun testSourceChooserClosesItselfAfterSelectingGallery() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertTrue(navController.backStack.none { it.destination.route == ChooseSourceRoute::class.qualifiedName })
@@ -215,9 +191,7 @@ class NavControllerTest {
     fun testSourceChooserNavigatesToGalleryAfterSelectingGallery() {
         setContentToAppDefault(navController)
         coroutineScope.launch(Dispatchers.Main) { navController.navigateToAvatarPicker() }
-        composeTestRule.waitUntil {
-            ChooseSourceRoute::class.qualifiedName == navController.currentDestination?.route
-        }
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertEquals(GalleryRoute::class.qualifiedName, navController.currentDestination?.route)
