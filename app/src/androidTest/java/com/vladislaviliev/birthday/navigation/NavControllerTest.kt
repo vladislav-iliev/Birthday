@@ -17,9 +17,7 @@ import com.vladislaviliev.birthday.R
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.Age
-import com.vladislaviliev.birthday.test.DummyNetworkingRepository
 import com.vladislaviliev.birthday.kid.text.Text
-import com.vladislaviliev.birthday.networking.Repository
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.CameraPermissionRoute
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
 import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.ChooseSourceRoute
@@ -27,6 +25,8 @@ import com.vladislaviliev.birthday.screens.avatarPicker.gallery.GalleryRoute
 import com.vladislaviliev.birthday.screens.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
+import com.vladislaviliev.birthday.test.DummyNetworkingRepository
+import com.vladislaviliev.birthday.test.DummyTextRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +38,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
+import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
+import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -55,7 +57,10 @@ class NavControllerTest {
     lateinit var coroutineScope: CoroutineScope
 
     @Inject
-    lateinit var networkingRepo: Repository
+    lateinit var networkingRepo: NetworkingRepository
+
+    @Inject
+    lateinit var textRepo: TextRepository
 
     @Before
     fun setup() {
@@ -216,5 +221,32 @@ class NavControllerTest {
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.gallery)).performClick()
         composeTestRule.onNodeWithText(composeTestRule.activity.getString(android.R.string.ok)).performClick()
         Assert.assertEquals(GalleryRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun go_to_kid_when_text_arrives() {
+        setContentToAppDefault(navController)
+        val msg = Text("Johny", Age(1, false), Theme.PELICAN)
+
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(msg) }
+        composeTestRule.waitForIdle()
+        Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
+
+        coroutineScope.launch { (textRepo as DummyTextRepository).emit(msg) }
+        composeTestRule.waitForIdle()
+        Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
+    }
+
+    @Test
+    fun go_to_connect_when_text_goes_null() {
+        setContentToAppDefault(navController)
+        val msg = Text("Johny", Age(1, false), Theme.PELICAN)
+
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(msg) }
+        composeTestRule.waitForIdle()
+
+        coroutineScope.launch { (textRepo as DummyTextRepository).emit(null) }
+        composeTestRule.waitForIdle()
+        Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 }
