@@ -1,6 +1,5 @@
 package com.vladislaviliev.birthday.screens.connect
 
-import androidx.lifecycle.viewModelScope
 import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
@@ -10,18 +9,11 @@ import com.vladislaviliev.birthday.test.DummyNetworkingRepository
 import com.vladislaviliev.birthday.test.DummyTextRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Assert
 import org.junit.Test
 
@@ -45,7 +37,7 @@ class ViewModelTest {
 
         val (viewModel, networkRepo) = createViewModelAndApi()
         val collected = mutableListOf<NetworkState>()
-        backgroundScope.launch { viewModel.networkState.onEach { println("HAHA $it") }.toList(collected) }
+        backgroundScope.launch { viewModel.networkState.toList(collected) }
         runCurrent()
 
         viewModel.connect("", 0)
@@ -75,5 +67,31 @@ class ViewModelTest {
         Assert.assertTrue(viewModel.networkState.value is NetworkState.Disconnected)
         Assert.assertEquals(collected.count { it is NetworkState.Connecting }, 1)
         Assert.assertEquals(collected.count { it is NetworkState.Connected }, 1)
+    }
+
+    @Test
+    fun text_reflects_text_repository() = runTest {
+        val textRepository = DummyTextRepository()
+        val viewModel = ViewModel(DummyNetworkingRepository(), textRepository, DummyAvatarRepository())
+
+        val collected = mutableListOf<Text?>()
+        backgroundScope.launch { viewModel.textState.toList(collected) }
+        runCurrent()
+
+        textRepository.emit(Text("Johny", Age(0, false), Theme.PELICAN))
+        runCurrent()
+        textRepository.emit(null)
+        runCurrent()
+        textRepository.emit(Text("Johny", Age(0, false), Theme.PELICAN))
+        runCurrent()
+        textRepository.emit(null)
+        runCurrent()
+
+        Assert.assertEquals(null, collected[0])
+        Assert.assertEquals(Text("Johny", Age(0, false), Theme.PELICAN), collected[1])
+        Assert.assertEquals(null, collected[2])
+        Assert.assertEquals(Text("Johny", Age(0, false), Theme.PELICAN), collected[3])
+        Assert.assertEquals(null, collected[4])
+        Assert.assertEquals(5, collected.size)
     }
 }
