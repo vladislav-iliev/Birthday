@@ -92,6 +92,7 @@ dependencies {
     kaptAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
 
     testImplementation(libs.okhttp3.mockwebserver)
 }

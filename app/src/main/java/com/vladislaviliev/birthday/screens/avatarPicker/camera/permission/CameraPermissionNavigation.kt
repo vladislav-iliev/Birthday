@@ -1,9 +1,13 @@
 package com.vladislaviliev.birthday.screens.avatarPicker.camera.permission
 
+import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.dialog
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.navigateToCamera
 import kotlinx.serialization.Serializable
 
@@ -18,8 +22,14 @@ fun NavGraphBuilder.addCameraPermissionDestination(
 }
 
 @Composable
-private fun Content(onDismissRequest: () -> Unit, onPermissionGranted: () -> Unit) {
-    CameraPermissionDialog(onDismissRequest, onPermissionGranted)
+@OptIn(ExperimentalPermissionsApi::class)
+fun Content(onDismissRequest: () -> Unit, onPermissionGranted: () -> Unit) {
+    val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    if (permissionState.status.isGranted) {
+        onPermissionGranted()
+        return
+    }
+    CameraPermissionDialog(onDismissRequest, { permissionState.launchPermissionRequest() })
 }
 
 fun NavController.navigateToCameraPermission() {
