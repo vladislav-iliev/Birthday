@@ -21,7 +21,7 @@ fun NavGraphBuilder.addCameraDestination(onFinished: () -> Unit) {
 }
 
 @Composable
-private fun Content(onFinished: () -> Unit) {
+fun Content(onFinished: () -> Unit) {
     val vm = hiltViewModel<CameraViewModel>()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (Activity.RESULT_OK == it.resultCode) vm.onPhotoCopied()
