@@ -38,6 +38,7 @@ navigation-testing = "2.9.0"
 okhttp3-mockwebserver = "4.12.0"
 runner = "1.6.2"
 rules = "1.6.1"
+orchestrator = "1.5.1"
 
 [libraries]
 core-library-desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "core-library-desugaring" }
@@ -90,6 +91,7 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 okhttp3-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp3-mockwebserver" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-rules = { group = "androidx.test", name = "rules", version.ref = "rules" }
+orchestrator = {group="androidx.test", name="orchestrator", version.ref="orchestrator"}
 
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }

@@ -19,6 +19,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "com.vladislaviliev.birthday.HiltTestRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     buildTypes {
@@ -37,6 +38,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 }
 
@@ -93,6 +97,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.rules)
+    androidTestUtil(libs.orchestrator)
 
     testImplementation(libs.okhttp3.mockwebserver)
 }
