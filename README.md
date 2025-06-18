@@ -8,7 +8,7 @@ Receive a kid's [Name, Date of Birth, Theme] via WebSocket. Then, show a Happy B
 https://github.com/vladislav-iliev/home-task-birthday/blob/main/media/demo.mp4
 
 ## Design
-[<img src="media/spec.png" alt="/media/spec" height="468" width="216">](https://github.com/vladislav-iliev/home-task-birthday/blob/main/media/spec.png)
+[<img src="media/spec.png" alt="/media/spec" height="468" width="316">](https://github.com/vladislav-iliev/home-task-birthday/blob/main/media/spec.png)
 
 ## Inside
 
