@@ -10,23 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class DummyAvatarRepository : Repository {
 
-    override val fileUri: Uri = Uri.EMPTY
-
     private val _bitmap = MutableStateFlow<ImageBitmap?>(null)
     override val bitmap = _bitmap.asStateFlow()
 
     private fun createDummyBitmap() = createBitmap(1, 1).asImageBitmap()
 
-    var wasPhotoCopied = false
-        private set
-
     var lastCopiedUri: Uri? = null
         private set
-
-    override suspend fun onPhotoCopied() {
-        wasPhotoCopied = true
-        _bitmap.emit(createDummyBitmap())
-    }
 
     override suspend fun copyFromUri(uri: Uri) {
         lastCopiedUri = uri
@@ -35,7 +25,6 @@ class DummyAvatarRepository : Repository {
 
     suspend fun clearState() {
         _bitmap.emit(null)
-        wasPhotoCopied = false
         lastCopiedUri = null
     }
 }

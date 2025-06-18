@@ -39,7 +39,7 @@ class CameraDestinationTest {
     }
 
     @Test
-    fun cameraDestination_whenPhotoTakenSuccessfully_callsViewModelOnPhotoCopied() {
+    fun cameraDestination_whenPhotoTakenSuccessfully_savesUri() {
 
         val owner = object : ActivityResultRegistryOwner {
             override val activityResultRegistry = TestActivityResultRegistry(ActivityResult(Activity.RESULT_OK, null))
@@ -52,11 +52,11 @@ class CameraDestinationTest {
         }
 
         composeTestRule.waitForIdle()
-        Assert.assertTrue((repository as DummyAvatarRepository).wasPhotoCopied)
+        Assert.assertNotNull((repository as DummyAvatarRepository).lastCopiedUri)
     }
 
     @Test
-    fun cameraDestination_whenPhotoTakingCancelled_doesNotCallViewModelOnPhotoCopied() {
+    fun cameraDestination_whenPhotoTakingCancelled_doesNotSaveUri() {
 
         val owner = object : ActivityResultRegistryOwner {
             override val activityResultRegistry =
@@ -70,6 +70,6 @@ class CameraDestinationTest {
         }
 
         composeTestRule.waitForIdle()
-        Assert.assertFalse((repository as DummyAvatarRepository).wasPhotoCopied)
+        Assert.assertNull((repository as DummyAvatarRepository).lastCopiedUri)
     }
 }

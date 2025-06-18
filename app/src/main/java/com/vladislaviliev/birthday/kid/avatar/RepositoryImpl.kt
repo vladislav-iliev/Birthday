@@ -7,9 +7,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
-import com.vladislaviliev.birthday.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,19 +24,12 @@ class RepositoryImpl @Inject constructor(
 
     private val file = File(context.filesDir, "avatar")
 
-    override val fileUri: Uri =
-        FileProvider.getUriForFile(context, context.getString(R.string.file_provider_authority), file)
-
     private val _bitmap = MutableStateFlow<ImageBitmap?>(initialState())
     override val bitmap = _bitmap.asStateFlow()
 
     private fun initialState() = if (file.length() == 0L) null else convertFileToBitmap()
 
     private fun convertFileToBitmap() = BitmapFactory.decodeFile(file.absolutePath)?.rotate()?.asImageBitmap()
-
-    private suspend fun emitFileAsBitmap() {
-        _bitmap.emit(convertFileToBitmap())
-    }
 
     private fun Bitmap.rotate(): Bitmap {
         val exif = ExifInterface(file.absolutePath)
@@ -56,16 +47,12 @@ class RepositoryImpl @Inject constructor(
         return Bitmap.createBitmap(this, 0, 0, getWidth(), getHeight(), matrix, true)
     }
 
-    override suspend fun onPhotoCopied() {
-        emitFileAsBitmap()
-    }
-
     override suspend fun copyFromUri(uri: Uri) = scope.launch(dispatcher) {
         context.contentResolver.openInputStream(uri)?.use { input ->
             file.outputStream().use { output ->
                 input.copyTo(output)
             }
         }
-        emitFileAsBitmap()
+        _bitmap.emit(convertFileToBitmap())
     }.join()
 }

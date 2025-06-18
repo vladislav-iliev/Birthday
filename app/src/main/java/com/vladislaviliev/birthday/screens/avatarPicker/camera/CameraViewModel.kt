@@ -1,5 +1,6 @@
 package com.vladislaviliev.birthday.screens.avatarPicker.camera
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vladislaviliev.birthday.kid.avatar.Repository
@@ -10,9 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CameraViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    val avatarUri = repository.fileUri
-
-    fun onPhotoCopied() {
-        viewModelScope.launch { repository.onPhotoCopied() }
+    fun copyFromUri(uri: Uri) {
+        viewModelScope.launch { repository.copyFromUri(uri) }
     }
 }

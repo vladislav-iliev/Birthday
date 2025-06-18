@@ -24,20 +24,8 @@ class DummyAvatarRepositoryTest { // Instrumented test - Bitmap requires Android
         println("Thread: " + Thread.currentThread().name)
         println("Thread: " + Thread.currentThread().name)
 
-        Assert.assertEquals(Uri.EMPTY, repository.fileUri)
         Assert.assertNull(repository.bitmap.first())
-        Assert.assertFalse(repository.wasPhotoCopied)
         Assert.assertNull(repository.lastCopiedUri)
-    }
-
-    @Test
-    fun onPhotoCopied_should_update_state() = runTest {
-        val repository = DummyAvatarRepository()
-
-        repository.onPhotoCopied()
-
-        Assert.assertTrue(repository.wasPhotoCopied)
-        Assert.assertNotNull(repository.bitmap.first())
     }
 
     @Test
@@ -56,12 +44,10 @@ class DummyAvatarRepositoryTest { // Instrumented test - Bitmap requires Android
         val repository = DummyAvatarRepository()
         val testUri = Uri.parse("content://test/photo.jpg")
         repository.copyFromUri(testUri)
-        repository.onPhotoCopied()
 
         repository.clearState()
 
         Assert.assertNull(repository.bitmap.first())
-        Assert.assertFalse(repository.wasPhotoCopied)
         Assert.assertNull(repository.lastCopiedUri)
     }
 
@@ -87,17 +73,14 @@ class DummyAvatarRepositoryTest { // Instrumented test - Bitmap requires Android
 
         repository.clearState()
         Assert.assertNull(repository.bitmap.first())
-
-        repository.onPhotoCopied()
-        Assert.assertNotNull(repository.bitmap.first())
+        Assert.assertNull(repository.bitmap.first())
     }
 
     @Test
     fun created_bitmap_should_have_correct_dimensions() = runTest {
         val repository = DummyAvatarRepository()
-
-        repository.onPhotoCopied()
-        val bitmap = repository.bitmap.first()
+        repository.copyFromUri(Uri.parse("content://test/photo.jpg"))
+        val bitmap = repository.bitmap.value
 
         Assert.assertNotNull(bitmap)
         bitmap?.let {

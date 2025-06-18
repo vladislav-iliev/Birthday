@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -20,7 +19,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class ViewModelTest {
 
-    private fun TestScope.createViewModelAndApi(): Pair<ViewModel, DummyNetworkingRepository> {
+    private fun createViewModelAndApi(): Pair<ViewModel, DummyNetworkingRepository> {
         val repo = DummyNetworkingRepository()
         val viewModel = ViewModel(repo, DummyTextRepository(), DummyAvatarRepository())
         return Pair(viewModel, repo)
