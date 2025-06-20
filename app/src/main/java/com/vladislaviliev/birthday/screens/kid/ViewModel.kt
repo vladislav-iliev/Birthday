@@ -1,12 +1,22 @@
 package com.vladislaviliev.birthday.screens.kid
 
 import androidx.lifecycle.ViewModel
-import com.vladislaviliev.birthday.kid.Repository
+import androidx.lifecycle.viewModelScope
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
+import com.vladislaviliev.birthday.kid.text.TextRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewModel @Inject constructor(repository: Repository) : ViewModel() {
+class ViewModel @Inject constructor(textRepository: TextRepository, avatarRepository: AvatarRepository) : ViewModel() {
 
-    val state = repository.state
+    val state = combine(textRepository.text, avatarRepository.bitmap, StateTransformer()::from)
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000L),
+            StateTransformer().from(textRepository.text.value, avatarRepository.bitmap.value)
+        )
 }

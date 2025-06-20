@@ -1,7 +1,9 @@
-package com.vladislaviliev.birthday.kid
+package com.vladislaviliev.birthday.screens.kid
 
 import androidx.compose.ui.graphics.ImageBitmap
 import com.vladislaviliev.birthday.Theme
+import com.vladislaviliev.birthday.kid.Age
+import com.vladislaviliev.birthday.kid.State
 import com.vladislaviliev.birthday.kid.text.Text
 
 class StateTransformer {
