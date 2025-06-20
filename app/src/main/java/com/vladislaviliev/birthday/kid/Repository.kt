@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
-import com.vladislaviliev.birthday.kid.avatar.Repository as AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
 
 class Repository(

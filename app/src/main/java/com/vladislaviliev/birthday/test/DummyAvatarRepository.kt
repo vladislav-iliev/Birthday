@@ -4,11 +4,11 @@ import android.net.Uri
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.createBitmap
-import com.vladislaviliev.birthday.kid.avatar.Repository
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class DummyAvatarRepository : Repository {
+class DummyAvatarRepository : AvatarRepository {
 
     private val _bitmap = MutableStateFlow<ImageBitmap?>(null)
     override val bitmap = _bitmap.asStateFlow()

@@ -9,7 +9,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vladislaviliev.birthday.HiltTestActivity
 import com.vladislaviliev.birthday.TestActivityResultRegistry
-import com.vladislaviliev.birthday.kid.avatar.Repository
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.test.DummyAvatarRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -31,7 +31,7 @@ class CameraDestinationTest {
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
 
     @Inject
-    lateinit var repository: Repository
+    lateinit var repository: AvatarRepository
 
     @Before
     fun setUp() {

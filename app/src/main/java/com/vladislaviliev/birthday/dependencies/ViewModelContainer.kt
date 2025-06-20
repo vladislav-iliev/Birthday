@@ -8,7 +8,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import com.vladislaviliev.birthday.kid.Repository as KidRepository
-import com.vladislaviliev.birthday.kid.avatar.Repository as AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
 
 @Module

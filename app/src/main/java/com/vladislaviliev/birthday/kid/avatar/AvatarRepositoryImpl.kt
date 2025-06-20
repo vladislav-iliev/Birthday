@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(
+class AvatarRepositoryImpl @Inject constructor(
     private val context: Context,
     private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-) : Repository {
+) : AvatarRepository {
 
     private val file = File(context.filesDir, "avatar")
 

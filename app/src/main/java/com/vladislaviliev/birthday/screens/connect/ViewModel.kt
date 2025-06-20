@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.vladislaviliev.birthday.kid.avatar.Repository as AvatarRepository
+import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
 import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 
