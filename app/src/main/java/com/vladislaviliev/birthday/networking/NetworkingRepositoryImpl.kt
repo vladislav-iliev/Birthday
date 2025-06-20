@@ -11,11 +11,10 @@ import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.websocket.Frame
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import java.util.concurrent.atomic.AtomicBoolean
 
 class NetworkingRepositoryImpl(
     private val scope: CoroutineScope,
@@ -29,10 +28,8 @@ class NetworkingRepositoryImpl(
         }
     }
 
-    private val isTransmitting = AtomicBoolean(false)
-
-    private val _state = MutableSharedFlow<NetworkState>()
-    override val state = _state.asSharedFlow()
+    private val _state = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
+    override val state = _state.asStateFlow()
 
     private suspend fun loopReceiving(session: DefaultClientWebSocketSession) {
         while (true) {
@@ -53,12 +50,11 @@ class NetworkingRepositoryImpl(
             client.webSocket(host = ip, port = port, path = "/nanit", block = ::onConnected)
         } catch (e: Exception) {
             _state.emit(NetworkState.Disconnected(e))
-            isTransmitting.set(false)
         }
     }.join()
 
     override suspend fun connect(ip: String, port: Int) {
-        if (!isTransmitting.compareAndSet(false, true)) return
+        if (_state.value !is NetworkState.Disconnected) return
         connectWebSocket(ip, port)
     }
 }

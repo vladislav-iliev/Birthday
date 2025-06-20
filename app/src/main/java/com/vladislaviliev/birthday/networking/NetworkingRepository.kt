@@ -1,8 +1,8 @@
 package com.vladislaviliev.birthday.networking
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface NetworkingRepository {
-    val state: Flow<NetworkState>
+    val state: StateFlow<NetworkState>
     suspend fun connect(ip: String, port: Int)
 }

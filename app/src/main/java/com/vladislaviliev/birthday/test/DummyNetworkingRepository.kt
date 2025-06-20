@@ -3,19 +3,16 @@ package com.vladislaviliev.birthday.test
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import com.vladislaviliev.birthday.networking.NetworkingRepository
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class DummyNetworkingRepository : NetworkingRepository {
 
-    private val isTransmitting = AtomicBoolean(false)
-
-    private val _state = MutableSharedFlow<NetworkState>()
-    override val state = _state.asSharedFlow()
+    private val _state = MutableStateFlow<NetworkState>(NetworkState.Disconnected())
+    override val state = _state.asStateFlow()
 
     override suspend fun connect(ip: String, port: Int) {
-        if (!isTransmitting.compareAndSet(false, true)) return
+        if (_state.value !is NetworkState.Disconnected) return
         _state.emit(NetworkState.Connecting)
         _state.emit(NetworkState.Connected())
     }

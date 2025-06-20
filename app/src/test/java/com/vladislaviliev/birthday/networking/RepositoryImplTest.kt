@@ -4,8 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
@@ -34,7 +33,7 @@ class RepositoryImplTest {
     }
 
     @Test
-    fun `states progress up and down`() = runTest {
+    fun `states progress up and down`() = runTest(UnconfinedTestDispatcher()) {
         val serverMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
         val serverMessageParsed = Json.Default.decodeFromString<TextRaw>(serverMessage).parse()
 
@@ -50,18 +49,21 @@ class RepositoryImplTest {
         val networkStates = mutableListOf<NetworkState>()
 
         backgroundScope.launch { repo.state.toList(networkStates) }
-        runCurrent()
         repo.connect(mockWebServer.hostName, mockWebServer.port)
 
-        advanceUntilIdle()
-        Assert.assertEquals(NetworkState.Connecting, networkStates[0])
-        Assert.assertEquals(NetworkState.Connected(), networkStates[1])
-        Assert.assertEquals(NetworkState.Connected(serverMessageParsed), networkStates[2])
-        Assert.assertTrue(networkStates[3] is NetworkState.Disconnected)
+        Assert.assertEquals(
+            listOf(
+                NetworkState.Disconnected(),
+                NetworkState.Connecting,
+                NetworkState.Connected(),
+                NetworkState.Connected(serverMessageParsed)
+            ), networkStates.take(4)
+        )
+        Assert.assertTrue(networkStates.last() is NetworkState.Disconnected)
     }
 
     @Test
-    fun testMultipleConnectsAreIdempotent() = runTest {
+    fun testMultipleConnectsAreIdempotent() = runTest(UnconfinedTestDispatcher()) {
 
         val firstServerMessage = "{\"name\":\"Nanit\",\"dob\":1685826000000,\"theme\":\"pelican\"}"
         val firstParsed = Json.Default.decodeFromString<TextRaw>(firstServerMessage).parse()
@@ -81,12 +83,11 @@ class RepositoryImplTest {
         backgroundScope.launch { client.state.toList(networkStates) }
         val firstConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
         val secondConnect = launch { client.connect(mockWebServer.hostName, mockWebServer.port) }
-        runCurrent()
         firstConnect.join()
         firstConnect.join()
         secondConnect.join()
 
-        Assert.assertEquals("Connected count", 1, networkStates.count(NetworkState.Connected()::equals))
-        Assert.assertEquals("Parsed message", 1, networkStates.count(NetworkState.Connected(firstParsed)::equals))
+        Assert.assertEquals(1, networkStates.count(NetworkState.Connected()::equals))
+        Assert.assertEquals(1, networkStates.count(NetworkState.Connected(firstParsed)::equals))
     }
 }

@@ -5,8 +5,9 @@ import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
@@ -15,21 +16,26 @@ import org.junit.Test
 class DummyNetworkingRepositoryTest {
 
     @Test
-    fun `states progress up and down`() = runTest {
+    fun `states progress up and down`() = runTest(UnconfinedTestDispatcher()) {
         val repo = DummyNetworkingRepository()
         val networkStates = mutableListOf<NetworkState>()
 
-        backgroundScope.launch { repo.state.collect { networkStates.add(it) } }
-        runCurrent()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { repo.state.toList(networkStates) }
         val text = Text("Johny", Age(0, false), Theme.PELICAN)
 
         repo.connect("", 0)
         repo.emit(text)
         repo.disconnect()
 
-        Assert.assertEquals(NetworkState.Connecting, networkStates[0])
-        Assert.assertEquals(NetworkState.Connected(), networkStates[1])
-        Assert.assertEquals(NetworkState.Connected(text), networkStates[2])
-        Assert.assertTrue(networkStates[3] is NetworkState.Disconnected)
+        Assert.assertEquals(
+            listOf(
+                NetworkState.Disconnected(),
+                NetworkState.Connecting,
+                NetworkState.Connected(),
+                NetworkState.Connected(text),
+                NetworkState.Disconnected()
+            ),
+            networkStates
+        )
     }
 }
