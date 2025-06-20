@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.text.TextRepository
-import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @HiltViewModel
 class ViewModel @Inject constructor(

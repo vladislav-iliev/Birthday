@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 class TextRepositoryImpl(
     scope: CoroutineScope,

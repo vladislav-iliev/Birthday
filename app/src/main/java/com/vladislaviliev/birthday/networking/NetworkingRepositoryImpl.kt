@@ -17,10 +17,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import java.util.concurrent.atomic.AtomicBoolean
 
-class RepositoryImpl(
+class NetworkingRepositoryImpl(
     private val scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-) : Repository {
+) : NetworkingRepository {
 
     private val client = HttpClient(CIO) {
         install(Logging)

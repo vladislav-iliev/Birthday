@@ -2,12 +2,12 @@ package com.vladislaviliev.birthday.test
 
 import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
-import com.vladislaviliev.birthday.networking.Repository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import java.util.concurrent.atomic.AtomicBoolean
 
-class DummyNetworkingRepository : Repository {
+class DummyNetworkingRepository : NetworkingRepository {
 
     private val isTransmitting = AtomicBoolean(false)
 

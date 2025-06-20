@@ -45,7 +45,7 @@ class RepositoryImplTest {
             }
         }
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val repo = RepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
+        val repo = NetworkingRepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
 
         val networkStates = mutableListOf<NetworkState>()
 
@@ -74,7 +74,7 @@ class RepositoryImplTest {
         }
 
         mockWebServer.enqueue(MockResponse().setResponseCode(101).withWebSocketUpgrade(serverListener))
-        val client = RepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
+        val client = NetworkingRepositoryImpl(this, coroutineContext[CoroutineDispatcher]!!)
 
         val networkStates = mutableListOf<NetworkState>()
 

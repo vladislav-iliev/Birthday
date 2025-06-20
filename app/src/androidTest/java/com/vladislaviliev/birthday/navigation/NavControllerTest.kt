@@ -39,7 +39,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
 import com.vladislaviliev.birthday.kid.text.TextRepository
-import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

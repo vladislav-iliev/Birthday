@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.text.TextRepository
-import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @Module
 @TestInstallIn(components = [SingletonComponent::class], replaces = [AppContainer::class])
