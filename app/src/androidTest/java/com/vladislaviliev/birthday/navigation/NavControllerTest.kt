@@ -38,7 +38,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
-import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
+import com.vladislaviliev.birthday.kid.text.TextRepository
 import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 
 @HiltAndroidTest

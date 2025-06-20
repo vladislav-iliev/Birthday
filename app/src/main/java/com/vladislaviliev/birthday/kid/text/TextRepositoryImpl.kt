@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 
-class RepositoryImpl(
+class TextRepositoryImpl(
     scope: CoroutineScope,
     dispatcher: CoroutineDispatcher,
     networkingRepository: NetworkingRepository
-) : Repository {
+) : TextRepository {
 
     override val text = networkingRepository.state
         .map { it.getTextOrNull() }.flowOn(dispatcher).stateIn(scope, SharingStarted.Eagerly, null)

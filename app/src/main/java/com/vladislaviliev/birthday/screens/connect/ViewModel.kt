@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
-import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
+import com.vladislaviliev.birthday.kid.text.TextRepository
 import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 
 @HiltViewModel

@@ -16,7 +16,7 @@ class RepositoryImplTest {
     @Test
     fun `should follow api state changes`() = runTest {
         val networkingRepo = DummyNetworkingRepository()
-        val repo = RepositoryImpl(backgroundScope, coroutineContext[CoroutineDispatcher]!!, networkingRepo)
+        val repo = TextRepositoryImpl(backgroundScope, coroutineContext[CoroutineDispatcher]!!, networkingRepo)
         runCurrent()
 
         Assert.assertNull(repo.text.value)

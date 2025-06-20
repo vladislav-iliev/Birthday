@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import com.vladislaviliev.birthday.kid.Repository as KidRepository
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
-import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
+import com.vladislaviliev.birthday.kid.text.TextRepository
 
 @Module
 @InstallIn(ViewModelComponent::class)

@@ -12,8 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepositoryImpl
-import com.vladislaviliev.birthday.kid.text.Repository as TextRepository
-import com.vladislaviliev.birthday.kid.text.RepositoryImpl as TextRepositoryImpl
+import com.vladislaviliev.birthday.kid.text.TextRepository as TextRepository
+import com.vladislaviliev.birthday.kid.text.TextRepositoryImpl
 import com.vladislaviliev.birthday.networking.Repository as NetworkingRepository
 import com.vladislaviliev.birthday.networking.RepositoryImpl as NetworkingRepositoryImpl
 
