@@ -18,6 +18,8 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
+import com.vladislaviliev.birthday.kid.text.TextRepository
+import com.vladislaviliev.birthday.networking.NetworkingRepository
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.CameraPermissionRoute
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
 import com.vladislaviliev.birthday.screens.avatarPicker.chooseSource.ChooseSourceRoute
@@ -26,7 +28,6 @@ import com.vladislaviliev.birthday.screens.avatarPicker.navigateToAvatarPicker
 import com.vladislaviliev.birthday.screens.connect.ConnectScreenRoute
 import com.vladislaviliev.birthday.screens.kid.KidScreenRoute
 import com.vladislaviliev.birthday.test.DummyNetworkingRepository
-import com.vladislaviliev.birthday.test.DummyTextRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.CoroutineScope
@@ -38,8 +39,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
-import com.vladislaviliev.birthday.kid.text.TextRepository
-import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -86,7 +85,7 @@ class NavControllerTest {
     fun testConnectNavigatesToKids() {
         setContentToAppDefault(navController)
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
         composeTestRule.waitForIdle()
         Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
@@ -95,7 +94,7 @@ class NavControllerTest {
     fun testConnectClosesItselfWhenConnected() {
         setContentToAppDefault(navController)
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
         composeTestRule.waitForIdle()
         Assert.assertTrue(navController.backStack.none { it.destination.route == ConnectScreenRoute::class.qualifiedName })
     }
@@ -130,7 +129,7 @@ class NavControllerTest {
             composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.select_new_avatar))
 
         val genericText = Text("Johny", Age(1, false), Theme.PELICAN)
-        coroutineScope.launch { (textRepo as DummyTextRepository).emit(genericText) }
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(genericText) }
 
         composeTestRule.waitUntil { btn.isDisplayed() }
 
@@ -204,10 +203,6 @@ class NavControllerTest {
 
         coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(msg) }
         composeTestRule.waitForIdle()
-        Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
-
-        coroutineScope.launch { (textRepo as DummyTextRepository).emit(msg) }
-        composeTestRule.waitForIdle()
         Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
 
@@ -218,8 +213,9 @@ class NavControllerTest {
 
         coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).emit(msg) }
         composeTestRule.waitForIdle()
+        Assert.assertEquals(KidScreenRoute::class.qualifiedName, navController.currentDestination?.route)
 
-        coroutineScope.launch { (textRepo as DummyTextRepository).emit(null) }
+        coroutineScope.launch { (networkingRepo as DummyNetworkingRepository).disconnect() }
         composeTestRule.waitForIdle()
         Assert.assertEquals(ConnectScreenRoute::class.qualifiedName, navController.currentDestination?.route)
     }
