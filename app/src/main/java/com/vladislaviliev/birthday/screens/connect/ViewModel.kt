@@ -9,20 +9,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
-import com.vladislaviliev.birthday.kid.text.TextRepository
 import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @HiltViewModel
 class ViewModel @Inject constructor(
     private val networkingRepository: NetworkingRepository,
-    textRepository: TextRepository,
     avatarRepository: AvatarRepository // To trigger early instantiation for App Dependency Container. Don't remove!
 ) : ViewModel() {
 
     val networkState = networkingRepository.state
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NetworkState.Disconnected())
-
-    val textState = textRepository.text
 
     fun connect(ip: String, port: Int) {
         viewModelScope.launch { networkingRepository.connect(ip, port) }

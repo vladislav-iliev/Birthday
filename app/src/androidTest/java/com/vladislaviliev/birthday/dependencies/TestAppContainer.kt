@@ -2,7 +2,6 @@ package com.vladislaviliev.birthday.dependencies
 
 import com.vladislaviliev.birthday.test.DummyAvatarRepository
 import com.vladislaviliev.birthday.test.DummyNetworkingRepository
-import com.vladislaviliev.birthday.test.DummyTextRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -12,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
-import com.vladislaviliev.birthday.kid.text.TextRepository
 import com.vladislaviliev.birthday.networking.NetworkingRepository
 
 @Module
@@ -35,8 +33,4 @@ class TestAppContainer {
     @Provides
     @Singleton
     fun provideAvatarRepository(): AvatarRepository = DummyAvatarRepository()
-
-    @Provides
-    @Singleton
-    fun provideTextRepository(): TextRepository = DummyTextRepository()
 }

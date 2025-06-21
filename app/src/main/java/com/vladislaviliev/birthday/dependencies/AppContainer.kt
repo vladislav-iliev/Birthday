@@ -12,8 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepository
 import com.vladislaviliev.birthday.kid.avatar.AvatarRepositoryImpl
-import com.vladislaviliev.birthday.kid.text.TextRepository as TextRepository
-import com.vladislaviliev.birthday.kid.text.TextRepositoryImpl
 import com.vladislaviliev.birthday.networking.NetworkingRepository
 import com.vladislaviliev.birthday.networking.NetworkingRepositoryImpl
 
@@ -39,12 +37,4 @@ class AppContainer {
     fun provideAvatarRepository(
         @ApplicationContext context: Context, scope: CoroutineScope, dispatcher: CoroutineDispatcher
     ): AvatarRepository = AvatarRepositoryImpl(context, scope, dispatcher)
-
-    @Provides
-    @Singleton
-    fun provideTextRepository(
-        scope: CoroutineScope,
-        dispatcher: CoroutineDispatcher,
-        networkingRepository: NetworkingRepository
-    ): TextRepository = TextRepositoryImpl(scope, dispatcher, networkingRepository)
 }

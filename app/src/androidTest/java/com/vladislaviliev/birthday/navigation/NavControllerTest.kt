@@ -18,7 +18,6 @@ import com.vladislaviliev.birthday.Theme
 import com.vladislaviliev.birthday.createAppGraph
 import com.vladislaviliev.birthday.kid.Age
 import com.vladislaviliev.birthday.kid.text.Text
-import com.vladislaviliev.birthday.kid.text.TextRepository
 import com.vladislaviliev.birthday.networking.NetworkingRepository
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.CameraPermissionRoute
 import com.vladislaviliev.birthday.screens.avatarPicker.camera.permission.navigateToCameraPermission
@@ -57,9 +56,6 @@ class NavControllerTest {
 
     @Inject
     lateinit var networkingRepo: NetworkingRepository
-
-    @Inject
-    lateinit var textRepo: TextRepository
 
     @Before
     fun setup() {

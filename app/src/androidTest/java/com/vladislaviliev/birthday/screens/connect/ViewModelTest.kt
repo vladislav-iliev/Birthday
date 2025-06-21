@@ -6,11 +6,12 @@ import com.vladislaviliev.birthday.kid.text.Text
 import com.vladislaviliev.birthday.networking.NetworkState
 import com.vladislaviliev.birthday.test.DummyAvatarRepository
 import com.vladislaviliev.birthday.test.DummyNetworkingRepository
-import com.vladislaviliev.birthday.test.DummyTextRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -21,7 +22,7 @@ class ViewModelTest {
 
     private fun createViewModelAndApi(): Pair<ViewModel, DummyNetworkingRepository> {
         val repo = DummyNetworkingRepository()
-        val viewModel = ViewModel(repo, DummyTextRepository(), DummyAvatarRepository())
+        val viewModel = ViewModel(repo, DummyAvatarRepository())
         return Pair(viewModel, repo)
     }
 
@@ -66,31 +67,5 @@ class ViewModelTest {
         Assert.assertTrue(viewModel.networkState.value is NetworkState.Disconnected)
         Assert.assertEquals(collected.count { it is NetworkState.Connecting }, 1)
         Assert.assertEquals(collected.count { it is NetworkState.Connected }, 1)
-    }
-
-    @Test
-    fun text_reflects_text_repository() = runTest {
-        val textRepository = DummyTextRepository()
-        val viewModel = ViewModel(DummyNetworkingRepository(), textRepository, DummyAvatarRepository())
-
-        val collected = mutableListOf<Text?>()
-        backgroundScope.launch { viewModel.textState.toList(collected) }
-        runCurrent()
-
-        textRepository.emit(Text("Johny", Age(0, false), Theme.PELICAN))
-        runCurrent()
-        textRepository.emit(null)
-        runCurrent()
-        textRepository.emit(Text("Johny", Age(0, false), Theme.PELICAN))
-        runCurrent()
-        textRepository.emit(null)
-        runCurrent()
-
-        Assert.assertEquals(null, collected[0])
-        Assert.assertEquals(Text("Johny", Age(0, false), Theme.PELICAN), collected[1])
-        Assert.assertEquals(null, collected[2])
-        Assert.assertEquals(Text("Johny", Age(0, false), Theme.PELICAN), collected[3])
-        Assert.assertEquals(null, collected[4])
-        Assert.assertEquals(5, collected.size)
     }
 }
